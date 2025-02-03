@@ -1,0 +1,86 @@
+<div class="row">
+
+  <div class="col-6">
+    <mat-card style="width: 400px;">
+      <img mat-card-image [src]="movie?.img_url" [alt]="movie?.tittle" >
+    </mat-card>
+
+  </div>
+
+  <div class="col-6">
+    <h1>{{movie?.tittle}}</h1>
+    <h3> {{movie?.rating}}</h3>
+    <h4> {{movie?.synopsis_alt}}</h4>
+    <h4> {{movie?.synopsis}}</h4>
+
+  </div>
+
+</div>
+<br>
+<mat-divider></mat-divider>
+<div class="row">
+
+  <mat-tab-group mat-align-tabs="center" style="height: 600px;">
+    <mat-tab label="Trailer" >
+
+      <div class="trailer-container" >
+        <iframe
+          width="100%"
+          height="500px"
+          [src]="trailerSafeUrl"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+
+    </mat-tab>
+
+
+    <mat-tab label="Shows" >
+
+      <mat-accordion>
+        <br>
+        @if(funciones){
+          @for (funcion of funciones; track $index) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>{{funcion.chain}}</mat-expansion-panel-header>
+
+              @for (cinema of funcion.cinemas; track $index) {
+
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>{{cinema.name}}</mat-expansion-panel-header>
+
+                  <mat-divider></mat-divider>
+                  <mat-card-subtitle>Horarios: </mat-card-subtitle>
+                  @for (schedule of cinema.schedule; track $index) {
+                    <h6>{{ schedule.date }} </h6>
+                    @for (hour of schedule.hours; track $index) {
+
+                      <button mat-button>{{ hour.hour }}</button>
+                    }
+                  }
+
+                </mat-expansion-panel>
+
+              }
+
+            </mat-expansion-panel>
+            <br>
+
+          }
+        }
+
+
+
+      </mat-accordion>
+
+
+
+
+    </mat-tab>
+  </mat-tab-group>
+
+
+</div>

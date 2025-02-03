@@ -1,0 +1,12 @@
+<div class="row">
+  @for (movie of movies; track movie) {
+    <div class="col-3">
+      <movie-card [movie]="movie"></movie-card>
+      <br>
+    </div>
+
+  }
+</div>
+
+<router-outlet></router-outlet>
+

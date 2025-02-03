@@ -1,0 +1,51 @@
+.image-container {
+  /* Asegúrate de que la imagen no se salga de los bordes */
+  overflow: hidden;
+  display: inline-block;
+  /* Tamaño o restricciones que quieras */
+  width: auto;
+
+}
+
+.image-container img {
+  /* Transición para que el zoom sea suave */
+  transition: transform 0.3s ease-in-out;
+  width: 100%;  /* O el tamaño apropiado */
+
+}
+
+.image-container:hover img {
+  /* Aquí ocurre el zoom */
+  transform: scale(1.1); /* 1.1 => 110%, ajusta a tu preferencia */
+}
+
+.card-container {
+
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Ajustes visuales para el fondo de la superposición */
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  box-sizing: border-box;
+  /* Opcional: Si quieres que el título siempre aparezca,
+     asegúrate de que no sea muy alto o ajusta el overflow */
+}
+
+.card-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.card-title {
+  color: rgb(0, 195, 255);
+}

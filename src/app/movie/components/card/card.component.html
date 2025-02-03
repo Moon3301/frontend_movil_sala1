@@ -1,0 +1,16 @@
+<mat-card matRipple
+[routerLink]="['movie', movie?.id]"
+  [matRippleCentered]="true"
+  class="card-container"
+  >
+
+  <div class="image-container">
+
+    <img mat-card-image src={{movie?.img_url}} alt="img" height="370px">
+  </div>
+
+  <div class="card-overlay">
+    <h5 class="card-title">{{ movie?.tittle }}</h5>
+  </div>
+
+</mat-card>
