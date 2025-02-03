@@ -6,6 +6,7 @@ import { MoviePageComponent } from './pages/movie-page/movie-page.component';
 import { MaterialModule } from '../material/material.module';
 import { MovieRoutingModule } from './movie-routing.module';
 import { ListMoviePageComponent } from './pages/list-movie-page/list-movie-page.component';
+import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { ListMoviePageComponent } from './pages/list-movie-page/list-movie-page.
     LayoutPageComponent,
     MoviePageComponent,
     ListMoviePageComponent,
+    ExpansionPanelComponent,
 
   ],
   imports: [

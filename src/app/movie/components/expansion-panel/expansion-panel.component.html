@@ -1,0 +1,33 @@
+<mat-accordion>
+  <br>
+  @if(funciones){
+    @for (funcion of funciones; track funcion) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>{{funcion.chain}}</mat-expansion-panel-header>
+
+        @for (cinema of funcion.cinemas; track cinema) {
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>{{cinema.name}}</mat-expansion-panel-header>
+
+            <mat-divider></mat-divider>
+            <mat-card-subtitle>Horarios: </mat-card-subtitle>
+            @for (schedule of cinema.schedule; track schedule) {
+              <h6>{{ schedule.date }} </h6>
+              @for (hour of schedule.hours; track hour) {
+
+                <button mat-button>{{ hour.hour }}</button>
+              }
+            }
+
+          </mat-expansion-panel>
+
+        }
+
+      </mat-expansion-panel>
+      <br>
+
+    }
+  }
+
+</mat-accordion>
