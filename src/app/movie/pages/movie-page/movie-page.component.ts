@@ -52,11 +52,31 @@ export class MoviePageComponent  implements OnInit{
     this.trailerSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl!);
 
     if(this.movie){
-      this.movieService.getBillboards(this.movie.id)
-        .subscribe(funciones => {
-          this.funciones = funciones
-          console.log(this.funciones);
-        })
+      // this.movieService.getBillboards(this.movie.id)
+      //   .subscribe(funciones => {
+      //     this.funciones = funciones
+      //     console.log(this.funciones);
+      //   })
+
+      navigator.geolocation.getCurrentPosition(
+        (position)=> {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+
+          this.movieService.getCinemasByUbicationAndMovie(this.movie?.id!, lat, lng).subscribe(
+            (cinemas) => {
+              this.funciones = cinemas
+              console.log(this.funciones);
+
+            }
+          )
+
+        }
+      )
+
+
     }
 
 

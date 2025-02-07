@@ -2,16 +2,18 @@
 
   <div class="col-6">
     <mat-card style="width: 400px;">
-      <img mat-card-image [src]="movie?.img_url" [alt]="movie?.tittle" >
+      <img mat-card-image [src]="movie?.img_url" [alt]="movie?.title" >
     </mat-card>
 
   </div>
 
   <div class="col-6">
-    <h1>{{movie?.tittle}}</h1>
-    <h3> {{movie?.rating}}</h3>
-    <h4> {{movie?.synopsis_alt}}</h4>
-    <h5> {{movie?.synopsis}}</h5>
+    <h1>{{movie?.title}}</h1>
+    <h4>{{movie?.synopsis_alt}}</h4>
+    <h5>{{movie?.synopsis}}</h5>
+    <hr>
+    <h5>Rating: {{movie?.rating}}</h5>
+    <h5>Categoria: </h5>
 
   </div>
 
@@ -45,7 +47,7 @@
 
     <mat-tab label="Shows">
       <ng-template matTabContent>
-        <movie-expansion-panel [funciones]="funciones"></movie-expansion-panel>
+        <movie-expansion-panel [funciones]="funciones!"></movie-expansion-panel>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

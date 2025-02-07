@@ -1,34 +1,26 @@
 export interface ICines {
-  chain:   string;
+  cinemaType:   string;
   cinemas: ICinema[];
 }
 
 export interface ICinema {
-  id:        number;
-  name:      string;
-  ubication: string;
-  slug:      string;
-  schedule:  ISchedule[];
+  cinemaId:         number;
+  cinemaName:       string;
+  cinema_slug:      string;
+  cinemaExternalId: number;
+  vistaId:          string;
+  showtimes:        Showtime[];
+
 }
 
-export interface ISchedule {
-  date:  Date;
-  hours: IHour[];
-}
+export interface Showtime {
 
-export interface IHour {
-  billboardId: number;
-  hour:        string;
-  language:    string;
-  movie:       IMovie;
-}
+  showtimeId:         number;
+  showtime:           string;
+  showdate:           string;
+  language:           string;
+  showtimeExternalId: string;
 
-export interface IShowtime {
-  billboardId: number;
-  language:    string;
-  date:        Date;
-  hour:        string;
-  movie:       IMovie;
 }
 
 export interface IMovie {

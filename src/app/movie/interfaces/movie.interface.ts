@@ -1,8 +1,8 @@
 export interface Movie {
   id: number;
-  tittle_slug?: string;
+  title_slug?: string;
   company?: string;
-  tittle: string;
+  title: string;
   synopsis: string;
   synopsis_alt: string;
   trailer_url: string;

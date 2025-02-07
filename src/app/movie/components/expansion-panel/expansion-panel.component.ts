@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ICines } from '../../interfaces/funciones.interface';
 
 @Component({
   selector: 'movie-expansion-panel',
@@ -11,6 +12,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class ExpansionPanelComponent {
 
   @Input()
-  funciones: any
+  funciones!: ICines[]
 
 }
