@@ -5,6 +5,9 @@ import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ICines } from '../../interfaces/funciones.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { ExpansionPanelComponent } from '../../components/expansion-panel/expansion-panel.component';
+import { CardVideoComponent } from '../../components/card-video/card-video.component';
 
 @Component({
   selector: 'movie-movie-page',
@@ -23,7 +26,8 @@ export class MoviePageComponent  implements OnInit{
     private activateRoute: ActivatedRoute,
     private movieService: MovieService,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private dialog: MatDialog,
   ){}
 
 
@@ -52,11 +56,6 @@ export class MoviePageComponent  implements OnInit{
     this.trailerSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl!);
 
     if(this.movie){
-      // this.movieService.getBillboards(this.movie.id)
-      //   .subscribe(funciones => {
-      //     this.funciones = funciones
-      //     console.log(this.funciones);
-      //   })
 
       navigator.geolocation.getCurrentPosition(
         (position)=> {
@@ -113,7 +112,58 @@ export class MoviePageComponent  implements OnInit{
 
   // 5. Retorna el link de embed final
   return `https://www.youtube.com/embed/${videoId}`;
-}
+  }
+
+  getYouTubeThumbnailUrl(originalUrl: string | undefined): string {
+    if (!originalUrl) return '';
+
+    let videoId = '';
+
+    // 1. Si incluye "youtu.be/"
+    if (originalUrl.includes('youtu.be/')) {
+      const parts = originalUrl.split('youtu.be/');
+      videoId = parts[1]?.split('?')[0]; // en caso tenga parámetros
+    }
+    // 2. Si incluye "watch?v="
+    else if (originalUrl.includes('watch?v=')) {
+      const params = new URL(originalUrl).searchParams;
+      videoId = params.get('v') || '';
+    }
+    // 3. Si incluye "embed/"
+    else if (originalUrl.includes('/embed/')) {
+      const parts = originalUrl.split('/embed/');
+      videoId = parts[1]?.split('?')[0];
+    }
+
+    if (!videoId) return ''; // o algún valor por defecto
+
+    // Retorna la URL del thumbnail, en este caso "hqdefault" es de alta calidad
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
 
 
+  openBillboards(){
+    this.dialog.open(ExpansionPanelComponent, {
+      data: {
+        billboards: this.funciones,
+        movie: this.movie
+      },
+      width: '80%',
+      height: '80%',
+      maxWidth: '100%',
+      panelClass: 'custom-dialog-container',    // Clase personalizada para el contenedor
+      backdropClass: 'custom-dialog-backdrop'     // (Opcional) Clase para el backdrop
+    });
+  }
+
+  openVideoDialog(): void {
+    this.dialog.open(CardVideoComponent, {
+      data: {
+        embedUrl: this.getYouTubeEmbedUrl(this.movie?.trailer_url)
+      },
+      width: '90%',
+      maxWidth: '100%',
+      height: '90%'
+    });
+  }
 }

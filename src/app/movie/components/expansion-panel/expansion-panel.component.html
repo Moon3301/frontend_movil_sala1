@@ -1,30 +1,49 @@
-<mat-accordion>
-  <br>
-  @if(funciones){
-    @for (funcion of funciones; track funcion) {
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>{{funcion.cinemaType}}</mat-expansion-panel-header>
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">X</button>
+</mat-dialog-actions>
 
-        @for (cinema of funcion.cinemas; track cinema) {
+<mat-dialog-content>
 
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>{{cinema.cinemaName}}</mat-expansion-panel-header>
+  <mat-accordion >
+    <br>
+    @if(data.billboards){
+      @for (billboard of data.billboards; track billboard) {
+        <mat-expansion-panel style="background-color: rgba(36, 73, 80, 0.1);">
+          <mat-expansion-panel-header>{{billboard.cinemaType}}</mat-expansion-panel-header>
 
-            <mat-divider></mat-divider>
-            <mat-card-subtitle>Horarios: </mat-card-subtitle>
-            @for (schedule of cinema.showtimes; track schedule) {
-              <h6>{{ schedule.showtime }} </h6>
+          @for (cinema of billboard.cinemas; track cinema) {
 
-            }
+            <mat-expansion-panel style="background-color: rgba(0, 0, 0, 0.1);">
+              <mat-expansion-panel-header>{{cinema.cinemaName}}</mat-expansion-panel-header>
 
-          </mat-expansion-panel>
+              <mat-divider></mat-divider>
+              <mat-card-subtitle>Horarios: </mat-card-subtitle>
+              @for (schedule of cinema.showtimes; track schedule) {
+                <div class="row">
+                  <h6>{{ schedule.showtime }} </h6>
+                  @if(billboard.cinemaType === 'Cinepolis'){
+                    <button mat-flat-button (click)="buildUrlPaymentCinepolis(cinema.vistaId, schedule.showtimeExternalId)">Ir al pago</button>
+                  }
+                  @if(billboard.cinemaType === 'Cinemark'){
+                    <button mat-flat-button (click)="buildUrlPaymentCinemark(cinema.cinemaExternalId, schedule.showtimeExternalId,schedule.showdate, schedule.showtime, cinema.cinemaSlug)">Ir al pago</button>
+                  }
 
-        }
+                </div>
+              }
 
-      </mat-expansion-panel>
-      <br>
+            </mat-expansion-panel>
 
+          }
+
+        </mat-expansion-panel>
+        <br>
+
+      }
     }
-  }
 
-</mat-accordion>
+  </mat-accordion>
+
+</mat-dialog-content>
+
+
+

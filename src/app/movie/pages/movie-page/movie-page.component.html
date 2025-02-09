@@ -1,56 +1,48 @@
-<div class="row">
-
-  <div class="col-6">
-    <mat-card style="width: 400px;">
-      <img mat-card-image [src]="movie?.img_url" [alt]="movie?.title" >
+<div class="card-container">
+  <!-- Contenedor del video con alto fijo -->
+  <div class="video-container">
+    <mat-card>
+      <img
+        mat-card-image
+        height="400px"
+        [src]="getYouTubeThumbnailUrl(movie?.trailer_url)"
+        alt="Video thumbnail"
+        (click)="openVideoDialog()"
+        style="cursor: pointer;"
+      />
     </mat-card>
-
+    <!-- Imagen del poster posicionada de forma absoluta -->
+    <img
+      class="movie-poster"
+      [src]="movie?.img_url"
+      [alt]="movie?.title"
+    />
   </div>
 
-  <div class="col-6">
-    <h1>{{movie?.title}}</h1>
-    <h4>{{movie?.synopsis_alt}}</h4>
-    <h5>{{movie?.synopsis}}</h5>
-    <hr>
-    <h5>Rating: {{movie?.rating}}</h5>
-    <h5>Categoria: </h5>
-
-  </div>
-
+  <!-- Contenido textual que quedará siempre debajo del contenedor de video -->
+  <mat-card-content >
+    <div class="row" >
+      <div class="col-4" style="margin-top: 100px;">
+        <h1>{{ movie?.title }}</h1>
+        <h5>Rating: {{ movie?.rating }}</h5>
+        <h5>Categoria:</h5>
+        <button mat-flat-button (click)="openBillboards()" [disabled]="!funciones">
+          Ver funciones
+        </button>
+      </div>
+      <div class="col-8">
+        <h6>{{ movie?.synopsis_alt }}</h6>
+        <br>
+        <h5>Sinopsis:</h5>
+        <h5>{{ movie?.synopsis }}</h5>
+      </div>
+    </div>
+  </mat-card-content>
 </div>
+
+
+
+
 <br>
-<mat-divider></mat-divider>
-<div class="row">
-
-  <mat-tab-group
-    mat-align-tabs="center"
-    dynamicHeight
-    lazyLoad
-
-    >
-    <mat-tab label="Trailer" >
-      <ng-template matTabContent>
-        <div class="trailer-container" >
-          <iframe
-            width="100%"
-            height="500px"
-            [src]="trailerSafeUrl"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-        </div>
-      </ng-template>
-
-    </mat-tab>
 
 
-    <mat-tab label="Shows">
-      <ng-template matTabContent>
-        <movie-expansion-panel [funciones]="funciones!"></movie-expansion-panel>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
-
-
-</div>

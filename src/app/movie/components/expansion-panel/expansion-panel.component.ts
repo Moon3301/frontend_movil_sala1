@@ -1,17 +1,66 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, OnInit } from '@angular/core';
+
+import {MatDialogModule} from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+
 import { ICines } from '../../interfaces/funciones.interface';
+import { Movie } from '../../interfaces/movie.interface';
+import { getFormattedDate } from '../../../common/helpers';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'movie-expansion-panel',
-  standalone: false,
-
+  standalone: true,
+  imports:[
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatCardModule,
+    MatButtonModule
+  ],
   templateUrl: './expansion-panel.component.html',
   styleUrl: './expansion-panel.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ExpansionPanelComponent {
+export class ExpansionPanelComponent implements OnInit{
 
-  @Input()
-  funciones!: ICines[]
+  constructor(public dialogRef: MatDialogRef<ExpansionPanelComponent>, @Inject(MAT_DIALOG_DATA) public data: { billboards: ICines[], movie: Movie }){}
+
+  ngOnInit(): void {}
+
+
+  buildUrlPaymentCinepolis(vistaId:string, showtimeId: string){
+    window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
+  }
+
+  buildUrlPaymentCinemark(tag: number, showtimeId: string, date:string,  hour: string, cineSlug:string){
+
+    console.log(tag, showtimeId, date, hour, cineSlug);
+
+    const currentDate =  date.split('T')[0];
+    const transformedString = cineSlug.replace(/-/g, "_");
+
+    const data = {
+      tag,
+      movie_id: this.data.movie.external_id,
+      showtimeId,
+      currentDate,
+      hour,
+      movie_title_slug: this.data.movie.title_slug,
+      transformedString
+    }
+
+    console.log(data);
+
+
+    window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${this.data.movie.external_id}&showtime=${showtimeId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
+  }
+
+  onClose(): void{
+    this.dialogRef.close(true);
+  }
 
 }

@@ -2,3 +2,14 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Para el contenedor del diálogo */
+.custom-dialog-container {
+  background: transparent !important;
+  box-shadow: none !important; /* Opcional: elimina la sombra si no la deseas */
+}
+
+/* Para el backdrop, si es necesario */
+.custom-dialog-backdrop {
+  background-color: transparent !important;
+}

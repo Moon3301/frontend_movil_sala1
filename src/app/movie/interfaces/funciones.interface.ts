@@ -6,7 +6,7 @@ export interface ICines {
 export interface ICinema {
   cinemaId:         number;
   cinemaName:       string;
-  cinema_slug:      string;
+  cinemaSlug:      string;
   cinemaExternalId: number;
   vistaId:          string;
   showtimes:        Showtime[];

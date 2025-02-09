@@ -10,5 +10,6 @@ export interface Movie {
   opening_date: string;
   isPremiere: boolean;
   rating: string;
+  external_id: string;
 
 }
