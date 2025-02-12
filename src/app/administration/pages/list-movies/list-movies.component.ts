@@ -3,8 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AdministrationService } from '../../services/administration.service';
 import { Company, Movie } from '../../interfaces/movies.interface';
 
-
-
 @Component({
   selector: 'app-list-movies',
   standalone: false,
@@ -15,6 +13,8 @@ import { Company, Movie } from '../../interfaces/movies.interface';
 export class ListMoviesComponent implements OnInit {
 
   companies!: Company[]
+
+  listUpdates: Movie[] = []
 
   displayedColumns: string[] = ["company", "title", "isNewRelease"]
   dataSource!: MatTableDataSource<Movie>
@@ -36,9 +36,20 @@ export class ListMoviesComponent implements OnInit {
       })
   }
 
-  toggleNewRelease(movie: Movie) {
-    movie.isPremiere = !movie.isPremiere
-    this.dataSource._updateChangeSubscription() // Trigger update
+  toggleNewRelease(_movie: Movie) {
+    _movie.isPremiere = !_movie.isPremiere
+
+    let indice = this.listUpdates.findIndex( movie => movie.id === _movie.id);
+
+    if(indice !== -1){
+      this.listUpdates.splice( indice, 1);
+
+      this.listUpdates.push(_movie);
+    }else{
+      this.listUpdates.push(_movie);
+    }
+
+    console.log(this.listUpdates)
   }
 
   getAllMoviesByCompany(){
@@ -48,6 +59,11 @@ export class ListMoviesComponent implements OnInit {
         console.log(this.companies);
 
       })
+  }
+
+  updateIsPremiere(){
+
+
   }
 
 }
