@@ -1,0 +1,102 @@
+
+<div style="display: grid; justify-content: center; align-items: center;">
+
+  <mat-card class="w-50 mx-auto">
+
+    <mat-card-actions>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-2">
+            <button [routerLink]="['/auth', 'login']" mat-button>X</button>
+          </div>
+
+          <div class="col-8 text-center">
+            <span class=" mx-auto" style="color: white;">Registro</span>
+          </div>
+
+          <div class="col-2">
+
+          </div>
+        </div>
+      </div>
+
+    </mat-card-actions>
+
+    <mat-card-content>
+
+
+      <form>
+
+        <div class="row">
+
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Name</mat-label>
+              <mat-icon matSuffix>person</mat-icon>
+              <input matInput>
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email</mat-label>
+              <mat-icon matSuffix>email</mat-icon>
+              <input matInput>
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Role</mat-label>
+              <mat-icon matSuffix>person</mat-icon>
+              <input matInput>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Password</mat-label>
+              <mat-icon matSuffix>password</mat-icon>
+              <input matInput>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Password</mat-label>
+              <mat-icon matSuffix>password</mat-icon>
+              <input matInput>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </form>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+
+      <div class="container">
+        <div class="row">
+
+          <div class="col-12 col-md-6">
+            <button mat-button>Limpiar</button>
+          </div>
+
+          <div class="col-12 col-md-6" align="end">
+            <button mat-flat-button>Crear</button>
+          </div>
+
+        </div>
+      </div>
+
+
+    </mat-card-actions>
+
+  </mat-card>
+
+</div>
+
+

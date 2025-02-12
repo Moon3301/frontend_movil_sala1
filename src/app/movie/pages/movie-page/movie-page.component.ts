@@ -64,7 +64,9 @@ export class MoviePageComponent  implements OnInit{
 
           console.log(`Latitude: ${lat}, Longitude: ${lng}`);
 
-          this.movieService.getCinemasByUbicationAndMovie(this.movie?.id!, lat, lng).subscribe(
+          const regionName = localStorage.getItem("user_ubication")
+
+          this.movieService.getCinemasByUbicationAndMovie(this.movie?.id!, regionName!).subscribe(
             (cinemas) => {
               this.funciones = cinemas
               console.log(this.funciones);

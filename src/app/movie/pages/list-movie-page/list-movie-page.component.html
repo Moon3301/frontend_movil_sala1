@@ -1,11 +1,20 @@
-<div class="row">
-  @for (movie of movies; track movie) {
-    <div class="col-3">
-      <movie-card [movie]="movie"></movie-card>
-      <br>
-    </div>
+<div class="container">
 
-  }
+  <movie-carrusel></movie-carrusel>
+
+  <hr>
+
+  <movie-search-box [movies]="movies"></movie-search-box>
+
+  <div class="row">
+    @for (movie of movies; track movie) {
+      <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+        <movie-card [movie]="movie"></movie-card>
+        <br>
+      </div>
+
+    }
+  </div>
 </div>
 
 <router-outlet></router-outlet>

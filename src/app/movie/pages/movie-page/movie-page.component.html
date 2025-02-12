@@ -3,7 +3,7 @@
   <div class="video-container">
     <mat-card>
       <img
-        mat-card-image
+
         height="400px"
         [src]="getYouTubeThumbnailUrl(movie?.trailer_url)"
         alt="Video thumbnail"
@@ -22,27 +22,34 @@
   <!-- Contenido textual que quedará siempre debajo del contenedor de video -->
   <mat-card-content >
     <div class="row" >
-      <div class="col-4" style="margin-top: 100px;">
-        <h1>{{ movie?.title }}</h1>
-        <h5>Rating: {{ movie?.rating }}</h5>
-        <h5>Categoria:</h5>
+      <div class="col-3" style="margin-top: 100px; align-items: center; justify-content: center; display: grid;">
+
+        <h5 style="color: cyan;">Titulo </h5>
+        <mat-divider></mat-divider>
+        <h6>{{ movie?.title }}</h6>
+
+        <h5 style="color: cyan;">Rating</h5>
+        <mat-divider></mat-divider>
+        <h6>{{ movie?.rating }}</h6>
+
+        <h5 style="color: cyan;">Categoria:</h5>
+        <mat-divider></mat-divider>
+
+
+        <br>
         <button mat-flat-button (click)="openBillboards()" [disabled]="!funciones">
           Ver funciones
         </button>
       </div>
-      <div class="col-8">
+      <div class="col-9">
         <h6>{{ movie?.synopsis_alt }}</h6>
         <br>
         <h5>Sinopsis:</h5>
-        <h5>{{ movie?.synopsis }}</h5>
+        <h6>{{ movie?.synopsis }}</h6>
       </div>
     </div>
   </mat-card-content>
 </div>
-
-
-
-
 <br>
 
 

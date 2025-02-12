@@ -22,9 +22,12 @@ export class ListMoviePageComponent implements OnInit{
         this.movies = movies
 
         this.movieService.saveAllMovies(this.movies)
+
       })
 
   }
+
+
 
   getMovies(): void{
     console.log(this.movies)

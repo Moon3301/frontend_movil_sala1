@@ -1,0 +1,65 @@
+<div class="container">
+
+  <mat-drawer-container autosize class="layout">
+
+    <mat-toolbar>
+      <button (click)="drawer.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="titulo-toolbar">Sala 1</span>
+    </mat-toolbar>
+
+    <mat-drawer #drawer mode="side" class="sidebar">
+      <mat-toolbar>
+        <button (click)="drawer.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar>
+      <mat-card>
+        @if(currentUser){
+          <button mat-card-avatar class="avatar mx-auto mt-2"></button>
+          <span class="mx-auto">{{currentUser.name}}</span>
+          <span class="mx-auto" style="color: gray;">{{currentUser.email}}</span>
+          <mat-divider class="mt-2 w-100"></mat-divider>
+
+          <mat-list>
+
+            <mat-list-item matRipple [routerLink]="['/movies']" (click)="drawer.toggle()">
+              <mat-icon matListItemIcon>settings</mat-icon>
+              Cuenta
+            </mat-list-item>
+
+            <mat-list-item matRipple [routerLink]="['/movies']" (click)="drawer.toggle()">
+              <mat-icon matListItemIcon>movie</mat-icon>
+              Peliculas
+            </mat-list-item>
+
+            <mat-list-item matRipple [routerLink]="['/administration']" (click)="drawer.toggle()">
+              <mat-icon matListItemIcon>shield_person</mat-icon>
+              Administracion
+            </mat-list-item>
+
+            <mat-list-item matRipple (click)="drawer.toggle()">
+              <mat-icon matListItemIcon>manage_accounts</mat-icon>
+              Proveedores
+            </mat-list-item>
+
+          </mat-list>
+
+        }@else {
+          <button mat-flat-button class="mt-2 mb-2 w-75 mx-auto" [routerLink]="['/auth', 'login']" >Iniciar sesion</button>
+          <button mat-button class="mt-2 mb-2 w-75 mx-auto" [routerLink]="['/auth', 'new-account']">Registrate</button>
+        }
+
+      </mat-card>
+
+    </mat-drawer>
+
+    <router-outlet />
+
+    <mat-toolbar></mat-toolbar>
+  </mat-drawer-container>
+
+
+</div>
+

@@ -6,29 +6,27 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { provideHttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi   } from '@angular/common/http';
 
-import { provideHttpClient } from '@angular/common/http';
+import { SharedModule } from './shared/shared.module';
+import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
-
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule
+    SharedModule
 
   ],
   providers: [
     provideAnimationsAsync(),
-    provideHttpClient()
+    provideHttpClient(withInterceptorsFromDi()),
+    // Registra el interceptor como multi-provider
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

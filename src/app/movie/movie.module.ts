@@ -6,9 +6,10 @@ import { MoviePageComponent } from './pages/movie-page/movie-page.component';
 import { MaterialModule } from '../material/material.module';
 import { MovieRoutingModule } from './movie-routing.module';
 import { ListMoviePageComponent } from './pages/list-movie-page/list-movie-page.component';
-import { ExpansionPanelComponent } from './components/expansion-panel/expansion-panel.component';
-import { CardVideoComponent } from './components/card-video/card-video.component';
-
+import { SharedModule } from '../shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SearchBoxComponent } from './components/search-box/search-box.component';
+import { CarruselComponent } from './components/carrusel/carrusel.component';
 
 @NgModule({
   declarations: [
@@ -16,12 +17,16 @@ import { CardVideoComponent } from './components/card-video/card-video.component
     LayoutPageComponent,
     MoviePageComponent,
     ListMoviePageComponent,
+    SearchBoxComponent,
+    CarruselComponent,
 
   ],
   imports: [
     CommonModule,
     MovieRoutingModule,
-    MaterialModule
+    MaterialModule,
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class MovieModule { }

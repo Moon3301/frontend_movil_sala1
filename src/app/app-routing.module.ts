@@ -1,25 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MainLayoutComponent } from './shared/pages/main-layout/main-layout.component';
 
 const routes: Routes = [
+
   {
-    path: 'billboard',
-    loadChildren: () => import ('./billboard/billboard.module').then(m => m.BillboardModule)
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: 'movies',
+        loadChildren: () => import('./movie/movie.module').then( m => m.MovieModule)
+      },
+      {
+        path: 'administration',
+        loadChildren: () => import('./administration/administration.module').then( m => m.AdministrationModule)
+      },
+      {
+        path: '', redirectTo: 'movies', pathMatch: 'full'
+      },
+
+    ]
+
   },
   {
-    path: 'movies',
-    loadChildren: () => import('./movie/movie.module').then( m => m.MovieModule)
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
   },
-  {
-    path: 'cinema',
-    loadChildren: () => import('./cinema/cinema.module').then( m => m.CinemaModule)
-  },
-  {
-    path: '', redirectTo: 'movies', pathMatch: 'full'
-  },
-  {
-    path: '**', redirectTo: 'movies'
-  }
+
 ];
 
 @NgModule({

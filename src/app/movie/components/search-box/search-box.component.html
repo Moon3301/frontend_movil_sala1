@@ -1,0 +1,20 @@
+<form class="mt-2" style="display: flex; justify-content: center; align-items: center;">
+  <mat-form-field appearance="outline" class="w-50" >
+    <mat-label>Buscar ...</mat-label>
+    <input
+
+      type="text"
+      aria-label="Buscar"
+      matInput
+      [formControl]="myControl"
+      [matAutocomplete]="auto"
+      >
+
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      @for (option of filteredOptions | async; track option) {
+        <mat-option (onSelectionChange)="redirectToMovie(option)" [value]="option.title">{{option.title}}</mat-option>
+      }
+    </mat-autocomplete>
+
+  </mat-form-field>
+</form>

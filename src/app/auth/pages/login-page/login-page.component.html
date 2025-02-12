@@ -1,0 +1,41 @@
+<div style="display: grid; justify-content: center; align-items: center;">
+
+  <mat-card>
+
+    <mat-card-title class="text-center mt-3" style="color: white;">Login</mat-card-title>
+    <hr>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+      <mat-card-content>
+        <div class="row w-75 mx-auto">
+
+          <mat-form-field appearance="outline" >
+            <mat-label>Email</mat-label>
+            <mat-icon matSuffix>person</mat-icon>
+            <input matInput formControlName="email">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" >
+            <mat-label>Clave</mat-label>
+            <mat-icon matSuffix>password</mat-icon>
+            <input matInput formControlName="password">
+          </mat-form-field>
+
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <div class="row mx-auto">
+          <button class="mb-2" mat-flat-button type="submit">Ingresar</button>
+          <button class="mb-2" mat-button [routerLink]="['/auth', 'new-account']">Registrarse</button>
+          <mat-divider></mat-divider>
+          <button class="mt-2" mat-button>Olvido su contrase?</button>
+        </div>
+      </mat-card-actions>
+    </form>
+
+  </mat-card>
+
+</div>

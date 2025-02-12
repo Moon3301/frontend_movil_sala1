@@ -1,8 +1,8 @@
 <mat-dialog-actions>
-  <button mat-button (click)="onClose()">X</button>
+  <button class="btn-close" style="background-color: cyan;" (click)="onClose()"></button>
 </mat-dialog-actions>
 
-<mat-dialog-content>
+<mat-dialog-content style="background-color: rgb(15, 15, 30);">
 
   <mat-accordion >
     <br>
@@ -12,8 +12,46 @@
           <mat-expansion-panel-header>{{billboard.cinemaType}}</mat-expansion-panel-header>
 
           @for (cinema of billboard.cinemas; track cinema) {
+            <br>
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{cinema.cinemaName}}</mat-card-title>
 
-            <mat-expansion-panel style="background-color: rgba(0, 0, 0, 0.1);">
+              </mat-card-header>
+              <hr>
+              <mat-card-content>
+                <mat-card-subtitle>Funciones: </mat-card-subtitle>
+                <div class="row">
+                  @for (schedule of cinema.showtimes; track schedule) {
+
+                    <div class="col-1">
+                      @if(billboard.cinemaType === 'Cinepolis'){
+                        <button mat-button
+                        (click)="buildUrlPaymentCinepolis(
+                          cinema.vistaId,
+                          schedule.showtimeExternalId)"
+                          >{{ schedule.showtime }}</button>
+                      }@else if
+                      (billboard.cinemaType === 'Cinemark'){
+                        <button mat-button
+                        (click)="buildUrlPaymentCinemark(
+                          cinema.cinemaExternalId,
+                          schedule.showtimeExternalId,
+                          schedule.showdate, schedule.showtime,
+                          cinema.cinemaSlug)"
+                          >{{ schedule.showtime }}</button>
+                      }
+                    </div>
+
+                  }
+                </div>
+
+
+              </mat-card-content>
+
+            </mat-card>
+
+            <!-- <mat-expansion-panel style="background-color: rgba(0, 0, 0, 0.1);">
               <mat-expansion-panel-header>{{cinema.cinemaName}}</mat-expansion-panel-header>
 
               <mat-divider></mat-divider>
@@ -31,7 +69,7 @@
                 </div>
               }
 
-            </mat-expansion-panel>
+            </mat-expansion-panel> -->
 
           }
 

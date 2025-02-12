@@ -3,9 +3,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 /* El contenedor general no requiere posicionamiento absoluto, ya que el contenedor de video se encarga de ello */
-.card-container {
-  /* Puedes agregar margenes o padding si lo requieres */
-}
+
 
 /* Contenedor del video con altura fija para evitar que se solapen con el contenido */
 .video-container {
@@ -18,7 +16,7 @@ h1, h2, h3, h4, h5, h6, p {
 .movie-poster {
   position: absolute;
   bottom:-100px;      /* Ajusta para posicionarla verticalmente dentro del video-container */
-  left: 14%;         /* Centra horizontalmente */
+  left: 13%;         /* Centra horizontalmente */
   transform: translateX(-50%);
   z-index: 10;       /* Se asegura que esté por encima del video */
   width: 200px;      /* Ajusta el tamaño según necesites */

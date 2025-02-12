@@ -5,17 +5,17 @@ import { MoviePageComponent } from './pages/movie-page/movie-page.component';
 import { ListMoviePageComponent } from './pages/list-movie-page/list-movie-page.component';
 
 const routes: Routes = [
+
   {
     path: '',
-    component: ListMoviePageComponent,
+    component: LayoutPageComponent,
+    children: [
+      { path: 'list', component: ListMoviePageComponent },
+      { path: ':id', component: MoviePageComponent },
+      { path: '**', redirectTo: 'list' }
+    ]
   },
-  {
-    path: 'movie/:id',
-    component: MoviePageComponent
-  },{
-    path: '**',
-    redirectTo: ''
-  }
+
 ];
 
 @NgModule({
