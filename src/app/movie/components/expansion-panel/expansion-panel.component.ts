@@ -36,7 +36,7 @@ export class ExpansionPanelComponent implements OnInit{
     window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
   }
 
-  buildUrlPaymentCinemark(tag: number, showtimeId: string, date:string,  hour: string, cineSlug:string){
+  buildUrlPaymentCinemark(tag: number, showtimeId: string, date:string,  hour: string, cineSlug:string, sessionId: string){
 
     console.log(tag, showtimeId, date, hour, cineSlug);
 
@@ -56,7 +56,7 @@ export class ExpansionPanelComponent implements OnInit{
     console.log(data);
 
 
-    window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${this.data.movie.external_id}&showtime=${showtimeId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
+    window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
   }
 
   onClose(): void{

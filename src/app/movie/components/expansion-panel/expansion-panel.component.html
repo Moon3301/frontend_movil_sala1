@@ -24,22 +24,29 @@
                 <div class="row">
                   @for (schedule of cinema.showtimes; track schedule) {
 
-                    <div class="col-1">
+                    <div class="col-2">
                       @if(billboard.cinemaType === 'Cinepolis'){
                         <button mat-button
                         (click)="buildUrlPaymentCinepolis(
                           cinema.vistaId,
                           schedule.showtimeExternalId)"
-                          >{{ schedule.showtime }}</button>
+
+                          >{{ schedule.showtime }} {{schedule.language}}</button>
+
                       }@else if
                       (billboard.cinemaType === 'Cinemark'){
                         <button mat-button
                         (click)="buildUrlPaymentCinemark(
                           cinema.cinemaExternalId,
                           schedule.showtimeExternalId,
-                          schedule.showdate, schedule.showtime,
-                          cinema.cinemaSlug)"
-                          >{{ schedule.showtime }}</button>
+                          schedule.showdate,
+                          schedule.showtime,
+                          cinema.cinemaSlug,
+                          schedule.sessionId
+                          )"
+
+                          >{{ schedule.showtime }} {{schedule.language}}</button>
+
                       }
                     </div>
 

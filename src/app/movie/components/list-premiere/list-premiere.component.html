@@ -1,0 +1,33 @@
+<div class="carousel-container">
+  <div class="top-carousel">
+    <button class="nav-button prev" (click)="prev()" [disabled]="currentIndex === 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div class="carousel-viewport">
+      <div class="carousel-content" [style.transform]="carouselTransform">
+        <mat-card class="card" style="background-color: black;" *ngFor="let card of cards; let i = index" [class.active]="i === currentIndex">
+          <img mat-card-image [src]="card.image" [alt]="card.title">
+          <mat-card-title>{{ card.title }}</mat-card-title>
+          <mat-card-content>
+            <p>{{ card.content }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <button class="nav-button next" (click)="next()" [disabled]="currentIndex === cards.length - 1">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <div class="bottom-card-container">
+    <mat-card class="bottom-card" [@fadeAnimation]>
+      <img mat-card-image [src]="bottomCard.image" [alt]="bottomCard.title">
+      <mat-card-title>{{ bottomCard.title }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ bottomCard.content }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

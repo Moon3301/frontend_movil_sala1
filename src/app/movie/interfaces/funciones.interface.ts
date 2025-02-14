@@ -20,6 +20,7 @@ export interface Showtime {
   showdate:           string;
   language:           string;
   showtimeExternalId: string;
+  sessionId:          string;
 
 }
 

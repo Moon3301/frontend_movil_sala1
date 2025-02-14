@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { CarruselComponent } from './components/carrusel/carrusel.component';
+import { ListPremiereComponent } from './components/list-premiere/list-premiere.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { CarruselComponent } from './components/carrusel/carrusel.component';
     ListMoviePageComponent,
     SearchBoxComponent,
     CarruselComponent,
+    ListPremiereComponent,
 
   ],
   imports: [
