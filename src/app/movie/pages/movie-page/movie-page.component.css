@@ -1,12 +1,9 @@
 h1, h2, h3, h4, h5, h6, p {
   color: gray;
 }
-
-/* El contenedor general no requiere posicionamiento absoluto, ya que el contenedor de video se encarga de ello */
-
-
 /* Contenedor del video con altura fija para evitar que se solapen con el contenido */
 .video-container {
+  border-radius: 20px;
   position: relative;
   height: 400px; /* Este valor debe coincidir con el alto de la imagen del video */
   margin-bottom: 20px; /* Separa visualmente del contenido de abajo */

@@ -1,14 +1,14 @@
-<div class="container">
+<div class="container-fluid layout">
 
-  <mat-drawer-container autosize class="layout">
+  <mat-drawer-container autosize style="background-color: rgb(15, 15, 30);">
 
-    <mat-toolbar>
+    <mat-toolbar style="border-radius: 20px;">
       <button (click)="drawer.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="titulo-toolbar">Sala 1</span>
     </mat-toolbar>
-
+    <br>
     <mat-drawer #drawer mode="side" class="sidebar">
       <mat-toolbar>
         <button (click)="drawer.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
@@ -37,11 +37,6 @@
             <mat-list-item matRipple [routerLink]="['/administration']" (click)="drawer.toggle()">
               <mat-icon matListItemIcon>shield_person</mat-icon>
               Administracion
-            </mat-list-item>
-
-            <mat-list-item matRipple (click)="drawer.toggle()">
-              <mat-icon matListItemIcon>manage_accounts</mat-icon>
-              Proveedores
             </mat-list-item>
 
           </mat-list>

@@ -58,26 +58,6 @@
 
             </mat-card>
 
-            <!-- <mat-expansion-panel style="background-color: rgba(0, 0, 0, 0.1);">
-              <mat-expansion-panel-header>{{cinema.cinemaName}}</mat-expansion-panel-header>
-
-              <mat-divider></mat-divider>
-              <mat-card-subtitle>Horarios: </mat-card-subtitle>
-              @for (schedule of cinema.showtimes; track schedule) {
-                <div class="row">
-                  <h6>{{ schedule.showtime }} </h6>
-                  @if(billboard.cinemaType === 'Cinepolis'){
-                    <button mat-flat-button (click)="buildUrlPaymentCinepolis(cinema.vistaId, schedule.showtimeExternalId)">Ir al pago</button>
-                  }
-                  @if(billboard.cinemaType === 'Cinemark'){
-                    <button mat-flat-button (click)="buildUrlPaymentCinemark(cinema.cinemaExternalId, schedule.showtimeExternalId,schedule.showdate, schedule.showtime, cinema.cinemaSlug)">Ir al pago</button>
-                  }
-
-                </div>
-              }
-
-            </mat-expansion-panel> -->
-
           }
 
         </mat-expansion-panel>

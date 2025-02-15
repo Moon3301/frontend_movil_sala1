@@ -30,7 +30,6 @@ export class MoviePageComponent  implements OnInit{
     private dialog: MatDialog,
   ){}
 
-
   ngOnInit(): void {
 
     console.log('Entrando a movie');
@@ -77,9 +76,7 @@ export class MoviePageComponent  implements OnInit{
         }
       )
 
-
     }
-
 
   }
 

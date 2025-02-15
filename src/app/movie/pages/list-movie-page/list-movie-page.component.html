@@ -1,8 +1,6 @@
-<div class="container">
+<movie-carrusel></movie-carrusel>
 
-  <movie-carrusel></movie-carrusel>
-
-  <br class="mb-5">
+<div class="container mt-5">
 
   <movie-search-box [movies]="movies"></movie-search-box>
 
@@ -12,10 +10,11 @@
         <movie-card [movie]="movie"></movie-card>
         <br>
       </div>
-
     }
   </div>
 </div>
+
+<br class="mb-5">
 
 <router-outlet></router-outlet>
 

@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
-import { Company } from '../interfaces/movies.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,10 +8,23 @@ import { Observable } from 'rxjs';
 })
 export class AdministrationService {
 
+  baseUrl = environments.baseUrl
+
   constructor(private readonly http: HttpClient) { }
 
-  getMoviesForCompany(): Observable<Company[]>{
-    return this.http.get<Company[]>(`${environments.baseUrl}/version`)
+  public getMovieCarrusel(): Observable<any>{
+    return this.http.get<any[]>(`${this.baseUrl}/carrusel/movieCarrusel`)
+  }
+
+  public addItemToCarrusel(movieId: number, position: number){
+    return this.http.post(`${this.baseUrl}/carrusel`, {
+      movieId,
+      position
+    })
+  }
+
+  public removeItemCarrusel( movieId: number){
+    return this.http.delete(`${this.baseUrl}/carrusel/${movieId}`)
   }
 
 }

@@ -8,7 +8,6 @@ import {MatButtonModule} from '@angular/material/button';
 
 import { ICines } from '../../interfaces/funciones.interface';
 import { Movie } from '../../interfaces/movie.interface';
-import { getFormattedDate } from '../../../common/helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({

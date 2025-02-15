@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { ICines } from '../interfaces/funciones.interface';
 import { getFormattedDate } from '../../common/helpers';
+import { MovieCarrusel } from '../../administration/interfaces/movies.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,10 @@ export class MovieService {
 
   public getMovies(): Observable<Movie[]>{
     return this.http.get<Movie[]>(`${this.baseUrl}/movies`)
+  }
+
+  public getCarrusel(): Observable<MovieCarrusel[]>{
+    return this.http.get<MovieCarrusel[]>(`${this.baseUrl}/carrusel`)
   }
 
   public saveAllMovies(movies: Movie[]){

@@ -11,8 +11,6 @@ import { Router } from '@angular/router';
 })
 export class CardComponent implements OnInit {
 
-
-
   @Input()
   movie?: Movie
 

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
+import { MovieService } from '../../services/movie.service';
 
 @Component({
   selector: 'movie-carrusel',
@@ -7,30 +9,26 @@ import { Component } from '@angular/core';
   templateUrl: './carrusel.component.html',
   styleUrl: './carrusel.component.css'
 })
-export class CarruselComponent {
+export class CarruselComponent implements OnInit{
 
-  dataCarrusel = [
-    {
-      title: 'Primero',
-      subtitle: 'primer registro',
-      src: 'img/img1.jpg',
-      description: ' test primer registro'
-    },
-    {
-      title: 'Segundo',
-      subtitle: 'segundo registro',
-      src: 'img/img2.jpg',
-      description: 'test segundo registro'
-    },
-    {
-      title: 'Tercero',
-      subtitle: 'tercer registro',
-      src: 'img/img3.jpg',
-      description: 'test tercer registro'
-    },
+  moviesCarrusel: MovieCarrusel[] = [];
 
-  ]
+  constructor(private movieService: MovieService){}
 
-  constructor(){}
+  ngOnInit(): void {
+    this.loadCarouselData();
+  }
+
+  loadCarouselData(): void {
+    this.movieService.getCarrusel().subscribe({
+
+      next: (movies) => {
+
+        this.moviesCarrusel = movies.sort((a, b) => a.position - b.position);
+        console.log('moviesCarrusel: ',this.moviesCarrusel);
+      },
+      error: (err) => console.error('Error cargando carrusel:', err)
+    });
+  }
 
 }
