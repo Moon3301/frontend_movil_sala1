@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainLayoutComponent } from './shared/pages/main-layout/main-layout.component';
+import { authGuard } from './auth/guards/auth.guard';
+import { Error404PageComponent } from './shared/pages/error404-page/error404-page.component';
 
 const routes: Routes = [
 
@@ -14,12 +16,16 @@ const routes: Routes = [
       },
       {
         path: 'administration',
+        canActivate: [authGuard],
         loadChildren: () => import('./administration/administration.module').then( m => m.AdministrationModule)
       },
       {
-        path: '', redirectTo: 'movies', pathMatch: 'full'
+        path: 'account',
+        loadChildren: () => import('./users/users.module').then( m => m.UsersModule)
       },
-
+      {
+        path: '', redirectTo: 'movies', pathMatch: 'full',
+      },
     ]
 
   },
@@ -27,6 +33,12 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
   },
+  {
+    path: 'error404', component: Error404PageComponent,
+  },
+  {
+    path: '**', redirectTo: 'error404',
+  }
 
 ];
 

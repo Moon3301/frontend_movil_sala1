@@ -1,14 +1,23 @@
-<mat-dialog-actions>
-  <button class="btn-close" style="background-color: cyan;" (click)="onClose()"></button>
-</mat-dialog-actions>
 
 <mat-dialog-content style="background-color: rgb(15, 15, 30);">
+
+  <div class="row">
+    <div class="col-12 d-flex align-items-center">
+      <!-- H3 crece a lo ancho y centra el texto -->
+      <h3 class="flex-grow-1 text-center mb-0">
+        {{ data.movie.title }}
+      </h3>
+
+      <!-- Botón de cierre en el extremo derecho -->
+      <button class="btn-close" style="background-color: cyan;" (click)="onClose()"></button>
+    </div>
+  </div>
 
   <mat-accordion >
     <br>
     @if(data.billboards){
       @for (billboard of data.billboards; track billboard) {
-        <mat-expansion-panel style="background-color: rgba(36, 73, 80, 0.1);">
+        <mat-expansion-panel >
           <mat-expansion-panel-header>{{billboard.cinemaType}}</mat-expansion-panel-header>
 
           @for (cinema of billboard.cinemas; track cinema) {
@@ -27,11 +36,12 @@
                     <div class="col-2">
                       @if(billboard.cinemaType === 'Cinepolis'){
                         <button mat-button
-                        (click)="buildUrlPaymentCinepolis(
+                          (click)="buildUrlPaymentCinepolis(
                           cinema.vistaId,
                           schedule.showtimeExternalId)"
+                          >
 
-                          >{{ schedule.showtime }} {{schedule.language}}</button>
+                        {{ schedule.showtime }} {{schedule.language}}</button>
 
                       }@else if
                       (billboard.cinemaType === 'Cinemark'){
@@ -42,18 +52,16 @@
                           schedule.showdate,
                           schedule.showtime,
                           cinema.cinemaSlug,
-                          schedule.sessionId
-                          )"
+                          schedule.sessionId)"
+                          >
 
-                          >{{ schedule.showtime }} {{schedule.language}}</button>
+                        {{ schedule.showtime }} {{schedule.language}}</button>
 
                       }
                     </div>
 
                   }
                 </div>
-
-
               </mat-card-content>
 
             </mat-card>

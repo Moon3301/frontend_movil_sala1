@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../../../users/interfaces/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +28,17 @@ export class MainLayoutComponent implements OnInit{
       }
     });
 
-
   }
+
+  logout(){
+    try{
+      this.currentUser = undefined;
+      this.authService.logout();
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+
 
 }

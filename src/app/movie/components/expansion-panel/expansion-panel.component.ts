@@ -5,7 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
-
+import {MatChipsModule} from '@angular/material/chips';
 import { ICines } from '../../interfaces/funciones.interface';
 import { Movie } from '../../interfaces/movie.interface';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -18,7 +18,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     MatDividerModule,
     MatExpansionModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatChipsModule
   ],
   templateUrl: './expansion-panel.component.html',
   styleUrl: './expansion-panel.component.css',

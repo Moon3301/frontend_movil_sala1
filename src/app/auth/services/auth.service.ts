@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { User } from '../../users/interfaces/user.interface';
+import { UserRegister } from '../interfaces/registerUser';
 
 @Injectable({
   providedIn: 'root'
@@ -67,5 +68,28 @@ export class AuthService {
       console.error("Error al parsear el usuario de localStorage:", error);
       return of(false);
     }
+  }
+
+  register(userRegister: UserRegister): Observable<any>{
+
+    try{
+
+      return this.http.post<any>(`${environments.baseUrl}/user`,{
+        user: userRegister
+      })
+
+    }catch(error){
+      console.log(error);
+      return of(error)
+    }
+
+  }
+
+  logout(){
+
+    this.user = undefined;
+    localStorage.removeItem("userLogged");
+    localStorage.removeItem("access_token");
+
   }
 }

@@ -79,7 +79,6 @@ export class MoviePageComponent  implements OnInit{
     }
 
   }
-
   // Extrae el ID de un URL de YouTube y genera un embed URL
   getYouTubeEmbedUrl(originalUrl: string | undefined): string {
   if (!originalUrl) return '';
@@ -139,7 +138,6 @@ export class MoviePageComponent  implements OnInit{
     // Retorna la URL del thumbnail, en este caso "hqdefault" es de alta calidad
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
-
 
   openBillboards(){
     this.dialog.open(ExpansionPanelComponent, {

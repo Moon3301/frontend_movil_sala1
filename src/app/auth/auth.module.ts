@@ -7,6 +7,7 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { MaterialModule } from '../material/material.module';
 import { AuthService } from './services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     AuthRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [AuthService]
 })

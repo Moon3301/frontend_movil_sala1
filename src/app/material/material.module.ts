@@ -18,6 +18,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
 
@@ -40,7 +41,8 @@ import {MatTableModule} from '@angular/material/table';
     MatSidenavModule,
     MatDialogModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    MatChipsModule,
   ]
 })
 export class MaterialModule { }
