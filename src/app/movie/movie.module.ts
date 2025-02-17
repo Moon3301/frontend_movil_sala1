@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { CarruselComponent } from './components/carrusel/carrusel.component';
 import { ListPremiereComponent } from './components/list-premiere/list-premiere.component';
+import { PrimengModule } from '../primeng/primeng.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ListPremiereComponent } from './components/list-premiere/list-premiere.
     CommonModule,
     MovieRoutingModule,
     MaterialModule,
+    PrimengModule,
     SharedModule,
     ReactiveFormsModule
   ]

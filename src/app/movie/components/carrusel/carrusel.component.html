@@ -1,59 +1,11 @@
-<div id="movieCarousel" class="carousel slide" data-bs-ride="carousel" data-interval="false" *ngIf="moviesCarrusel && moviesCarrusel.length > 0">
-  <!-- Indicadores -->
-  <div class="carousel-indicators">
-    <button *ngFor="let movie of moviesCarrusel; let i = index"
-            type="button"
-            data-bs-target="#movieCarousel"
-            [attr.data-bs-slide-to]="i"
-            [class.active]="i === 0"
-            [attr.aria-label]="'Slide ' + (i + 1)">
-    </button>
-  </div>
+<p-galleria [value]="images" [responsiveOptions]="responsiveOptions"  [numVisible]="5">
+  <ng-template #item let-item>
+      <img [src]="item" style="width:100%; height:600px; object-fit: cover;" />
+  </ng-template>
+  <ng-template #thumbnail let-item>
+      <img [src]="item" style=" width: 230px; height: 250px; border-radius: 15px;" />
+  </ng-template>
+</p-galleria>
 
-  <!-- Items del Carrusel -->
-  <div class="carousel-inner">
-    <div *ngFor="let movie of moviesCarrusel; let i = index"
-         class="carousel-item"
-         [class.active]="i === 0"
-         [routerLink]="['/movies', movie.movieId]">
-      <div class="carousel-content-wrapper">
-        <div class="promotional-background">
-          <div class="blur-overlay"></div>
-          <div class="geometric-overlay"></div>
-        </div>
-        <div class="content-container">
-          <div class="poster-wrapper">
-            <img [src]="movie.poster_url"
-                 class="movie-poster"
-                 [alt]="movie.title_snapshoot">
-          </div>
-          <div class="promotional-content">
-            <h2 class="movie-title">{{ movie.title_snapshoot }}</h2>
-            <div class="promotional-details">
-              <span class="badge">ESTRENO</span>
-              <p class="movie-tagline">Una nueva era del cine comienza</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Controles -->
-  <button class="carousel-control-prev"
-          type="button"
-          data-bs-target="#movieCarousel"
-          data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Anterior</span>
-  </button>
-  <button class="carousel-control-next"
-          type="button"
-          data-bs-target="#movieCarousel"
-          data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Siguiente</span>
-  </button>
-</div>
 
 

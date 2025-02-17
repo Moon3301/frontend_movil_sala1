@@ -1,0 +1,19 @@
+/* En tu archivo CSS/SCSS del componente */
+mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 0 16px; /* Ajusta según el padding que necesites */
+}
+
+.centered-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+}
+
+.left-button {
+  margin-right: auto; /* Empuja el botón a la derecha */
+}

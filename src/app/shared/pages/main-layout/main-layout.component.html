@@ -1,17 +1,18 @@
-<div class="container-fluid layout">
+<div class="layout">
 
   <mat-drawer-container autosize style="background-color: rgb(15, 15, 30);">
 
-    <mat-toolbar style="border-radius: 20px;">
-      <button (click)="drawer.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: relative; z-index: 1;">
+      <button (click)="drawer.toggle()" mat-icon-button class="example-icon">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="titulo-toolbar">Sala 1</span>
     </mat-toolbar>
+
     <br>
     <mat-drawer #drawer mode="side" class="sidebar">
       <mat-toolbar>
-        <button (click)="drawer.toggle()" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <button (click)="drawer.toggle()" mat-icon-button class="example-icon">
           <mat-icon>close</mat-icon>
         </button>
       </mat-toolbar>
@@ -46,10 +47,8 @@
 
         }@else {
 
-
           <button mat-flat-button class="mt-2 mb-2 w-75 mx-auto" [routerLink]="['/auth', 'login']" >Iniciar sesion</button>
           <button mat-button class="mt-2 mb-2 w-75 mx-auto" [routerLink]="['/auth', 'new-account']">Registrate</button>
-
 
         }
 

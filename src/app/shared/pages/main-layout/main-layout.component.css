@@ -10,7 +10,6 @@
 
 }
 
-
 .sidebar {
 
   width: 250px;
@@ -39,3 +38,6 @@
   width: auto;             /* Deja que el ícono tome su tamaño natural */
   height: auto;
 }
+
+
+

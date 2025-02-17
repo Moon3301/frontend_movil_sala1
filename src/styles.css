@@ -18,3 +18,19 @@ body {
 .custom-dialog-backdrop {
   background-color: transparent !important;
 }
+
+:host ::ng-deep .p-galleria-thumbnail {
+  background: transparent !important;
+}
+
+:host ::ng-deep .p-galleria-thumbnail-container {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: transparent !important;
+}
+
+

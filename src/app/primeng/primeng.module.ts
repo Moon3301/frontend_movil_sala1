@@ -6,6 +6,7 @@ import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
+import { GalleriaModule } from 'primeng/galleria';
 
 @NgModule({
   exports: [
@@ -16,6 +17,7 @@ import { CardModule } from 'primeng/card';
     ProgressSpinnerModule,
     MessageModule,
     CardModule,
+    GalleriaModule,
   ],
 })
 export class PrimengModule { }

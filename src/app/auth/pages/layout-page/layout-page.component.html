@@ -1,8 +1,22 @@
-<div class="container p-3">
+<div class="container-fluid">
 
+  <div class="row vh-100">
+    <div class="col-md-6 mx-auto login-form-container d-flex align-items-center justify-content-center">
+      <router-outlet class="mx-auto"/>
+    </div>
 
-  <div class="col-12 mt-5">
-    <router-outlet/>
+    <div class="col-md-6 movie-promo-container d-flex align-items-center justify-content-center text-white">
+      <div class="movie-promo text-center">
+          <h1 class="mb-4">Descubre los Últimos Estrenos</h1>
+          <p class="mb-4">Registrate y recibe las ultimas promociones a tu email.<span></span> Mantente al día con las películas más esperadas en tus cines favoritos</p>
+          <div class="movie-poster">
+              <img src="/placeholder.svg?height=400&width=300" alt="Póster de película" class="img-fluid rounded shadow">
+          </div>
+      </div>
+    </div>
+
   </div>
+
+
 
 </div>
