@@ -32,8 +32,10 @@ import { MessageService } from 'primeng/api';
     provideHttpClient(withInterceptorsFromDi()),
     providePrimeNG({
       theme: {
-          preset: Aura
-      }
+        preset: Aura,
+
+      },
+
     }),
     // Registra el interceptor como multi-provider
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

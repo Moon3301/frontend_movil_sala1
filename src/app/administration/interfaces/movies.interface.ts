@@ -13,6 +13,7 @@ export interface MovieCarrusel {
   movieId?:        number;
   position:        number;
   title_snapshoot: string;
+  img_url?:        string;
   poster_url:      string;
   externalMovieId: number;
 }

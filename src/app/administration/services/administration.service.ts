@@ -16,15 +16,20 @@ export class AdministrationService {
     return this.http.get<any[]>(`${this.baseUrl}/carrusel/movieCarrusel`)
   }
 
-  public addItemToCarrusel(movieId: number, position: number){
+  public addItemToCarrusel(movieId: number, position: number, poster_url: string){
     return this.http.post(`${this.baseUrl}/carrusel`, {
       movieId,
-      position
+      position,
+      poster_url,
     })
   }
 
   public removeItemCarrusel( movieId: number){
     return this.http.delete(`${this.baseUrl}/carrusel/${movieId}`)
+  }
+
+  public uploadMoviePoster(formData: FormData) {
+    return this.http.post(`${this.baseUrl}/carrusel/upload`, formData);
   }
 
 }

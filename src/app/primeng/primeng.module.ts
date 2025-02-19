@@ -7,6 +7,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
 import { GalleriaModule } from 'primeng/galleria';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   exports: [
@@ -18,6 +19,7 @@ import { GalleriaModule } from 'primeng/galleria';
     MessageModule,
     CardModule,
     GalleriaModule,
+    TableModule
   ],
 })
 export class PrimengModule { }

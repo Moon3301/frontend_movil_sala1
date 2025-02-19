@@ -2,15 +2,16 @@
 
   <mat-drawer-container autosize style="background-color: rgb(15, 15, 30);">
 
-    <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: relative; z-index: 1;">
+    <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 1; ">
       <button (click)="drawer.toggle()" mat-icon-button class="example-icon">
         <mat-icon>menu</mat-icon>
       </button>
-      <span class="titulo-toolbar">Sala 1</span>
+      <span class="title-toolbar">Sala 1</span>
+      <button  mat-button [routerLink]="['/movies']" style="font-size: 20px;">Peliculas</button>
     </mat-toolbar>
 
     <br>
-    <mat-drawer #drawer mode="side" class="sidebar">
+    <mat-drawer #drawer mode="side" class="sidebar" style="position: fixed;">
       <mat-toolbar>
         <button (click)="drawer.toggle()" mat-icon-button class="example-icon">
           <mat-icon>close</mat-icon>
@@ -66,7 +67,7 @@
 
     <router-outlet />
 
-    <mat-toolbar></mat-toolbar>
+
   </mat-drawer-container>
 
 

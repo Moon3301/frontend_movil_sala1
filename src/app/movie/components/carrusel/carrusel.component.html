@@ -1,11 +1,47 @@
-<p-galleria [value]="images" [responsiveOptions]="responsiveOptions"  [numVisible]="5">
-  <ng-template #item let-item>
-      <img [src]="item" style="width:100%; height:600px; object-fit: cover;" />
-  </ng-template>
-  <ng-template #thumbnail let-item>
-      <img [src]="item" style=" width: 230px; height: 250px; border-radius: 15px;" />
-  </ng-template>
-</p-galleria>
+<!-- Contenedor principal del carrusel/hero -->
+<div class="hero-container">
+  <!-- Imagen de fondo -->
+  <div
+    class="hero-background"
+    [ngStyle]="{'background-image': 'url('+ moviePoster.poster_url +')'}">
+  </div>
+
+  <!-- Contenido superpuesto -->
+  <div class="hero-content">
+    <h1>{{moviePoster.title_snapshoot}}</h1>
+    <p>
+      Animated film that explores the world of Monstropolis,
+      where monsters generate their city’s power by scaring
+      children at night.
+    </p>
+    <div class="hero-buttons">
+      <button
+        mat-stroked-button
+        color="primary"
+        [routerLink]="['/movies', moviePoster.movieId]"
+        >Ver cartelera</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sección de películas "trending" -->
+<div class="trending-movies-container">
+  <h2>Mas populares</h2>
+
+  <!-- Contenedor para el carrusel/scroll horizontal de posters -->
+  <div class="trending-carousel" >
+
+    @for(movies of moviesCarrusel; track $index){
+
+      <div class="movie-poster" (click)="selectMovie(movies)">
+        <img [src]="movies.img_url" alt="The Good Dinosaur">
+      </div>
+    }
+
+  </div>
+</div>
+
+
 
 
 

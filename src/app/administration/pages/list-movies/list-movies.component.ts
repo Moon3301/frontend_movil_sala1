@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { AdministrationService } from '../../services/administration.service';
 import { ListsCarrusel, MovieCarrusel } from '../../interfaces/movies.interface';
 import { MessageService } from 'primeng/api';
 import { forkJoin } from 'rxjs';
+import { environments } from '../../../../environments/environments';
 
 @Component({
   selector: 'app-list-movies',
@@ -12,7 +13,12 @@ import { forkJoin } from 'rxjs';
 })
 export class ListMoviesComponent implements OnInit {
 
+  @ViewChildren('fileInput') fileInputs!: QueryList<ElementRef>
+
   listMovies: MovieCarrusel[] = [];
+
+  baseUrl = environments.baseUrl;
+
   listUpdates: MovieCarrusel[] = [];
   existingIds = new Set<number>();
   loading = false;
@@ -61,10 +67,15 @@ export class ListMoviesComponent implements OnInit {
     if (newItems.length === 0) return;
 
     const requests = newItems.map((item: MovieCarrusel) =>
+
       this.administrationService.addItemToCarrusel(
         item.externalMovieId,
-        this.listUpdates.length + 1 // Posición al final
-      )
+        this.listUpdates.length + 1,
+        ''
+      ).subscribe((resp)=> {
+        console.log(resp);
+      })
+
     );
 
     forkJoin(requests).subscribe({
@@ -110,6 +121,71 @@ export class ListMoviesComponent implements OnInit {
           detail: 'Error al eliminar elementos'
         });
       }
+    });
+  }
+
+  triggerFileInput(product: any) {
+    const input = this.fileInputs.find((_, index) =>
+      this.listUpdates[index] === product
+    )?.nativeElement;
+
+    if (input) {
+      input.click();
+    }
+  }
+
+  async handleFileUpload(event: Event, movie: MovieCarrusel) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (file) {
+      try {
+        // 1. Mostrar preview inmediata
+        const previewUrl = await this.readFileAsDataURL(file);
+        movie.poster_url = previewUrl;
+
+        console.log('movie:', movie);
+        console.log('file:', movie.poster_url);
+
+         // Armamos FormData
+        const formData = new FormData();
+        formData.append('poster', file); // El nombre 'poster' debe coincidir con FileInterceptor('poster')
+        formData.append('movieId', movie.externalMovieId.toString());
+        formData.append('position', (this.listUpdates.length + 1).toString());
+
+        // Llamamos a la nueva ruta de NestJS
+        this.administrationService.uploadMoviePoster(formData).subscribe({
+          next: (resp) => {
+            console.log(resp);
+            // recargamos la data
+            this.loadCarruselData();
+          },
+          error: (err) => {
+            console.error('Error:', err);
+          },
+        });
+
+        // this.administrationService.addItemToCarrusel(
+        //   movie.externalMovieId,
+        //   this.listUpdates.length + 1,
+        //   movie.poster_url,
+        // ).subscribe((resp)=> {
+        //   console.log(resp);
+        // })
+
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        // Manejar errores
+      }
+    }
+  }
+
+  private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
   }
 
