@@ -12,11 +12,48 @@ h1, h2, h3, h4, h5, h6, p {
 /* Imagen del poster superpuesta, posicionada de forma absoluta respecto a video-container */
 .movie-poster {
   position: absolute;
-  bottom:-100px;      /* Ajusta para posicionarla verticalmente dentro del video-container */
-  left: 13%;         /* Centra horizontalmente */
+  top: 300px;      /* Ajusta para posicionarla verticalmente dentro del video-container */
+  left: 16%;         /* Centra horizontalmente */
   transform: translateX(-50%);
   z-index: 10;       /* Se asegura que esté por encima del video */
   width: 200px;      /* Ajusta el tamaño según necesites */
+}
+
+
+
+
+
+
+
+/* Ajuste para pantallas grandes o para mayor precisión */
+@media (min-width: 992px) {
+  .list-movies-container {
+    margin-top: 850px; /* igual a la altura del .hero-container en escritorio */
+  }
+}
+
+@media( max-width: 992px) {
+  .list-movies-container {
+    margin-top: 850px; /* un valor menor para pantallas pequeñas */
+  }
+}
+
+@media (min-width: 1200px) {
+  .list-movies-container {
+    margin-top: 900px; /* un valor mayor para pantallas más grandes */
+  }
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+  .movie-poster {
+    position: absolute;
+    top: 300px;      /* Ajusta para posicionarla verticalmente dentro del video-container */
+    left: 16%;         /* Centra horizontalmente */
+    transform: translateX(-50%);
+    z-index: 10;       /* Se asegura que esté por encima del video */
+    width: 150px;      /* Ajusta el tamaño según necesites */
+  }
 }
 
 

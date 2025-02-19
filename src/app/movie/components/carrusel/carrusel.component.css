@@ -23,13 +23,11 @@
 }
 
 .hero-content {
-  position: relative;
   z-index: 1;
   max-width: 800px;
-  text-align: left;
-  right: 500px;
-  color: #fff; /* Texto blanco sobre el fondo oscurecido */
-  margin: 0 20px; /* Un poco de margen lateral */
+  color: #fff;
+  margin: 0 20px;
+  text-align: left; /* en móviles, o left en escritorio, según prefieras */
 }
 
 .hero-content h1 {
@@ -102,4 +100,85 @@
   cursor: pointer;
 }
 
+.carousel-wrapper {
+  position: relative;
+}
 
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+  display: none; /* se pueden ocultar en desktop si no son necesarios */
+}
+
+
+/* Media Query para dispositivos móviles */
+
+/* Mostrar botones en móviles o siempre si se prefiere */
+@media (max-width: 768px) {
+  .carousel-button {
+    display: block;
+  }
+}
+
+.carousel-button.left {
+  left: 10px;
+}
+
+.carousel-button.right {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+
+  .trending-movies-container {
+    bottom: 0px;
+    position: relative;
+    width: 100%;
+
+    padding: 2rem 2rem 3rem;
+    background-color: transparent;
+  }
+  .hero-content {
+    position: relative; /* o mantener absolute pero sin tanta restricción */
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    text-align: left; /* centra el contenido para móviles */
+    padding: 10px;
+  }
+  .hero-container {
+    height: 400px; /* reducir altura en móviles */
+  }
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+  }
+  .trending-carousel {
+    gap: 0.5rem;
+    padding: 0.5rem; /* Ajuste para menor espacio */
+  }
+  .movie-poster {
+    width: 150px; /* Posters más pequeños en móvil */
+  }
+  /* Si el contenedor de la lista de movies tiene un margin-top fijo, se puede ajustar */
+  .container {
+    margin-top: 200px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-content {
+    text-align: left; /* en escritorio puedes alinear a la izquierda si es necesario */
+  }
+}

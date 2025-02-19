@@ -13,15 +13,18 @@
         />
       </mat-card>
       <!-- Imagen del poster posicionada de forma absoluta -->
+
+    </div>
+
+    <!-- Contenido textual que quedará siempre debajo del contenedor de video -->
+    <mat-card-content >
+
       <img
         class="movie-poster"
         [src]="movie?.img_url"
         [alt]="movie?.title"
       />
-    </div>
 
-    <!-- Contenido textual que quedará siempre debajo del contenedor de video -->
-    <mat-card-content >
       <div class="row" >
         <div class="col-3" style="margin-top: 100px; align-items: center; justify-content: center; display: grid;">
 

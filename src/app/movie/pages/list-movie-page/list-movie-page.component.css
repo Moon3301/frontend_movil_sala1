@@ -6,3 +6,34 @@
   /* La altura la determinas según lo que necesites, p. ej.: */
 
 }
+
+.list-movies-container {
+  margin-top: 100vh; /* Por ejemplo, la altura completa del viewport */
+
+}
+
+/* Ajuste para pantallas grandes o para mayor precisión */
+@media (min-width: 992px) {
+  .list-movies-container {
+    margin-top: 850px; /* igual a la altura del .hero-container en escritorio */
+  }
+}
+
+@media( max-width: 992px) {
+  .list-movies-container {
+    margin-top: 850px; /* un valor menor para pantallas pequeñas */
+  }
+}
+
+@media (min-width: 1200px) {
+  .list-movies-container {
+    margin-top: 900px; /* un valor mayor para pantallas más grandes */
+  }
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+  .list-movies-container {
+    margin-top: 700px; /* un valor menor para pantallas pequeñas */
+  }
+}

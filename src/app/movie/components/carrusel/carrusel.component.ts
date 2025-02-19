@@ -1,4 +1,4 @@
-import { Component, model, OnInit } from '@angular/core';
+import { Component, ElementRef, model, OnInit, ViewChild } from '@angular/core';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
 import { MovieService } from '../../services/movie.service';
 import { environments } from '../../../../environments/environments';
@@ -11,6 +11,8 @@ import { environments } from '../../../../environments/environments';
   styleUrl: './carrusel.component.css'
 })
 export class CarruselComponent implements OnInit{
+
+  @ViewChild('carouselContainer') carouselContainer!: ElementRef;
 
   baseUrl = environments.baseUrl;
 
@@ -47,6 +49,16 @@ export class CarruselComponent implements OnInit{
 
   selectMovie(movie: any){
     this.moviePoster = movie;
+  }
+
+  scrollCarousel(direction: string): void {
+    const container = this.carouselContainer.nativeElement;
+    const scrollAmount = 200; // Ajusta este valor según convenga
+    if (direction === 'left') {
+      container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
   }
 
 }
