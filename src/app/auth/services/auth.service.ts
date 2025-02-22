@@ -70,12 +70,14 @@ export class AuthService {
     }
   }
 
-  register(userRegister: UserRegister): Observable<any>{
+  register(name: string, email: string, password: string): Observable<any>{
 
     try{
 
       return this.http.post<any>(`${environments.baseUrl}/user`,{
-        user: userRegister
+        name,
+        email,
+        password
       })
 
     }catch(error){

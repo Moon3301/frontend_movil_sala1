@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 import { Movie } from '../../interfaces/movie.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'movie-search-box',
@@ -18,6 +19,8 @@ export class SearchBoxComponent implements OnInit{
   myControl = new FormControl('');
 
   filteredOptions?: Observable<Movie[]>;
+
+  constructor(private router: Router){}
 
   ngOnInit(): void {
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -36,6 +39,7 @@ export class SearchBoxComponent implements OnInit{
   redirectToMovie(value: Movie){
 
     console.log(value);
+    this.router.navigate(['movies', value.id])
 
   }
 

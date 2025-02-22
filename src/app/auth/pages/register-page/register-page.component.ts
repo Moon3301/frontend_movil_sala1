@@ -25,32 +25,26 @@ export class RegisterPageComponent implements OnInit{
 
   }
 
-  ngOnInit(): void {
-
-
-
-  }
+  ngOnInit(): void {}
 
   register(){
 
-    const user: UserRegister = {
-      name: this.registerForm.get('name')?.value,
-      email: this.registerForm.get('email')?.value,
-      password: this.registerForm.get('password')?.value,
-      role: 'visitor'
-    }
+    const name = this.registerForm.get('name')?.value;
+    const email = this.registerForm.get('email')?.value;
+    const password = this.registerForm.get('password')?.value;
 
-    this.authService.register(user)
+    this.authService.register(name, email, password)
     .subscribe( resp => {
       if(resp){
-        console.log('resp register: ',resp);
-        this.authService.login(this.registerForm.get('email')?.value, this.registerForm.get('password')?.value)
-          .subscribe(resp => {
-            if(resp){
-              console.log('resp login:',resp);
-              this.router.navigate(['movies', 'list'])
-            }
-          })
+
+        this.authService.login(
+          this.registerForm.get('email')?.value,
+          this.registerForm.get('password')?.value)
+            .subscribe(resp => {
+              if(resp){
+                this.router.navigate(['movies', 'list'])
+              }
+            })
       }
 
     })
@@ -60,7 +54,5 @@ export class RegisterPageComponent implements OnInit{
   resetValues(){
     this.registerForm.reset();
   }
-
-
 
 }

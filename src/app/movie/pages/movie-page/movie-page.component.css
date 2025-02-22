@@ -1,59 +1,76 @@
-h1, h2, h3, h4, h5, h6, p {
+h6 {
   color: gray;
 }
+
+h1, h2, h3, h4, h5 {
+  color: cyan;
+}
+
 /* Contenedor del video con altura fija para evitar que se solapen con el contenido */
 .video-container {
-  border-radius: 20px;
   position: relative;
-  height: 400px; /* Este valor debe coincidir con el alto de la imagen del video */
   margin-bottom: 20px; /* Separa visualmente del contenido de abajo */
+  border-radius: 20px;
+  width: 100%;
 }
 
-/* Imagen del poster superpuesta, posicionada de forma absoluta respecto a video-container */
+.movie-detail {
+  margin-top: 100px;
+  align-items: center;
+  justify-content: center;
+  display: grid;
+}
+
+.img-video {
+  height: 400px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Estilos base para móviles (mobile-first) */
 .movie-poster {
   position: absolute;
-  top: 300px;      /* Ajusta para posicionarla verticalmente dentro del video-container */
-  left: 16%;         /* Centra horizontalmente */
+  bottom: 250px;        /* Posiciona verticalmente dentro del contenedor */
+  left: 14%;            /* Ajuste para móviles: se puede modificar si es necesario */
   transform: translateX(-50%);
-  z-index: 10;       /* Se asegura que esté por encima del video */
-  width: 200px;      /* Ajusta el tamaño según necesites */
+  z-index: 10;          /* Se asegura que esté por encima del video */
+  width: 100px;         /* Tamaño base para pantallas pequeñas */
+  border-radius: 20px;
+  margin-bottom: 10px;
 }
 
+/* Para pantallas medianas (a partir de 477px hasta 991px) */
+@media (min-width: 477px) and (max-width: 991px) {
+  .movie-poster {
+    left: 13%;         /* Ajuste para centrar en pantallas medianas */
+    width: 120px;      /* Incrementa ligeramente el tamaño */
+  }
 
+  .list-movies-container {
+    margin-top: 850px; /* Ajusta el margen según corresponda */
+  }
+}
 
-
-
-
-
-/* Ajuste para pantallas grandes o para mayor precisión */
+/* Para pantallas grandes (992px en adelante) */
 @media (min-width: 992px) {
+  .movie-poster {
+    left: 13%;         /* Mantiene la posición según tu diseño */
+    width: 180px;      /* Tamaño para escritorio */
+  }
+
   .list-movies-container {
-    margin-top: 850px; /* igual a la altura del .hero-container en escritorio */
+    margin-top: 850px; /* Margen para pantallas grandes */
   }
 }
 
-@media( max-width: 992px) {
-  .list-movies-container {
-    margin-top: 850px; /* un valor menor para pantallas pequeñas */
-  }
-}
-
+/* Para pantallas extra grandes (1200px en adelante) */
 @media (min-width: 1200px) {
   .list-movies-container {
-    margin-top: 900px; /* un valor mayor para pantallas más grandes */
+    margin-top: 900px; /* Margen un poco mayor para pantallas muy grandes */
   }
 }
 
-/* Ajuste para móviles */
-@media (max-width: 768px) {
-  .movie-poster {
-    position: absolute;
-    top: 300px;      /* Ajusta para posicionarla verticalmente dentro del video-container */
-    left: 16%;         /* Centra horizontalmente */
-    transform: translateX(-50%);
-    z-index: 10;       /* Se asegura que esté por encima del video */
-    width: 150px;      /* Ajusta el tamaño según necesites */
-  }
-}
+
+
 
 

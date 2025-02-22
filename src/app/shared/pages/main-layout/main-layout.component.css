@@ -16,7 +16,7 @@
 }
 
 .options-toolbar {
-  
+
 
   padding: 40px;
 
@@ -36,6 +36,15 @@
   padding: 20px;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+
+  }
+}
+
 .user-profile {
   text-align: center;
   margin-bottom: 30px;

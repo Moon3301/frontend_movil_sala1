@@ -1,5 +1,5 @@
 
-<mat-dialog-content style="background-color: rgb(15, 15, 30);">
+<mat-dialog-content class="dialog-content">
 
   <div class="row">
     <div class="col-12 d-flex align-items-center">
@@ -25,7 +25,6 @@
             <mat-card>
               <mat-card-header>
                 <mat-card-title>{{cinema.cinemaName}}</mat-card-title>
-
               </mat-card-header>
               <hr>
               <mat-card-content>
@@ -33,7 +32,7 @@
                 <div class="row">
                   @for (schedule of cinema.showtimes; track schedule) {
 
-                    <div class="col-2">
+                    <div class="col-6 col-md-2">
                       @if(billboard.cinemaType === 'Cinepolis'){
                         <button mat-button
                           (click)="buildUrlPaymentCinepolis(
@@ -58,6 +57,7 @@
                         {{ schedule.showtime }} {{schedule.language}}</button>
 
                       }
+                      <hr>
                     </div>
 
                   }
