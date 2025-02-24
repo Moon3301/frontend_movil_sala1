@@ -1,0 +1,21 @@
+<p-card header="Actualizacion de registros">
+  <hr>
+  <div class="row mb-3">
+    <div class="col" style="align-items: center; display: flex; font-size: 1.2rem; font-weight: bold;">
+      Actualizar registros Cinemark
+    </div>
+    <div class="col">
+      <p-button (click)="updateRecordsCinemark()" label="UPDATE" [disabled]="isUpdating" />
+    </div>
+  </div>
+
+  <div class="row mt-3" >
+    <div class="col" style="align-items: center; display: flex; font-size: 1.2rem; font-weight: bold;">
+      Actualizar registros Cinepolis
+    </div>
+    <div class="col">
+      <p-button (click)="updateRecordsCinepolis()" label="UPDATE" [disabled]="isUpdating" />
+    </div>
+  </div>
+
+</p-card>

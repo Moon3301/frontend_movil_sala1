@@ -7,26 +7,27 @@
   [source]="listMovies"
   [target]="listUpdates"
   [dragdrop]="true"
-  [responsive]="true"       
+  [responsive]="true"
   [sourceStyle]="{ height: '30rem' }"
   [targetStyle]="{ height: '30rem' }"
   [disabled]="loading"
   breakpoint="1400px"
   (onMoveToTarget)="onMoveToTarget($event)"
   (onMoveToSource)="onMoveToSource($event)"
->
-  <ng-template let-item pTemplate="item">
-    <div class="item-container" [ngClass]="{ 'existing-item': existingIds.has(item.externalMovieId) }">
-      <p>{{ item.title_snapshoot }}</p>
-      <i *ngIf="existingIds.has(item.externalMovieId)"
-          class="pi pi-exclamation-circle"
-          title="Ya existe en el carrusel"></i>
-    </div>
-  </ng-template>
-</p-pickList>
+  >
+    <ng-template let-item pTemplate="item">
+      <div class="item-container" [ngClass]="{ 'existing-item': existingIds.has(item.externalMovieId) }">
+        <p>{{ item.title_snapshoot }}</p>
+        <i *ngIf="existingIds.has(item.externalMovieId)"
+            class="pi pi-exclamation-circle"
+            title="Ya existe en el carrusel"></i>
+      </div>
+    </ng-template>
+  </p-pickList>
 
 </p-card >
 <br>
+
 <p-card header="Editar lista de peliculas">
   <p-table [value]="listUpdates" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #header>
@@ -64,6 +65,11 @@
   </p-table>
 </p-card>
 <br>
+
+<p-card header="Actualizacion registros de cines">
+
+
+</p-card>
 
 <p-toast></p-toast>
 <p-progressSpinner *ngIf="loading"></p-progressSpinner>

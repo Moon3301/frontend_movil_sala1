@@ -1,0 +1,90 @@
+<p-card header="Editar carrusel de películas" class="mb-3">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Columna PickList -->
+      <div class="col-12 col-md-12 mb-3">
+        <p-pickList
+          [source]="listMovies"
+          [target]="listUpdates"
+          [dragdrop]="true"
+          [responsive]="true"
+          [disabled]="loading"
+          breakpoint="1400px"
+          (onMoveToTarget)="onMoveToTarget($event)"
+          (onMoveToSource)="onMoveToSource($event)"
+          [sourceStyle]="{ 'max-height': '30rem', 'overflow-y': 'auto' }"
+          [targetStyle]="{ 'max-height': '30rem', 'overflow-y': 'auto' }"
+        >
+          <ng-template let-item pTemplate="item">
+            <div
+              class="item-container"
+              [ngClass]="{ 'existing-item': existingIds.has(item.externalMovieId) }"
+            >
+              <p>{{ item.title_snapshoot }}</p>
+              <i
+                *ngIf="existingIds.has(item.externalMovieId)"
+                class="pi pi-exclamation-circle"
+                title="Ya existe en el carrusel"
+              ></i>
+            </div>
+          </ng-template>
+        </p-pickList>
+      </div>
+
+      <!-- Columna Tabla -->
+      <div class="col-12 col-md-12">
+        <!-- Con Bootstrap, puedes envolver la tabla en .table-responsive para scroll horizontal en móviles -->
+        <div class="table-responsive">
+          <p-table [value]="listUpdates" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+              <tr>
+                <th>Nombre</th>
+                <th>Posición</th>
+                <th>Imagen</th>
+                <th>Poster</th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-movie>
+              <tr style="text-align: center;">
+                <td>{{ movie.title_snapshoot }}</td>
+                <td>{{ movie.position }}</td>
+                <td>
+                  <img [src]="movie.img_url" width="50" height="50" />
+                </td>
+                <td>
+                  <div
+                    class="image-upload-container"
+                    (click)="triggerFileInput(movie)"
+                  >
+                    <img
+                      [src]="baseUrl + '/uploads/' + movie.poster_url"
+                      class="upload-target"
+                      width="80"
+                      height="50"
+                    />
+                    <input
+                      type="file"
+                      hidden
+                      #fileInput
+                      (change)="handleFileUpload($event, movie)"
+                    />
+                    <div class="hover-overlay">
+                      <i class="pi pi-upload"></i>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>
+
+
+
+
+
+<p-toast></p-toast>
+<p-progressSpinner *ngIf="loading"></p-progressSpinner>

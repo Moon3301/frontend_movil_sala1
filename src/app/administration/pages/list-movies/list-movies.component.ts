@@ -69,7 +69,7 @@ export class ListMoviesComponent implements OnInit {
     const requests = newItems.map((item: MovieCarrusel) =>
 
       this.administrationService.addItemToCarrusel(
-        item.externalMovieId,
+        item.externalMovieId.toString(),
         this.listUpdates.length + 1,
         ''
       ).subscribe((resp)=> {
@@ -150,7 +150,7 @@ export class ListMoviesComponent implements OnInit {
          // Armamos FormData
         const formData = new FormData();
         formData.append('poster', file); // El nombre 'poster' debe coincidir con FileInterceptor('poster')
-        formData.append('movieId', movie.externalMovieId.toString());
+        formData.append('external_id', movie.externalMovieId.toString());
         formData.append('position', (this.listUpdates.length + 1).toString());
 
         // Llamamos a la nueva ruta de NestJS

@@ -1,0 +1,6 @@
+@media (max-width: 576px) {
+  /* Aplica solo a pantallas con ancho menor o igual a 576px */
+  .ui-picklist-list {
+    max-height: 5rem !important; /* Ejemplo: reducir la altura en móviles */
+  }
+}

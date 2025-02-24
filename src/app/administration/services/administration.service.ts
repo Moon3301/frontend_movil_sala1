@@ -16,9 +16,9 @@ export class AdministrationService {
     return this.http.get<any[]>(`${this.baseUrl}/carrusel/movieCarrusel`)
   }
 
-  public addItemToCarrusel(movieId: number, position: number, poster_url: string){
+  public addItemToCarrusel(external_id: string, position: number, poster_url: string){
     return this.http.post(`${this.baseUrl}/carrusel`, {
-      movieId,
+      external_id,
       position,
       poster_url,
     })
@@ -30,6 +30,14 @@ export class AdministrationService {
 
   public uploadMoviePoster(formData: FormData) {
     return this.http.post(`${this.baseUrl}/carrusel/upload`, formData);
+  }
+
+  public updateRecordsCinemark(){
+    return this.http.post(`${this.baseUrl}/data-loader/cinemark`, {})
+  }
+
+  public updateRecordsCinepolis(){
+    return this.http.post(`${this.baseUrl}/data-loader/cinepolis`, {})
   }
 
 }
