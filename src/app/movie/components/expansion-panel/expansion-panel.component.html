@@ -61,7 +61,7 @@
                       }@else if
                       (billboard.cinemaType === 'Cineplanet'){
                         <button mat-button
-                        
+                          (click)="buildUrlPaymentCineplanet(cinema.version.title, cinema.cinemaExternalId, schedule.sessionId)"
                           class="notranslate" translate="no"
                           >
 
