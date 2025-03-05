@@ -6,14 +6,43 @@
 
   <movie-search-box [movies]="movies"></movie-search-box>
 
-  <div class="row mt-4">
-    @for (movie of movies; track movie) {
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-        <movie-card [movie]="movie"></movie-card>
-        <br>
+  <mat-tab-group [dynamicHeight]="true" style="min-height: 400px;">
+    <mat-tab label="En cartelera">
+      <div class="row mt-4">
+        @for (movie of moviesPremiere; track movie) {
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <movie-card [movie]="movie"></movie-card>
+            <br>
+          </div>
+        }
       </div>
-    }
-  </div>
+    </mat-tab>
+
+    <mat-tab label="Preventas">
+
+      <div class="row mt-4">
+        @for (movie of moviesPresale; track movie) {
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <movie-card [movie]="movie"></movie-card>
+            <br>
+          </div>
+        }
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Proximamente">
+      <div class="row mt-4">
+        @for (movie of moviesComingSoon; track movie) {
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <movie-card [movie]="movie"></movie-card>
+            <br>
+          </div>
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
 </div>
 
 <br class="mb-5">

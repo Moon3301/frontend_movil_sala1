@@ -19,6 +19,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
 
@@ -30,7 +31,6 @@ import {MatChipsModule} from '@angular/material/chips';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
-    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatAutocompleteModule,
     MatSlideToggleModule,
@@ -43,6 +43,7 @@ import {MatChipsModule} from '@angular/material/chips';
     MatSelectModule,
     MatTableModule,
     MatChipsModule,
+    MatTabsModule
   ]
 })
 export class MaterialModule { }

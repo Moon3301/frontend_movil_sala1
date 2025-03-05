@@ -2,6 +2,7 @@ export interface Movie {
   id: number;
   title_slug?: string;
   company?: string;
+  screen_type: string;
   title: string;
   synopsis: string;
   synopsis_alt: string;

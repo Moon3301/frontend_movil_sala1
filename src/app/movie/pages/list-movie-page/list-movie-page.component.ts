@@ -15,6 +15,10 @@ export class ListMoviePageComponent implements OnInit{
 
   movies: Movie[] = []
 
+  moviesPremiere: Movie[] = []
+  moviesPresale: Movie[] = []
+  moviesComingSoon: Movie[] = []
+
   constructor(private movieService: MovieService){}
 
   ngOnInit(): void {
@@ -29,15 +33,34 @@ export class ListMoviePageComponent implements OnInit{
         this.movies = finalList;
         this.movieService.saveAllMovies(this.movies);
 
+        this.movies.forEach( movie => {
+
+          if(movie.screen_type === 'ESTRENO'){
+            this.moviesPremiere.push(movie)
+          }
+
+          if(movie.screen_type === 'PREVENTA'){
+            this.moviesPresale.push(movie)
+          }
+
+          if(movie.screen_type === 'PROXIMAMENTE'){
+            this.moviesComingSoon.push(movie)
+          }
+
+        })
+
       },
       error: (err) => console.error('Error combinando:', err)
     })
+
+    // Asignar movies por tipo
+
+
 
   }
 
   private combineAndSort(allMovies: Movie[], moviesCarrusel: MovieCarrusel[]): Movie[] {
     // 1. Crear un Map<externalMovieId, position> a partir del carrusel
-    console.log(allMovies, moviesCarrusel);
 
     const positionMap = new Map<string, number>(
       moviesCarrusel.map(c => [String(c.externalMovieId), c.position])

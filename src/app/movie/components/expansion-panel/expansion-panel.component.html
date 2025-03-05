@@ -15,7 +15,7 @@
 
   <mat-accordion >
     <br>
-    @if(data.billboards){
+    @if(data.billboards.length > 0){
       @for (billboard of data.billboards; track billboard) {
         <mat-expansion-panel >
           <mat-expansion-panel-header>{{billboard.cinemaType}}</mat-expansion-panel-header>
@@ -82,6 +82,9 @@
         <br>
 
       }
+    }@else {
+      <div class="alert alert-info" style="display: flex; justify-content: center; align-items: center; ">No existen funciones disponibles para esta ubicacion</div>
+
     }
 
   </mat-accordion>
