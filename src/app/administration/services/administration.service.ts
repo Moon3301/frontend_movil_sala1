@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
 import { Observable } from 'rxjs';
+import { MovieCarrusel, UploadMoviePosterResponse } from '../interfaces/movies.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,16 @@ export class AdministrationService {
     return this.http.delete(`${this.baseUrl}/carrusel/${movieId}`)
   }
 
+  public updatePosterPosition(id: number, newPosition: number): Observable<MovieCarrusel[]>{
+    return this.http.post<MovieCarrusel[]>(`${this.baseUrl}/carrusel/update-position`, { id, newPosition });
+  }
+
+  reorderCarrusel(body: { posters: {id: number}[] }): Observable<{ data: MovieCarrusel[] }> {
+    return this.http.put<{ data: MovieCarrusel[] }>(`${this.baseUrl}/carrusel/reorder`, body);
+  }
+
   public uploadMoviePoster(formData: FormData) {
-    return this.http.post(`${this.baseUrl}/carrusel/upload`, formData);
+    return this.http.post<UploadMoviePosterResponse>(`${this.baseUrl}/carrusel/upload`, formData);
   }
 
   public updateRecordsCinemark(){

@@ -12,6 +12,8 @@
           breakpoint="1400px"
           (onMoveToTarget)="onMoveToTarget($event)"
           (onMoveToSource)="onMoveToSource($event)"
+          (onTargetReorder)="upPositionPoster($event)"
+
           [sourceStyle]="{ 'max-height': '30rem', 'overflow-y': 'auto' }"
           [targetStyle]="{ 'max-height': '30rem', 'overflow-y': 'auto' }"
         >
@@ -57,7 +59,7 @@
                     (click)="triggerFileInput(movie)"
                   >
                     <img
-                      [src]="baseUrl + '/uploads/' + movie.poster_url"
+                      [src]="buildPosterUrl(movie.poster_url)"
                       class="upload-target"
                       width="80"
                       height="50"

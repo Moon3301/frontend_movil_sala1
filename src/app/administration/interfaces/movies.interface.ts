@@ -10,9 +10,10 @@ export interface ListsCarrusel {
 }
 
 export interface MovieCarrusel {
-  movieId?:        number;
+  id:              number;
   position:        number;
   title_snapshoot: string;
+  movieId:         number;
   img_url?:        string;
   poster_url:      string;
   externalMovieId: number;
@@ -29,4 +30,8 @@ export interface Movie {
   synopsis:     string;
   synopsis_alt: string;
 
+}
+
+export interface UploadMoviePosterResponse {
+  poster_url: string;
 }

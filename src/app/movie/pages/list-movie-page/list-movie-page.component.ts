@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
+import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
+import { forkJoin, tap } from 'rxjs';
 
 @Component({
   selector: 'movie-list-movie-page',
@@ -17,22 +19,42 @@ export class ListMoviePageComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.movieService.getMovies()
-      .subscribe( movies => {
-        this.movies = movies
+    forkJoin([
+      this.movieService.getMovies(),
+      this.movieService.getCarrusel()
+    ]).subscribe({
+      next: ([allMovies, moviesCarrusel]) => {
 
-        this.movieService.saveAllMovies(this.movies)
+        const finalList = this.combineAndSort(allMovies, moviesCarrusel);
+        this.movies = finalList;
+        this.movieService.saveAllMovies(this.movies);
 
-      })
+      },
+      error: (err) => console.error('Error combinando:', err)
+    })
 
   }
 
+  private combineAndSort(allMovies: Movie[], moviesCarrusel: MovieCarrusel[]): Movie[] {
+    // 1. Crear un Map<externalMovieId, position> a partir del carrusel
+    console.log(allMovies, moviesCarrusel);
 
+    const positionMap = new Map<string, number>(
+      moviesCarrusel.map(c => [String(c.externalMovieId), c.position])
+    );
 
-  getMovies(): void{
-    console.log(this.movies)
-    // this.movies = this.movieService.getMoviesLocal()
+    // 2. Copiar el array de películas para no mutarlo (opcional)
+    const finalList = [...allMovies];
+
+    // 3. Ordenar: las que tengan position, primero (asc), y las que no, al final
+    finalList.sort((a, b) => {
+      const posA = positionMap.get(a.external_id) ?? Infinity;
+      const posB = positionMap.get(b.external_id) ?? Infinity;
+      return posA - posB;
+    });
+
+    // Devuelvo el array final ya ordenado
+    return finalList;
   }
-
 
 }

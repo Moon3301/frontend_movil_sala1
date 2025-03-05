@@ -12,7 +12,9 @@ export class AuthService {
 
   private user!: User | undefined;
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {
+    this.loadUserFromLocalStorage();
+  }
 
   get currentUser(): User | undefined {
     return this.user ? structuredClone(this.user) : undefined;
@@ -24,7 +26,7 @@ export class AuthService {
       try {
         this.user = JSON.parse(storedUser);
       } catch (error) {
-        console.error("Error al parsear el usuario de localStorage:", error);
+        console.error("Error al obtener el usuario de localStorage:", error);
       }
     }
   }
