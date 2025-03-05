@@ -4,7 +4,6 @@ import { AdministrationService } from '../../services/administration.service';
 @Component({
   selector: 'administration-update-records',
   standalone: false,
-
   templateUrl: './update-records.component.html',
   styleUrl: './update-records.component.css'
 })

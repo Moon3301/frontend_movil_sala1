@@ -1,16 +1,25 @@
 export interface ICines {
-  cinemaType:   string;
-  cinemas: ICinema[];
+  
+  cinemaType:     string;
+  cinemas:        ICinema[];
 }
 
 export interface ICinema {
+
   cinemaId:         number;
   cinemaName:       string;
-  cinemaSlug:      string;
-  cinemaExternalId: number;
+  cinemaSlug:       string;
+  cinemaExternalId: string;
   vistaId:          string;
   showtimes:        Showtime[];
+  version:          Version
+}
 
+export interface Version {
+
+  id:              number,
+  comany:          string,
+  title:           string
 }
 
 export interface Showtime {
@@ -21,10 +30,10 @@ export interface Showtime {
   language:           string;
   showtimeExternalId: string;
   sessionId:          string;
-
 }
 
 export interface IMovie {
+
   id:           number;
   tittle_slug:  string;
   company:      string;

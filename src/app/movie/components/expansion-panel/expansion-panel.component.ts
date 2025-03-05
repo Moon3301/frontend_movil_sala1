@@ -36,7 +36,7 @@ export class ExpansionPanelComponent implements OnInit{
     window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
   }
 
-  buildUrlPaymentCinemark(tag: number, showtimeId: string, date:string,  hour: string, cineSlug:string, sessionId: string){
+  buildUrlPaymentCinemark(tag: string, showtimeId: string, date:string,  hour: string, cineSlug:string, sessionId: string){
 
     console.log(tag, showtimeId, date, hour, cineSlug);
 
@@ -57,6 +57,15 @@ export class ExpansionPanelComponent implements OnInit{
 
 
     window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
+  }
+
+  buildUrlPaymentCineplanet(titleSlug: string, cinemaId: string, sessionId: string){
+
+    // https://www.cineplanet.cl/compra/attack-on-titan-el-ataque-final/0000000001/60657/asientos
+    //                                        movieDetailsUrl            cinemaId sessionId
+
+    window.open(`https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`)
+
   }
 
   onClose(): void{
