@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { filter, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -31,54 +31,67 @@ export class MoviePageComponent  implements OnInit{
   ){}
 
   ngOnInit(): void {
-
     console.log('Entrando a movie');
 
-    this.activateRoute.params
-      .pipe(
-        switchMap( ({ id }) =>{
-
-          const movieId = +id
-          return this.movieService.getMovieByIdLocal( movieId )
-        }),
-      ).subscribe( movie => {
-
-        if( !movie ) return this.router.navigateByUrl('/')
-
-        this.movie = movie
-
-        return;
-      })
-
-    const embedUrl = this.getYouTubeEmbedUrl(this.movie?.trailer_url)
-
-    this.trailerSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl!);
-
-    if(this.movie){
-
-      navigator.geolocation.getCurrentPosition(
-        (position)=> {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-
-          console.log(`Latitude: ${lat}, Longitude: ${lng}`);
-
-          const regionName = localStorage.getItem("user_ubication")
-
-          this.movieService.getCinemasByUbicationAndMovie(this.movie?.id!, regionName!).subscribe(
-            (cinemas) => {
-              this.funciones = cinemas
-              console.log(this.funciones);
-
-            }
-          )
-
+    this.activateRoute.params.pipe(
+      switchMap(({ id }) => {
+        const movieId = +id;
+        return this.movieService.getMovieByIdLocal(movieId);
+      }),
+      tap(movie => {
+        if (!movie) {
+          // Si no se encuentra la película, se redirige y se detiene la cadena.
+          this.router.navigateByUrl('/');
         }
+      }),
+      // Continuar solo si se obtuvo la película.
+      filter(movie => !!movie),
+      tap(movie => {
+        this.movie = movie;
+        const embedUrl = this.getYouTubeEmbedUrl(movie.trailer_url);
+        this.trailerSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+      }),
+      // Obtener la región (ya sea del localStorage o mediante geolocalización).
+      switchMap(() => this.getRegionName()),
+      // Una vez se tiene la región, se solicitan los cines.
+      switchMap(regionName =>
+        this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, regionName)
       )
+    ).subscribe(
+      cinemas => {
+        this.funciones = cinemas;
+        console.log(this.funciones);
+      },
+      error => console.error(error)
+    );
+  }
 
+  private getRegionName(): Observable<string> {
+    const regionName = localStorage.getItem('user_ubication');
+    if (regionName) {
+      return of(regionName);
     }
 
+    return new Observable<string>(observer => {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          this.movieService.getUbicationByGeoCode(lat, lng).subscribe(
+            response => {
+              const region = response.address.state;
+              localStorage.setItem("user_ubication", region);
+              observer.next(region);
+              observer.complete();
+            },
+            error => observer.error(error)
+          );
+        },
+        error => observer.error(error)
+      );
+    });
   }
+
   // Extrae el ID de un URL de YouTube y genera un embed URL
   getYouTubeEmbedUrl(originalUrl: string | undefined): string {
   if (!originalUrl) return '';
@@ -163,4 +176,6 @@ export class MoviePageComponent  implements OnInit{
       height: '90%'
     });
   }
+
+
 }

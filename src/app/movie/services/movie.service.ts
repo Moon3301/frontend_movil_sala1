@@ -6,6 +6,7 @@ import { environments } from '../../../environments/environments';
 import { ICines } from '../interfaces/funciones.interface';
 import { getFormattedDate } from '../../common/helpers';
 import { MovieCarrusel } from '../../administration/interfaces/movies.interface';
+import { IUbication } from '../../common/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -60,4 +61,9 @@ export class MovieService {
   public getMoviesLocal(): Movie[]{
     return this.movies
   }
+
+  getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{
+    return this.http.get<IUbication>(`${environments.urlGeoCode}reverse?lat=${lat}&lon=${lng}&api_key=${environments.apiKeyGeoCode}`)
+  }
+
 }
