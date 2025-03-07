@@ -9,6 +9,8 @@ import { PrimengModule } from '../primeng/primeng.module';
 import { AdministrationPageComponent } from './pages/administration-page/administration-page.component';
 import { EditCarruselComponent } from './components/edit-carrusel/edit-carrusel.component';
 import { UpdateRecordsComponent } from './components/update-records/update-records.component';
+import { MatTableModule } from '@angular/material/table';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { UpdateRecordsComponent } from './components/update-records/update-recor
   imports: [
     CommonModule,
     AdministrationRoutingModule,
-    PrimengModule
+    PrimengModule,
+    MatTableModule,
+    MatSelectModule
   ],
   providers: [
     AdministrationService

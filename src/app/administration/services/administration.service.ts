@@ -17,6 +17,17 @@ export class AdministrationService {
     return this.http.get<any[]>(`${this.baseUrl}/carrusel/movieCarrusel`)
   }
 
+  public updateManualScreenType(movieId: number, screenType: string){
+    return this.http.post<any>(`${this.baseUrl}/movies/update-screen-type`, {
+      movieId,
+      screenType
+    })
+  }
+
+  public getAllMovies(){
+    return this.http.get<any[]>(`${this.baseUrl}/movies`)
+  }
+
   public addItemToCarrusel(external_id: string, position: number, poster_url: string){
     return this.http.post(`${this.baseUrl}/carrusel`, {
       external_id,
