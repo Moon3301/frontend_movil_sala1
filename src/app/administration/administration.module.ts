@@ -1,25 +1,33 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
-import { ListComponent } from './components/list/list.component';
-import { ListMoviesComponent } from './pages/list-movies/list-movies.component';
+
 import { AdministrationRoutingModule } from './administration-routing.module';
-import { AdministrationService } from './services/administration.service';
 import { PrimengModule } from '../primeng/primeng.module';
-import { AdministrationPageComponent } from './pages/administration-page/administration-page.component';
-import { EditCarruselComponent } from './components/edit-carrusel/edit-carrusel.component';
-import { UpdateRecordsComponent } from './components/update-records/update-records.component';
+
 import { MatTableModule } from '@angular/material/table';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import {MatRippleModule} from '@angular/material/core';
+
+import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
+import { AdministrationPageComponent } from './pages/administration-page/administration-page.component';
+
+import { AdministrationService } from './services/administration.service';
+import { UpdateRecordsPageComponent } from './pages/update-records-page/update-records-page.component';
+import { EditCarruselPageComponent } from './pages/edit-carrusel-page/edit-carrusel-page.component';
+import { EditMoviesPagesComponent } from './pages/edit-movies-pages/edit-movies-pages.component';
+
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     LayoutPageComponent,
-    ListComponent,
-    ListMoviesComponent,
     AdministrationPageComponent,
-    EditCarruselComponent,
-    UpdateRecordsComponent,
+    UpdateRecordsPageComponent,
+    EditMoviesPagesComponent,
+    EditCarruselPageComponent,
 
   ],
   imports: [
@@ -27,7 +35,12 @@ import {MatSelectModule} from '@angular/material/select';
     AdministrationRoutingModule,
     PrimengModule,
     MatTableModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSidenavModule,
+    MatListModule,
+    MatRippleModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AdministrationService

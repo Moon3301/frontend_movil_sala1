@@ -24,6 +24,13 @@ export class AdministrationService {
     })
   }
 
+  public updateImgUrl(movieId: number, imgUrl: string){
+    return this.http.post<any>(`${this.baseUrl}/movies/update-movie-url`,{
+      movieId,
+      imgUrl
+    })
+  }
+
   public getAllMovies(){
     return this.http.get<any[]>(`${this.baseUrl}/movies`)
   }
@@ -58,6 +65,10 @@ export class AdministrationService {
 
   public updateRecordsCinepolis(){
     return this.http.post(`${this.baseUrl}/data-loader/cinepolis`, {})
+  }
+
+  public updateRecordsCineplanet(){
+    return this.http.post(`${this.baseUrl}/data-loader/cineplanet`, {})
   }
 
 }

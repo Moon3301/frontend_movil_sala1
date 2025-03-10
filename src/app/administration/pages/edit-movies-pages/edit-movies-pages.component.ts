@@ -1,17 +1,27 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AdministrationService } from '../../services/administration.service';
 import { Movie } from '../../interfaces/movies.interface';
-
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'administration-list',
+  selector: 'adm-edit-movies-pages',
   standalone: false,
-
-  templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+  templateUrl: './edit-movies-pages.component.html',
+  styleUrl: './edit-movies-pages.component.css'
 })
-export class ListComponent implements OnInit{
+export class EditMoviesPagesComponent implements OnInit{
+
+  visible: boolean = false;
+
+  Editmovie?: Movie
+
+  public editForm!: FormGroup;
+
+  showDialog(movie: Movie) {
+
+    this.Editmovie = movie
+    this.visible = true;
+  }
 
   foods: any[] = [
     {value: 'ESTRENO', viewValue: 'ESTRENO'},
@@ -22,9 +32,13 @@ export class ListComponent implements OnInit{
   @Input()
   dataSource : Movie[] = []
 
-  displayedColumns: string[] = ['ID', 'Titulo', 'Tipo'];
+  displayedColumns: string[] = ['ID', 'Titulo', 'Imagen', 'Rating', 'Tipo'];
 
-  constructor(private readonly admService: AdministrationService){}
+  constructor(private readonly admService: AdministrationService, private fb: FormBuilder){
+    this.editForm = this.fb.group({
+      img_url: ['', Validators.required],
+    })
+  }
 
   ngOnInit(): void {
 
@@ -44,8 +58,6 @@ export class ListComponent implements OnInit{
   }
 
   onChangeSelect(event: any, element: Movie){
-    console.log('element.id: ', element.id);
-    console.log('event.value: ', event.value);
 
     this.admService.updateManualScreenType(element.id, event.value).subscribe({
       next: (resp) => {
@@ -54,6 +66,23 @@ export class ListComponent implements OnInit{
       },
       error: (error) => {
         console.log('Ja ocurrido un error', error);
+      }
+    })
+
+  }
+
+  onChangesInput(){
+
+    const movieId = this.Editmovie?.id;
+    const img_url = this.editForm.get('img_url')?.value;
+
+    this.admService.updateImgUrl(movieId!, img_url).subscribe({
+      next: () => {
+        console.log('Imagen actualizada correctamente');
+        this.getAllMovies();
+      },
+      error: (error) => {
+        console.log('Ocurrio un error al actualizar la img.', error);
       }
     })
 
@@ -70,9 +99,8 @@ export class ListComponent implements OnInit{
 
         error: (error) => {
           console.log('Ha ocurrido un error al obtener las peliculas.');
-
         }
       })
-
   }
+
 }

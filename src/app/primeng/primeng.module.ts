@@ -8,6 +8,8 @@ import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
 import { GalleriaModule } from 'primeng/galleria';
 import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   exports: [
@@ -19,7 +21,9 @@ import { TableModule } from 'primeng/table';
     MessageModule,
     CardModule,
     GalleriaModule,
-    TableModule
+    TableModule,
+    DialogModule,
+    InputTextModule
   ],
 })
 export class PrimengModule { }

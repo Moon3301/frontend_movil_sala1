@@ -6,13 +6,13 @@ import { AdministrationService } from '../../services/administration.service';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'administration-edit-carrusel',
+  selector: 'adm-edit-carrusel-page',
   standalone: false,
 
-  templateUrl: './edit-carrusel.component.html',
-  styleUrl: './edit-carrusel.component.css'
+  templateUrl: './edit-carrusel-page.component.html',
+  styleUrl: './edit-carrusel-page.component.css'
 })
-export class EditCarruselComponent {
+export class EditCarruselPageComponent {
 
   @ViewChildren('fileInput') fileInputs!: QueryList<ElementRef>
 
@@ -292,4 +292,5 @@ export class EditCarruselComponent {
   buildPosterUrl(posterUrl: string): String{
     return `${this.baseUrl}/uploads/${posterUrl}`
   }
+
 }

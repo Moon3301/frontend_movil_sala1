@@ -1,3 +1,22 @@
-<div class="container">
-  <router-outlet/>
-</div>
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened style="width: 200px; background-color: rgb(15, 15, 30); border: 1px solid black;">
+
+    <h5 class="text-center">Panel de administracion</h5>
+    <hr>
+    <mat-list role="list">
+      <mat-list-item matRipple role="listitem" [routerLink]="['edit-carrusel']">Editar Carrusuel</mat-list-item>
+      <mat-list-item matRipple role="listitem" [routerLink]="['edit-movies']">Editar peliculas</mat-list-item>
+      <mat-list-item matRipple role="listitem" [routerLink]="['update-records']">Actualizar registros</mat-list-item>
+    </mat-list>
+
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="container">
+      <router-outlet/>
+    </div>
+  </mat-drawer-content>
+
+</mat-drawer-container>
+
+
