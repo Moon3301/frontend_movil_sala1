@@ -8,3 +8,13 @@ export function getFormattedDate() {
   // Retornamos en formato YYYY-MM-DD
   return `${year}-${month}-${day}`;
 }
+
+export function getFormattedDateV2(date: Date){
+
+  const year = date.getFullYear();
+  const month = String(date.getDate()).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`
+
+}

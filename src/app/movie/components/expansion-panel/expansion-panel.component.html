@@ -15,7 +15,23 @@
 
   <mat-accordion >
     <br>
-    @if(data.billboards.length > 0){
+
+    <div style="display: flex; justify-content: flex-end; width: 100%;">
+      <mat-form-field appearance="outline" class="fechas-funciones">
+        <mat-label>Funciones disponibles</mat-label>
+        <mat-select [value]="dates[0]">
+          @for (date of dates; track date) {
+            <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <br>
+    @if(isLoading){
+      <div style="display: flex; justify-content: center;">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else if(data.billboards.length > 0){
       @for (billboard of data.billboards; track billboard) {
         <mat-expansion-panel >
           <mat-expansion-panel-header>{{billboard.cinemaType}}</mat-expansion-panel-header>

@@ -2,3 +2,28 @@
   background-color: rgb(15, 15, 30);
 
 }
+
+.fechas-funciones {
+  padding: 0;
+  border: 1px solid black;
+  height: 55px;
+  width: 25%;
+}
+
+@media (max-width: 477px) {
+  .fechas-funciones {
+    padding: 0;
+    border: 1px solid black;
+    height: 55px;
+    width: 100%;
+  }
+}
+
+@media ((min-width: 477px) and (max-width: 768px)) {
+  .fechas-funciones {
+    padding: 0;
+    border: 1px solid black;
+    height: 55px;
+    width: 75%;
+  }
+}

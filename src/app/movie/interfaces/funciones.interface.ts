@@ -1,7 +1,8 @@
 export interface ICines {
-  
+
   cinemaType:     string;
   cinemas:        ICinema[];
+  dates:          Date[];
 }
 
 export interface ICinema {

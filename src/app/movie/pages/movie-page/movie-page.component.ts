@@ -8,6 +8,7 @@ import { ICines } from '../../interfaces/funciones.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpansionPanelComponent } from '../../components/expansion-panel/expansion-panel.component';
 import { CardVideoComponent } from '../../components/card-video/card-video.component';
+import { getFormattedDate } from '../../../common/helpers';
 
 @Component({
   selector: 'movie-movie-page',
@@ -19,8 +20,10 @@ import { CardVideoComponent } from '../../components/card-video/card-video.compo
 export class MoviePageComponent  implements OnInit{
 
   movie?: Movie
-  trailerSafeUrl!: SafeResourceUrl;
   funciones?: ICines[]
+
+  trailerSafeUrl!: SafeResourceUrl;
+
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -32,6 +35,7 @@ export class MoviePageComponent  implements OnInit{
 
   ngOnInit(): void {
     console.log('Entrando a movie');
+    const currentDate = getFormattedDate();
 
     this.activateRoute.params.pipe(
       switchMap(({ id }) => {
@@ -55,10 +59,10 @@ export class MoviePageComponent  implements OnInit{
       switchMap(() => this.getRegionName()),
       // Una vez se tiene la región, se solicitan los cines.
       switchMap(regionName =>
-        this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, regionName)
+        this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, regionName, currentDate)
       )
     ).subscribe(
-      cinemas => {
+      (cinemas) => {
         this.funciones = cinemas;
         console.log(this.funciones);
       },

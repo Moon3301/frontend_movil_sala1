@@ -23,9 +23,9 @@ export class MovieService {
     return this.http.post<ICines[]>(`${this.baseUrl}/billboard`, { movieId: movieId } )
   }
 
-  public getCinemasByUbicationAndMovie( movieId: number, regionName: string): Observable<ICines[]>{
+  public getCinemasByUbicationAndMovie( movieId: number, regionName: string, currentDate?: string): Observable<ICines[]>{
 
-    const currentDate = getFormattedDate();
+    const currentDate1 = getFormattedDate();
 
     return this.http.get<ICines[]>(
       `${this.baseUrl}/billboard/${currentDate}?movieId=${movieId}&regionName=${regionName}`
