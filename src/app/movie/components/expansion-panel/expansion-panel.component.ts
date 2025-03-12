@@ -53,6 +53,15 @@ export class ExpansionPanelComponent implements OnInit{
     console.log('this.dates: ',this.dates);
 
     this.dataBillboards = this.data
+
+    if(this.dataBillboards.billboards.length == 0){
+
+      const regionName = localStorage.getItem("user_ubication");
+      const movieId = this.data.movie.id;
+
+      this.getShowtimes(movieId, regionName!, this.dates[0])
+    }
+
   }
 
   buildUrlPaymentCinepolis(vistaId:string, showtimeId: string){
@@ -109,34 +118,41 @@ export class ExpansionPanelComponent implements OnInit{
 
   }
 
-  onSelectDate(fecha: string, event: MatOptionSelectionChange) {
-    if(event.isUserInput){
+  onSelectDate(fecha: string, event?: MatOptionSelectionChange) {
+    if(event?.isUserInput){
 
       const regionName = localStorage.getItem("user_ubication");
       const movieId = this.data.movie.id;
 
-      this.isLoading = true;
-      this.cdr.detectChanges();
+      this.getShowtimes(movieId, regionName!, fecha)
 
-      this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
-        next: (response) => {
-
-          this.data.billboards = response.data;
-
-          this.dates = response.dates
-
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        },
-        error: (error) => {
-
-          console.log(error);
-
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        }
-      });
     }
+  }
+
+  getShowtimes(movieId: number, regionName: string, fecha: string){
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
+      next: (response) => {
+
+        this.data.billboards = response.data;
+
+        this.dates = response.dates
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+
+        console.log(error);
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+
   }
 
 }
