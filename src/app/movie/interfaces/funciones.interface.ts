@@ -1,8 +1,12 @@
+export interface DataBillboard {
+  data: ICines[];
+  dates: string[];
+}
+
 export interface ICines {
 
   cinemaType:     string;
   cinemas:        ICinema[];
-  dates:          Date[];
 }
 
 export interface ICinema {

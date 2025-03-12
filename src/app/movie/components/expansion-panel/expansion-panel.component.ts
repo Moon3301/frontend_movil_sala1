@@ -41,14 +41,17 @@ export class ExpansionPanelComponent implements OnInit{
 
   constructor(
     public dialogRef: MatDialogRef<ExpansionPanelComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { billboards: ICines[], movie: Movie },
+    @Inject(MAT_DIALOG_DATA) public data: { billboards: ICines[], movie: Movie, dates: string[] },
     private movieService: MovieService,
     private cdr: ChangeDetectorRef // <-- Agrega esto
 
   ){}
 
   ngOnInit(): void {
-    this.dates = this.getNextFiveDates();
+    // this.dates = this.getNextFiveDates();
+    this.dates = this.data.dates
+    console.log('this.dates: ',this.dates);
+
     this.dataBillboards = this.data
   }
 
@@ -118,7 +121,9 @@ export class ExpansionPanelComponent implements OnInit{
       this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
         next: (response) => {
 
-          this.data.billboards = response;
+          this.data.billboards = response.data;
+
+          this.dates = response.dates
 
           this.isLoading = false;
           this.cdr.detectChanges();

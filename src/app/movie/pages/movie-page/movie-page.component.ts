@@ -4,7 +4,7 @@ import { filter, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ICines } from '../../interfaces/funciones.interface';
+import { DataBillboard, ICines } from '../../interfaces/funciones.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpansionPanelComponent } from '../../components/expansion-panel/expansion-panel.component';
 import { CardVideoComponent } from '../../components/card-video/card-video.component';
@@ -21,9 +21,9 @@ export class MoviePageComponent  implements OnInit{
 
   movie?: Movie
   funciones?: ICines[]
+  fechas?: string[]
 
   trailerSafeUrl!: SafeResourceUrl;
-
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -62,8 +62,10 @@ export class MoviePageComponent  implements OnInit{
         this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, regionName, currentDate)
       )
     ).subscribe(
-      (cinemas) => {
-        this.funciones = cinemas;
+      (dataBillboard) => {
+        this.funciones = dataBillboard.data;
+        this.fechas = dataBillboard.dates;
+
         console.log(this.funciones);
       },
       error => console.error(error)
@@ -160,7 +162,8 @@ export class MoviePageComponent  implements OnInit{
     this.dialog.open(ExpansionPanelComponent, {
       data: {
         billboards: this.funciones,
-        movie: this.movie
+        movie: this.movie,
+        dates: this.fechas
       },
       width: '80%',
       height: '80%',

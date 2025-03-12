@@ -3,7 +3,7 @@ import { Movie } from '../interfaces/movie.interface';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
-import { ICines } from '../interfaces/funciones.interface';
+import { DataBillboard, ICines } from '../interfaces/funciones.interface';
 import { getFormattedDate } from '../../common/helpers';
 import { MovieCarrusel } from '../../administration/interfaces/movies.interface';
 import { IUbication } from '../../common/interfaces';
@@ -23,11 +23,8 @@ export class MovieService {
     return this.http.post<ICines[]>(`${this.baseUrl}/billboard`, { movieId: movieId } )
   }
 
-  public getCinemasByUbicationAndMovie( movieId: number, regionName: string, currentDate?: string): Observable<ICines[]>{
-
-    const currentDate1 = getFormattedDate();
-
-    return this.http.get<ICines[]>(
+  public getCinemasByUbicationAndMovie( movieId: number, regionName: string, currentDate?: string): Observable<DataBillboard>{
+    return this.http.get<DataBillboard>(
       `${this.baseUrl}/billboard/${currentDate}?movieId=${movieId}&regionName=${regionName}`
     )
   }
@@ -35,11 +32,10 @@ export class MovieService {
   public getMovieByIdLocal( movieId: number): Observable<Movie>{
 
     const moviesStorage = localStorage.getItem("movies");
+
     const movies: Movie[] = moviesStorage ? JSON.parse(moviesStorage) : [];
 
     const movie = movies.find(movie => movie.id === movieId)
-
-    console.log(movie);
 
     return of(movie!)
   }
@@ -53,8 +49,6 @@ export class MovieService {
   }
 
   public saveAllMovies(movies: Movie[]){
-    console.log('Data guardada en local Storage');
-
     localStorage.setItem("movies", JSON.stringify(movies))
   }
 
