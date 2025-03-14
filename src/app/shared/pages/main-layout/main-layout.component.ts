@@ -57,13 +57,9 @@ export class MainLayoutComponent implements OnInit{
 
   }
 
-  onChangeUbication(newUbication: string, event?: MatOptionSelectionChange){
-    if(event?.isUserInput){
-
-      localStorage.setItem("user_ubication", newUbication)
-      window.location.reload();
-
-    }
+  onChangeUbication(newUbication: string): void {
+    localStorage.setItem("user_ubication", newUbication);
+    window.location.reload();
   }
 
   logout(){

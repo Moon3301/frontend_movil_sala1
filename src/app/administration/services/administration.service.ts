@@ -59,6 +59,13 @@ export class AdministrationService {
     return this.http.post<UploadMoviePosterResponse>(`${this.baseUrl}/carrusel/upload`, formData);
   }
 
+  public updateMoviePoster(id: number, posterUrl: string){
+    return this.http.post<any>(`${this.baseUrl}/carrusel/update-poster-url`, {
+      id,
+      posterUrl
+    })
+  }
+
   public updateRecordsCinemark(){
     return this.http.post(`${this.baseUrl}/data-loader/cinemark`, {})
   }

@@ -1,6 +1,6 @@
 <form  class="mt-2" style="display: flex; justify-content: center; align-items: center;">
-  <mat-form-field appearance="outline" class="w-50" >
-    <mat-label>Buscar ...</mat-label>
+  <mat-form-field appearance="outline" class="w-75" >
+    <mat-icon matSuffix>search</mat-icon>
     <input
 
       type="text"
@@ -8,7 +8,7 @@
       matInput
       [formControl]="myControl"
       [matAutocomplete]="auto"
-      >
+    >
 
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
       @for (option of filteredOptions | async; track option) {

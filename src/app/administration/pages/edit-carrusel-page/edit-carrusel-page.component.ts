@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { environments } from '../../../../environments/environments';
-import { ListsCarrusel, MovieCarrusel } from '../../interfaces/movies.interface';
+import { ListsCarrusel, Movie, MovieCarrusel } from '../../interfaces/movies.interface';
 import { AdministrationService } from '../../services/administration.service';
 import { forkJoin } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'adm-edit-carrusel-page',
@@ -16,6 +17,9 @@ export class EditCarruselPageComponent {
 
   @ViewChildren('fileInput') fileInputs!: QueryList<ElementRef>
 
+  visible: boolean = false;
+  movieCarrusel?: MovieCarrusel;
+
   listMovies: MovieCarrusel[] = [];
 
   baseUrl = environments.baseUrl;
@@ -24,14 +28,44 @@ export class EditCarruselPageComponent {
   existingIds = new Set<number>();
   loading = false;
 
+  public editForm!: FormGroup;
+
   constructor(
     private administrationService: AdministrationService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder
+  ) {
+    this.editForm = this.fb.group({
+      posterUrl: ['', Validators.required],
+  })
+  }
 
   ngOnInit(): void {
     this.loadCarruselData();
+  }
+
+  showDialog(movie: MovieCarrusel) {
+
+    this.movieCarrusel = movie
+    this.visible = true;
+  }
+
+  onChangesInput(){
+
+    const movieCarrsuelId = this.movieCarrusel?.id
+    const posterUrl = this.editForm.get("posterUrl")?.value
+
+    this.administrationService.updateMoviePoster( Number(movieCarrsuelId), posterUrl).subscribe({
+      next: (resp) => {
+        console.log(resp);
+        this.loadCarruselData();
+      },
+      error: (error) => {
+        console.log('No se pudo actualizar el poster', error);
+      }
+    })
+
   }
 
   private loadCarruselData(): void {
@@ -103,7 +137,6 @@ export class EditCarruselPageComponent {
     });
   }
 
-
   onMoveToSource(event: any): void {
 
     const itemsToRemove = event.items as MovieCarrusel[];
@@ -129,16 +162,6 @@ export class EditCarruselPageComponent {
         });
       }
     });
-  }
-
-  triggerFileInput(product: any) {
-    const input = this.fileInputs.find((_, index) =>
-      this.listUpdates[index] === product
-    )?.nativeElement;
-
-    if (input) {
-      input.click();
-    }
   }
 
   upPositionPoster(event: any){
@@ -177,36 +200,36 @@ export class EditCarruselPageComponent {
 
   }
 
-  downPositionPoster(event: any){
-    const reorderedList: MovieCarrusel[] = event.items;
-    // Asume que el pickList ya actualizó el array con la nueva posición (si no, puedes re-calcularla)
-    // Si no se actualizan automáticamente las posiciones, puedes asignarlas:
-    reorderedList.forEach((item, index) => item.position = index + 1);
+  // downPositionPoster(event: any){
+  //   const reorderedList: MovieCarrusel[] = event.items;
+  //   // Asume que el pickList ya actualizó el array con la nueva posición (si no, puedes re-calcularla)
+  //   // Si no se actualizan automáticamente las posiciones, puedes asignarlas:
+  //   reorderedList.forEach((item, index) => item.position = index + 1);
 
-    forkJoin(
-      reorderedList.map(item =>
-        this.administrationService.updatePosterPosition(item.id, item.position)
-      )
-    ).subscribe({
-      next: (responses) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Orden actualizado',
-          detail: 'La posición de los posters se ha actualizado correctamente'
-        });
-        // Refresca la data con la nueva lista ordenada
-        this.loadCarruselData();
-      },
-      error: (err) => {
-        console.error('Error actualizando el orden:', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo actualizar el orden'
-        });
-      }
-    });
-  }
+  //   forkJoin(
+  //     reorderedList.map(item =>
+  //       this.administrationService.updatePosterPosition(item.id, item.position)
+  //     )
+  //   ).subscribe({
+  //     next: (responses) => {
+  //       this.messageService.add({
+  //         severity: 'success',
+  //         summary: 'Orden actualizado',
+  //         detail: 'La posición de los posters se ha actualizado correctamente'
+  //       });
+  //       // Refresca la data con la nueva lista ordenada
+  //       this.loadCarruselData();
+  //     },
+  //     error: (err) => {
+  //       console.error('Error actualizando el orden:', err);
+  //       this.messageService.add({
+  //         severity: 'error',
+  //         summary: 'Error',
+  //         detail: 'No se pudo actualizar el orden'
+  //       });
+  //     }
+  //   });
+  // }
 
   async updatePosterPosition(event: any){
 
@@ -244,53 +267,53 @@ export class EditCarruselPageComponent {
 
   }
 
-  async handleFileUpload(event: Event, movieCarrusel: MovieCarrusel) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+  // async handleFileUpload(event: Event, movieCarrusel: MovieCarrusel) {
+  //   const input = event.target as HTMLInputElement;
+  //   const file = input.files?.[0];
 
-    if (file) {
-      try {
-        // 1. Mostrar preview inmediata
-        const previewUrl = await this.readFileAsDataURL(file);
-        movieCarrusel.poster_url = previewUrl;
+  //   if (file) {
+  //     try {
+  //       // 1. Mostrar preview inmediata
+  //       const previewUrl = await this.readFileAsDataURL(file);
+  //       movieCarrusel.poster_url = previewUrl;
 
-        console.log('movieCarrusel:', movieCarrusel);
+  //       console.log('movieCarrusel:', movieCarrusel);
 
-        // Armamos FormData
-        const formData = new FormData();
-        formData.append('poster', file); // El nombre 'poster' debe coincidir con FileInterceptor('poster')
-        formData.append('id', movieCarrusel.id.toString() || '');
+  //       // Armamos FormData
+  //       const formData = new FormData();
+  //       formData.append('poster', file); // El nombre 'poster' debe coincidir con FileInterceptor('poster')
+  //       formData.append('id', movieCarrusel.id.toString() || '');
 
-        // Llamamos a la nueva ruta de NestJS
-        this.administrationService.uploadMoviePoster(formData).subscribe({
-          next: (resp) => {
+  //       // Llamamos a la nueva ruta de NestJS
+  //       this.administrationService.uploadMoviePoster(formData).subscribe({
+  //         next: (resp) => {
 
-            movieCarrusel.poster_url = resp.poster_url
-            this.loadCarruselData();
-          },
-          error: (err) => {
-            console.error('Error:', err);
-          },
-        });
+  //           movieCarrusel.poster_url = resp.poster_url
+  //           this.loadCarruselData();
+  //         },
+  //         error: (err) => {
+  //           console.error('Error:', err);
+  //         },
+  //       });
 
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        // Manejar errores
-      }
-    }
-  }
+  //     } catch (error) {
+  //       console.error('Error uploading image:', error);
+  //       // Manejar errores
+  //     }
+  //   }
+  // }
 
-  private readFileAsDataURL(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
+  // private readFileAsDataURL(file: File): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => resolve(reader.result as string);
+  //     reader.onerror = reject;
+  //     reader.readAsDataURL(file);
+  //   });
+  // }
 
-  buildPosterUrl(posterUrl: string): String{
-    return `${this.baseUrl}/uploads/${posterUrl}`
-  }
+  // buildPosterUrl(posterUrl: string): String{
+  //   return `${this.baseUrl}/uploads/${posterUrl}`
+  // }
 
 }

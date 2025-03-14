@@ -35,9 +35,9 @@ export class CarruselComponent implements OnInit{
 
         this.moviesCarrusel = movies.sort((a, b) => a.position - b.position);
 
-        this.moviesCarrusel.map( movie => {
-          movie.poster_url = this.baseUrl + '/uploads/' + movie.poster_url;
-        })
+        // this.moviesCarrusel.map( movie => {
+        //   movie.poster_url = this.baseUrl + '/uploads/' + movie.poster_url;
+        // })
 
         this.moviePoster = this.moviesCarrusel[0];
         //this.moviePoster.poster_url = this.baseUrl + '/uploads/' + this.moviesCarrusel[0].poster_url;
