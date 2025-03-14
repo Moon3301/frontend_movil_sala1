@@ -3,6 +3,7 @@ import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
 import { forkJoin, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'movie-list-movie-page',
@@ -19,7 +20,14 @@ export class ListMoviePageComponent implements OnInit{
   moviesPresale: Movie[] = []
   moviesComingSoon: Movie[] = []
 
-  constructor(private movieService: MovieService){}
+  // Índice del tab seleccionado
+  selectedTabIndex = 0;
+
+  constructor(
+    private movieService: MovieService,
+    private route: ActivatedRoute,
+    private router: Router
+  ){}
 
   ngOnInit(): void {
 
@@ -53,10 +61,22 @@ export class ListMoviePageComponent implements OnInit{
       error: (err) => console.error('Error combinando:', err)
     })
 
-    // Asignar movies por tipo
+    // Leer el índice de la URL (query params, por ejemplo)
+    this.route.queryParams.subscribe(params => {
+      const tabIndex = +params['tab'] || 0; // si no hay 'tab', usar 0
+      this.selectedTabIndex = tabIndex;
+    });
 
+  }
 
-
+  onTabChange(event: any) {
+    const index = event.index;
+    // Navegar a la misma ruta, pero cambiando el query param 'tab'
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: index },
+      queryParamsHandling: 'merge' // mantiene los demás query params que existan
+    });
   }
 
   private combineAndSort(allMovies: Movie[], moviesCarrusel: MovieCarrusel[]): Movie[] {

@@ -155,4 +155,41 @@ export class ExpansionPanelComponent implements OnInit{
 
   }
 
+  isButtonDisabled(showtime: string, showdate: string): boolean {
+
+    const dShow = new Date(showdate);
+    const dNow = new Date();
+
+    const sameDay =
+    dShow.getMonth() === dNow.getMonth() &&
+    dShow.getDate() === dNow.getDate();
+
+    if (sameDay) {
+      // Extraemos [hora, minuto] de showtime (p.ej. "17:40")
+      const [hours, minutes] = showtime.split(':').map(val => parseInt(val, 10));
+
+      // 3) Creamos la fecha de la función usando el día actual y la hora dada
+      const showtimeDate = new Date();
+      showtimeDate.setHours(hours, minutes, 0, 0);
+
+      // 4) Calculamos la diferencia: (AHORA) - (HORA DE LA FUNCIÓN)
+      const diffMs = dNow.getTime() - showtimeDate.getTime();
+
+      // 20 minutos en milisegundos
+      const twentyMinutesMs = 20 * 60 * 1000;
+
+      // 5) Si la hora actual está al menos 20min por encima del showtime:
+      //    => deshabilitar botón
+      return diffMs >= twentyMinutesMs;
+
+    } else {
+      // Si no es el mismo día, tu lógica:
+      // Por ejemplo, deshabilitar si la fecha es anterior,
+      // o no deshabilitar si es un día futuro...
+      return dShow < dNow;
+    }
+
+  }
+
+
 }

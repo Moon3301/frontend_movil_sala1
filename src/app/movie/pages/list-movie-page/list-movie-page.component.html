@@ -6,7 +6,12 @@
 
   <movie-search-box [movies]="movies"></movie-search-box>
 
-  <mat-tab-group [dynamicHeight]="true" style="min-height: 400px;">
+  <mat-tab-group
+    [dynamicHeight]="true"
+    style="min-height: 400px;"
+    [selectedIndex]="selectedTabIndex"
+    (selectedTabChange)="onTabChange($event)"
+    >
     <mat-tab label="En cartelera">
       <div class="row mt-4">
         @for (movie of moviesPremiere; track movie) {

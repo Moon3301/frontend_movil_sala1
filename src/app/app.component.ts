@@ -17,7 +17,11 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.getUserLocation();
+    const ubication = localStorage.getItem("user_ubication")
+
+    if(!ubication){
+      this.getUserLocation();
+    }
 
     this.authService.checkAuthentication()
     .subscribe( ()=>{

@@ -2,12 +2,23 @@
 
   <mat-drawer-container autosize style="background-color: rgb(15, 15, 30);">
 
-    <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 1; ">
+    <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 1;">
       <button (click)="drawer.toggle()" mat-icon-button class="example-icon">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="title-toolbar">Sala 1</span>
       <button  mat-button [routerLink]="['/movies']" style="font-size: 20px;">Peliculas</button>
+      <span class="spacer"></span>
+
+      <mat-form-field appearance="outline" style="height: 55px;">
+        <mat-label>Ubicacion</mat-label>
+        <mat-select [value]="userCurrentRegion">
+          @for (region of regions; track region) {
+            <mat-option (onSelectionChange)="onChangeUbication(region.name, $event)" [value]="region.name">{{region.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
     </mat-toolbar>
 
     <br>

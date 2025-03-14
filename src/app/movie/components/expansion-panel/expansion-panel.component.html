@@ -51,6 +51,7 @@
                     <div class="col-6 col-md-2">
                       @if(billboard.cinemaType === 'Cinepolis'){
                         <button mat-button
+                          [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate)"
                           (click)="buildUrlPaymentCinepolis(
                           cinema.vistaId,
                           schedule.showtimeExternalId)"
@@ -62,6 +63,7 @@
                       }@else if
                       (billboard.cinemaType === 'Cinemark'){
                         <button mat-button
+                        [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate)"
                         (click)="buildUrlPaymentCinemark(
                           cinema.cinemaExternalId,
                           schedule.showtimeExternalId,
@@ -77,6 +79,7 @@
                       }@else if
                       (billboard.cinemaType === 'Cineplanet'){
                         <button mat-button
+                        [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate)"
                           (click)="buildUrlPaymentCineplanet(
                             cinema.version.title,
                             cinema.cinemaExternalId,
