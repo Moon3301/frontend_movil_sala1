@@ -73,7 +73,7 @@ export class MoviePageComponent  implements OnInit{
   }
 
   private getRegionName(): Observable<string> {
-    const regionName = localStorage.getItem('user_ubication');
+    const regionName = sessionStorage.getItem('user_ubication');
     if (regionName) {
       return of(regionName);
     }
@@ -159,6 +159,8 @@ export class MoviePageComponent  implements OnInit{
   }
 
   openBillboards(){
+
+
     this.dialog.open(ExpansionPanelComponent, {
       data: {
         billboards: this.funciones,

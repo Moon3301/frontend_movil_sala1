@@ -15,7 +15,7 @@
         <mat-icon>location_on</mat-icon>
         <span class="title-ubication">{{ userCurrentRegion || 'Ubicación' }}</span>
       </button>
-      
+
       <mat-menu #menu="matMenu">
         <ng-container *ngFor="let region of regions">
           <button mat-menu-item (click)="onChangeUbication(region.name)">
@@ -82,9 +82,7 @@
 
     <router-outlet />
 
-
   </mat-drawer-container>
-
 
 </div>
 

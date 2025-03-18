@@ -48,15 +48,14 @@ export class ExpansionPanelComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    // this.dates = this.getNextFiveDates();
+
     this.dates = this.data.dates
-    console.log('this.dates: ',this.dates);
 
     this.dataBillboards = this.data
 
     if(this.dataBillboards.billboards.length == 0){
 
-      const regionName = localStorage.getItem("user_ubication");
+      const regionName = sessionStorage.getItem("user_ubication");
       const movieId = this.data.movie.id;
 
       this.getShowtimes(movieId, regionName!, this.dates[0])
@@ -69,8 +68,6 @@ export class ExpansionPanelComponent implements OnInit{
   }
 
   buildUrlPaymentCinemark(tag: string, showtimeId: string, date:string,  hour: string, cineSlug:string, sessionId: string){
-
-    console.log(tag, showtimeId, date, hour, cineSlug);
 
     const currentDate =  date.split('T')[0];
     const transformedString = cineSlug.replace(/-/g, "_");
@@ -85,19 +82,15 @@ export class ExpansionPanelComponent implements OnInit{
       transformedString
     }
 
-    console.log(data);
-
-
     window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
   }
 
   buildUrlPaymentCineplanet(titleSlug: string, cinemaId: string, sessionId: string){
-
-    // https://www.cineplanet.cl/compra/attack-on-titan-el-ataque-final/0000000001/60657/asientos
-    //                                        movieDetailsUrl            cinemaId sessionId
-
     window.open(`https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`)
+  }
 
+  buildUrlPaymentMuvix(cinemaId: string, sessionId: string){
+    window.open(`https://muvix.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`)
   }
 
   onClose(): void{
@@ -121,7 +114,7 @@ export class ExpansionPanelComponent implements OnInit{
   onSelectDate(fecha: string, event?: MatOptionSelectionChange) {
     if(event?.isUserInput){
 
-      const regionName = localStorage.getItem("user_ubication");
+      const regionName = sessionStorage.getItem("user_ubication");
       const movieId = this.data.movie.id;
 
       this.getShowtimes(movieId, regionName!, fecha)
@@ -190,6 +183,5 @@ export class ExpansionPanelComponent implements OnInit{
     }
 
   }
-
 
 }

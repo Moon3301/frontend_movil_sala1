@@ -4,6 +4,8 @@ import { environments } from '../environments/environments';
 import { IUbication } from './common/interfaces';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
+import { Region, SharedService } from './shared/services/shared.service';
+import stringSimilarity from 'string-similarity';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +15,24 @@ import { AuthService } from './auth/services/auth.service';
 })
 export class AppComponent implements OnInit{
 
-  constructor(private readonly http: HttpClient, private readonly authService: AuthService){}
+  regions: Region[] = []
+  constructor(private readonly http: HttpClient, private readonly authService: AuthService, private sharedService: SharedService){}
 
   ngOnInit(): void {
 
-    const ubication = localStorage.getItem("user_ubication")
+    this.getAllRegions().subscribe({
+      next: (resp) => {
+        this.regions = resp
+        localStorage.setItem("regions", JSON.stringify(this.regions))
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
 
-    if(!ubication){
+    const ubicationSession = sessionStorage.getItem("user_ubication")
+    console.log('ubicationSession: ', ubicationSession)
+    if(!ubicationSession){
       this.getUserLocation();
     }
 
@@ -42,11 +55,16 @@ export class AppComponent implements OnInit{
 
           console.log(response);
 
-          localStorage.setItem("user_ubication",response.address.state)
+          //localStorage.setItem("user_ubication",response.address.state)
+          sessionStorage.setItem("user_ubication",response.address.state)
 
         })
       }
     )
+  }
+
+  getAllRegions(): Observable<Region[]>{
+    return this.http.get<Region[]>(`${environments.baseUrl}/region`)
   }
 
   getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{

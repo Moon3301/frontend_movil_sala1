@@ -89,6 +89,18 @@
                           >
 
                         {{ schedule.showtime }} {{schedule.language}}</button>
+                      }@else if
+                      (billboard.cinemaType === 'Muvix'){
+                        <button mat-button
+                        [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate)"
+                          (click)="buildUrlPaymentMuvix(
+                            cinema.cinemaExternalId,
+                            schedule.sessionId
+                          )"
+                          class="notranslate" translate="no"
+                          >
+
+                        {{ schedule.showtime }} {{schedule.language}}</button>
                       }
                       <hr>
                     </div>
