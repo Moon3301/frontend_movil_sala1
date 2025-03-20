@@ -148,40 +148,40 @@ export class ExpansionPanelComponent implements OnInit{
 
   }
 
-  isButtonDisabled(showtime: string, showdate: string): boolean {
-
+  isButtonDisabled(showtime: string, showdate: string, cinemaType: string): boolean {
     const dShow = new Date(showdate);
     const dNow = new Date();
 
     const sameDay =
-    dShow.getMonth() === dNow.getMonth() &&
-    dShow.getDate() === dNow.getDate();
+      dShow.getMonth() === dNow.getMonth() &&
+      dShow.getDate() === dNow.getDate();
 
     if (sameDay) {
-      // Extraemos [hora, minuto] de showtime (p.ej. "17:40")
+      // Extraemos [hora, minuto] de showtime (por ejemplo, "17:40")
       const [hours, minutes] = showtime.split(':').map(val => parseInt(val, 10));
 
-      // 3) Creamos la fecha de la función usando el día actual y la hora dada
+      // Creamos la fecha con el día de hoy y la hora indicada
       const showtimeDate = new Date();
       showtimeDate.setHours(hours, minutes, 0, 0);
 
-      // 4) Calculamos la diferencia: (AHORA) - (HORA DE LA FUNCIÓN)
+      // Calculamos la diferencia en milisegundos entre ahora y la hora del show
       const diffMs = dNow.getTime() - showtimeDate.getTime();
 
-      // 20 minutos en milisegundos
-      const twentyMinutesMs = 20 * 60 * 1000;
+      // Definimos el umbral. Por defecto son 20 minutos en milisegundos
+      let threshold = 20 * 60 * 1000;
 
-      // 5) Si la hora actual está al menos 20min por encima del showtime:
-      //    => deshabilitar botón
-      return diffMs >= twentyMinutesMs;
+      // Si el cine es cinemark, queremos deshabilitar justo cuando termine el showtime
+      if (cinemaType.toLowerCase() === 'cinemark') {
+        threshold = 0;
+      }
 
+      // Si han pasado al menos 'threshold' milisegundos desde el showtime, deshabilitamos el botón
+      return diffMs >= threshold;
     } else {
-      // Si no es el mismo día, tu lógica:
-      // Por ejemplo, deshabilitar si la fecha es anterior,
-      // o no deshabilitar si es un día futuro...
+      // Si no es el mismo día, se deshabilita el botón si la fecha del show es anterior al día actual.
       return dShow < dNow;
     }
-
   }
+
 
 }
