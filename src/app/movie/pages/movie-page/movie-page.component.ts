@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ExpansionPanelComponent } from '../../components/expansion-panel/expansion-panel.component';
 import { CardVideoComponent } from '../../components/card-video/card-video.component';
 import { getFormattedDate } from '../../../common/helpers';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'movie-movie-page',
@@ -79,10 +80,12 @@ export class MoviePageComponent  implements OnInit{
     }
 
     return new Observable<string>(observer => {
-      navigator.geolocation.getCurrentPosition(
-        position => {
+      // Opción 1: Directo con Promesas
+      Geolocation.getCurrentPosition()
+        .then(position => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
+          // Llamas tu servicio para “decodificar” la ubicación
           this.movieService.getUbicationByGeoCode(lat, lng).subscribe(
             response => {
               const region = response.address.state;
@@ -92,9 +95,11 @@ export class MoviePageComponent  implements OnInit{
             },
             error => observer.error(error)
           );
-        },
-        error => observer.error(error)
-      );
+        })
+        .catch(error => {
+          // Por si el usuario rechaza permisos o falla
+          observer.error(error);
+        });
     });
   }
 

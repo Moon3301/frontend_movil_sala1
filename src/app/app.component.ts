@@ -5,7 +5,8 @@ import { IUbication } from './common/interfaces';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
-import stringSimilarity from 'string-similarity';
+import * as stringSimilarity from 'string-similarity';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit{
     const ubicationSession = sessionStorage.getItem("user_ubication")
     console.log('ubicationSession: ', ubicationSession)
     if(!ubicationSession){
-      this.getUserLocation();
+      this.getUserLocationANDROID();
     }
 
     this.authService.checkAuthentication()
@@ -44,7 +45,35 @@ export class AppComponent implements OnInit{
 
   }
 
-  async getUserLocation(){
+  async getUserLocationANDROID() {
+    try {
+      // 1) Verifica permisos (opcional pero recomendado)
+      const permissions = await Geolocation.checkPermissions();
+      if (permissions.location === 'denied') {
+        // Solicita permiso si está denegado
+        await Geolocation.requestPermissions();
+      }
+
+      // 2) Obtén la posición actual
+      const position = await Geolocation.getCurrentPosition();
+
+      // 3) Extrae lat/lng
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // 4) Llamas a tu API (exactamente como antes)
+      this.getUbicationByGeoCode(lat, lng).subscribe(response => {
+        console.log(response);
+        // localStorage.setItem("user_ubication", response.address.state)
+        sessionStorage.setItem("user_ubication", response.address.state);
+      });
+
+    } catch (error) {
+      console.error('Error al obtener ubicación:', error);
+    }
+  }
+
+  async getUserLocationWEB(){
 
     navigator.geolocation.getCurrentPosition(
       (position)=> {
@@ -63,12 +92,12 @@ export class AppComponent implements OnInit{
     )
   }
 
-  getAllRegions(): Observable<Region[]>{
-    return this.http.get<Region[]>(`${environments.baseUrl}/region`)
-  }
-
   getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{
     return this.http.get<IUbication>(`${environments.urlGeoCode}reverse?lat=${lat}&lon=${lng}&api_key=${environments.apiKeyGeoCode}`)
+  }
+
+  getAllRegions(): Observable<Region[]>{
+    return this.http.get<Region[]>(`${environments.baseUrl}/region`)
   }
 
 }
