@@ -5,37 +5,62 @@ import { IUbication } from './common/interfaces';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
-import * as stringSimilarity from 'string-similarity';
 import { Geolocation } from '@capacitor/geolocation';
+import { StorageService } from './storage/storage.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   standalone: false,
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+
 })
+
 export class AppComponent implements OnInit{
 
   regions: Region[] = []
-  constructor(private readonly http: HttpClient, private readonly authService: AuthService, private sharedService: SharedService){}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly authService: AuthService,
+    private sharedService: SharedService,
+    private storageService: StorageService
+
+  ){}
 
   ngOnInit(): void {
 
     this.getAllRegions().subscribe({
       next: (resp) => {
         this.regions = resp
-        localStorage.setItem("regions", JSON.stringify(this.regions))
+
+        this.storageService.saveData("regions", JSON.stringify(this.regions)).subscribe({
+          next: () => {
+            console.log('Regiones guardadas en el almacenamiento local');
+          },
+          error: (error) => {
+            console.error('Error al guardar regiones:', error);
+          }
+        })
+
+        //localStorage.setItem("regions", JSON.stringify(this.regions))
       },
       error: (error) => {
         console.log(error);
       }
     })
 
-    const ubicationSession = sessionStorage.getItem("user_ubication")
-    console.log('ubicationSession: ', ubicationSession)
-    if(!ubicationSession){
-      this.getUserLocationANDROID();
-    }
+    this.storageService.getData("user_ubication").subscribe(value => {
+      if(!value){
+        this.getUserLocationANDROID();
+      }
+    })
+
+    // const ubicationSession = sessionStorage.getItem("user_ubication")
+
+    // console.log('ubicationSession: ', ubicationSession)
+    // if(!ubicationSession){
+    //   this.getUserLocationANDROID();
+    // }
 
     this.authService.checkAuthentication()
     .subscribe( ()=>{
@@ -65,7 +90,18 @@ export class AppComponent implements OnInit{
       this.getUbicationByGeoCode(lat, lng).subscribe(response => {
         console.log(response);
         // localStorage.setItem("user_ubication", response.address.state)
-        sessionStorage.setItem("user_ubication", response.address.state);
+        //sessionStorage.setItem("user_ubication", response.address.state);
+
+        // Guarda la ubicación en el almacenamiento local o en la sesión según sea necesario
+        this.storageService.saveData("user_ubication", response.address.state).subscribe({
+          next: () => {
+            console.log('Ubicación guardada en el almacenamiento local', response.address.state);
+          },
+          error: (error) => {
+            console.error('Error al guardar ubicación:', error);
+          }
+        })
+        
       });
 
     } catch (error) {

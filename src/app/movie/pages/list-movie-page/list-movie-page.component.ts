@@ -39,7 +39,15 @@ export class ListMoviePageComponent implements OnInit{
 
         const finalList = this.combineAndSort(allMovies, moviesCarrusel);
         this.movies = finalList;
-        this.movieService.saveAllMovies(this.movies);
+
+        this.movieService.saveAllMoviesT(this.movies).subscribe({
+          next: (resp)=> {
+            console.log('Peliculas guardadas en localStorage');
+          },
+          error: (error)=> {
+            console.log('Error al guardar las peliculas', error);
+          }
+        })
 
         this.movies.forEach( movie => {
 

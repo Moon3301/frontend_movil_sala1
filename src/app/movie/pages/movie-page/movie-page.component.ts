@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, Observable, of, switchMap, tap } from 'rxjs';
+import { filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { ExpansionPanelComponent } from '../../components/expansion-panel/expans
 import { CardVideoComponent } from '../../components/card-video/card-video.component';
 import { getFormattedDate } from '../../../common/helpers';
 import { Geolocation } from '@capacitor/geolocation';
+import { StorageService } from '../../../storage/storage.service';
 
 @Component({
   selector: 'movie-movie-page',
@@ -32,6 +33,7 @@ export class MoviePageComponent  implements OnInit{
     private router: Router,
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
+    private storageService: StorageService
   ){}
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class MoviePageComponent  implements OnInit{
     this.activateRoute.params.pipe(
       switchMap(({ id }) => {
         const movieId = +id;
-        return this.movieService.getMovieByIdLocal(movieId);
+        return this.movieService.getMovieByIdLocal(movieId)
       }),
       tap(movie => {
         if (!movie) {
@@ -74,33 +76,40 @@ export class MoviePageComponent  implements OnInit{
   }
 
   private getRegionName(): Observable<string> {
-    const regionName = sessionStorage.getItem('user_ubication');
-    if (regionName) {
-      return of(regionName);
-    }
-
-    return new Observable<string>(observer => {
-      // Opción 1: Directo con Promesas
-      Geolocation.getCurrentPosition()
-        .then(position => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          // Llamas tu servicio para “decodificar” la ubicación
-          this.movieService.getUbicationByGeoCode(lat, lng).subscribe(
-            response => {
+    return this.storageService.getData('user_ubication').pipe(
+      switchMap(storedRegion => {
+        if (storedRegion) {
+          // Si ya hay una región guardada en Storage, la devolvemos enseguida
+          return of(storedRegion);
+        } else {
+          // Si no hay región, usamos Geolocation y luego llamamos a la API
+          return from(Geolocation.getCurrentPosition()).pipe(
+            switchMap(position =>
+              this.movieService.getUbicationByGeoCode(
+                position.coords.latitude,
+                position.coords.longitude
+              )
+            ),
+            map(response => {
               const region = response.address.state;
-              localStorage.setItem("user_ubication", region);
-              observer.next(region);
-              observer.complete();
-            },
-            error => observer.error(error)
+              // Guardamos la región localmente (puedes usar localStorage
+              // o mejor aún, storageService.setData(...) para ser consistente)
+              //localStorage.setItem('user_ubication', region);
+              this.storageService.saveData('user_ubication', region).subscribe({
+                next: () => {
+                  console.log('Ubicación guardada en el almacenamiento local');
+                },
+                error: (error) => {
+                  console.error('Error al guardar ubicación:', error);
+                }
+              })
+
+              return region;
+            })
           );
-        })
-        .catch(error => {
-          // Por si el usuario rechaza permisos o falla
-          observer.error(error);
-        });
-    });
+        }
+      })
+    );
   }
 
   // Extrae el ID de un URL de YouTube y genera un embed URL

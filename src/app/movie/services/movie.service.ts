@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Movie } from '../interfaces/movie.interface';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { DataBillboard, ICines } from '../interfaces/funciones.interface';
 import { getFormattedDate } from '../../common/helpers';
 import { MovieCarrusel } from '../../administration/interfaces/movies.interface';
 import { IUbication } from '../../common/interfaces';
+import { StorageService } from '../../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class MovieService {
 
   movies: Movie[] = []
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private storageService: StorageService) {}
 
   public getBillboards( movieId: number): Observable<ICines[]>{
     return this.http.post<ICines[]>(`${this.baseUrl}/billboard`, { movieId: movieId } )
@@ -31,13 +32,15 @@ export class MovieService {
 
   public getMovieByIdLocal( movieId: number): Observable<Movie>{
 
-    const moviesStorage = localStorage.getItem("movies");
-
-    const movies: Movie[] = moviesStorage ? JSON.parse(moviesStorage) : [];
-
-    const movie = movies.find(movie => movie.id === movieId)
-
-    return of(movie!)
+    return this.storageService.getData('movies').pipe(
+      map(value => {
+        // `value` será un string con el JSON o null si no existe la clave
+        const movies: Movie[] = value ? JSON.parse(value) : [];
+        const movie = movies.find(m => m.id === movieId);
+        // Retornamos la película (puede ser undefined si no existe)
+        return movie!;
+      })
+    );
   }
 
   public getMovies(): Observable<Movie[]>{
@@ -50,6 +53,10 @@ export class MovieService {
 
   public saveAllMovies(movies: Movie[]){
     localStorage.setItem("movies", JSON.stringify(movies))
+  }
+
+  public saveAllMoviesT(movies: Movie[]){
+    return this.storageService.saveData("movies", JSON.stringify(movies))
   }
 
   public getMoviesLocal(): Movie[]{

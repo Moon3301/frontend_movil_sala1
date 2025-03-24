@@ -1,9 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import { Observable, of } from 'rxjs';
+import { from, map, Observable, of, pipe, switchMap } from 'rxjs';
 import { environments } from '../../../environments/environments';
 import { IUbication } from "../../common/interfaces";
 import stringSimilarity from "string-similarity";
+import { StorageService } from "../../storage/storage.service";
+import { Geolocation } from '@capacitor/geolocation';
 
 export interface Region {
   id: number,
@@ -22,7 +24,7 @@ export class SharedService{
 
   private baseUrl: string = environments.baseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private storageService: StorageService) {}
 
   public getAllRegions(): Observable<Region[]>{
     return this.http.get<Region[]>(`${this.baseUrl}/region`)
@@ -32,8 +34,17 @@ export class SharedService{
     return this.userCurrentRegion;
   }
 
-  public get allRegions(): Region[]{
+  public get allRegionsDEPRECATED(): Region[]{
     return localStorage.getItem("regions") ? JSON.parse(localStorage.getItem("regions")!) : []
+  }
+
+  public get allRegions(): Observable<Region[]>{
+    return this.storageService.getData('regions').pipe(
+
+      map(value => {
+        return value ? JSON.parse(value) as Region[]: []
+      })
+    )
   }
 
   public getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{
@@ -41,32 +52,25 @@ export class SharedService{
   }
 
   getUserLocation(): Observable<string> {
-    return new Observable<string>((observer) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-
-          this.getUbicationByGeoCode(lat, lng).subscribe(response => {
-            console.log(response);
-
-            //localStorage.setItem("user_ubication",response.address.state)
-            //sessionStorage.setItem("user_ubication",response.address.state)
-
-            const allRegionsName = this.allRegions.map(region => region.name);
-            const similarRegion = this.findSimilarityRegion(allRegionsName, response.address.state);
-
-            this.userCurrentRegion = similarRegion;
-            observer.next(this.userCurrentRegion);
-            observer.complete();
-          });
-        },
-        (error) => {
-          observer.error(error);
-        }
-      );
-    });
+    // Convertir geolocalización a Observable
+    return from(Geolocation.getCurrentPosition()).pipe(
+      // Con el resultado, obtener la dirección invertida
+      switchMap(position =>
+        this.getUbicationByGeoCode(position.coords.latitude, position.coords.longitude)
+      ),
+      // Con la dirección, ahora obtener la lista de regiones y transformarla
+      switchMap(response => {
+        return this.allRegions.pipe(
+          map(regions => {
+            const allRegionsName = regions.map(r => r.name);
+            return this.findSimilarityRegion(allRegionsName, response.address.state);
+          })
+        );
+      }),
+      // Al final, ya tenemos el `similarRegion` como string que se emite a quien se suscriba
+    );
   }
+
 
   findSimilarityRegion(array: string[], value: string): string {
 

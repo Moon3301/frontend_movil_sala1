@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Region, SharedService } from '../../services/shared.service';
 import * as stringSimilarity from 'string-similarity';
 import { MatOptionSelectionChange } from '@angular/material/core';
+import { StorageService } from '../../../storage/storage.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -27,6 +28,7 @@ export class MainLayoutComponent implements OnInit{
     private router: Router,
     private sharedService: SharedService,
     private cdr: ChangeDetectorRef,
+    private storageService: StorageService
 
   ){}
 
@@ -41,81 +43,78 @@ export class MainLayoutComponent implements OnInit{
       }
     });
 
-    this.regions = this.sharedService.allRegions
+    // Se actualizan las regiones
+    this.sharedService.allRegions.subscribe({
+      next: (resp)=> {
+        this.regions = resp
+      },
+      error: (error)=> {
+        console.log('No se logro actualizar las regiones', error);
+      }
+    })
 
-    this.userCurrentRegion = sessionStorage.getItem("user_ubication")!;
-    if (!this.userCurrentRegion){
+    // Se obtiene y actualiza la ubicacion actual del usuario
+    this.storageService.getData("user_ubication").subscribe({
+      next: (resp)=> {
+        this.userCurrentRegion = resp!
 
-      this.sharedService.getUserLocation().subscribe({
-        next: (resp) => {
-          console.log(resp)
-          this.userCurrentRegion = resp
-          this.cdr.detectChanges();
-          sessionStorage.setItem("user_ubication", resp)
-        },
-        error: (error) => {
-          console.log(error);
+        if (!this.userCurrentRegion){
+
+          this.sharedService.getUserLocation().subscribe({
+            next: (resp) => {
+              console.log(resp)
+              this.userCurrentRegion = resp
+              this.cdr.detectChanges();
+              sessionStorage.setItem("user_ubication", resp)
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
         }
-      })
+      },
+      error: (error)=> {
+        console.log(error);
+      }
+    })
 
-    }
-
-
-    // this.regions = JSON.parse(localStorage.getItem("regions")!);
-
-    // const regionsName = this.regions.map( region => region.name);
-
-    // const currentRegionSession = sessionStorage.getItem("user_ubication");
-
-    // const result = stringSimilarity.findBestMatch(currentRegionSession!, regionsName);
-
-    // const bestMatch = result.bestMatch;
-    // this.userCurrentRegion = bestMatch.target;
     this.cdr.detectChanges();
-
-    // Se obtiene la lista de regiones desde la BD
-    // this.sharedService.getAllRegions().subscribe({
-    //   next: (resp) => {
-    //     this.regions = resp
-
-    //     const regionsName = this.regions.map( region => region.name);
-
-    //     const currentRegion = localStorage.getItem("user_ubication");
-    //     const currentRegionSession = sessionStorage.getItem("user_ubication");
-
-    //     const result = stringSimilarity.findBestMatch(currentRegionSession!, regionsName);
-
-    //     const bestMatch = result.bestMatch;
-
-    //     this.userCurrentRegion = bestMatch.target;
-    //     this.cdr.detectChanges();
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   }
-    // })
-
-
 
   }
 
   onChangeUbication(newUbication: string): void {
 
-    //localStorage.setItem("user_ubication", newUbication);
-    sessionStorage.setItem("user_ubication", newUbication);
+    this.storageService.saveData("user_ubication", newUbication).subscribe({
+      next: ()=> {
+        console.log('Ubicacion actualizada correctamente');
+      },
+      error: ()=> {
+        console.log('La ubicacion no pudo actualizarse correctamente');
+      }
+    })
 
     window.location.reload();
-    this.cdr.detectChanges();
 
     const regionsName = this.regions.map( region => region.name);
-    //const currentRegion = localStorage.getItem("user_ubication");
-    const currentRegionSession = sessionStorage.getItem("user_ubication");
 
-    const result = stringSimilarity.findBestMatch(currentRegionSession!, regionsName);
+    this.storageService.getData("user_ubication").subscribe({
+      next: (resp)=> {
 
-    const bestMatch = result.bestMatch;
+        const currentRegionSession = resp
 
-    this.userCurrentRegion = bestMatch.target;
+        const result = stringSimilarity.findBestMatch(currentRegionSession!, regionsName);
+        const bestMatch = result.bestMatch;
+
+        console.log(this.userCurrentRegion)
+        console.log(bestMatch.target)
+        this.userCurrentRegion = bestMatch.target;
+
+        this.cdr.detectChanges();
+      },
+      error: (error)=> {
+        console.log(error);
+      }
+    })
 
   }
 
@@ -127,6 +126,5 @@ export class MainLayoutComponent implements OnInit{
       console.log(error);
     }
   }
-
 
 }
