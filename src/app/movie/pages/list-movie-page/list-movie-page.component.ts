@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
-import { forkJoin, tap } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

@@ -12,6 +12,7 @@ import { SearchBoxComponent } from './components/search-box/search-box.component
 import { CarruselComponent } from './components/carrusel/carrusel.component';
 import { ListPremiereComponent } from './components/list-premiere/list-premiere.component';
 import { PrimengModule } from '../primeng/primeng.module';
+import { ShowtimesComponent } from './components/showtimes/showtimes.component';
 
 @NgModule({
   declarations: [

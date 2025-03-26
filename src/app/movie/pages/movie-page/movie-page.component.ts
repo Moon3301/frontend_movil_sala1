@@ -4,13 +4,14 @@ import { filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DataBillboard, ICines } from '../../interfaces/funciones.interface';
+import { ICinema, ICines } from '../../interfaces/funciones.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ExpansionPanelComponent } from '../../components/expansion-panel/expansion-panel.component';
 import { CardVideoComponent } from '../../components/card-video/card-video.component';
 import { getFormattedDate } from '../../../common/helpers';
 import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from '../../../storage/storage.service';
+import { ShowtimesComponent } from '../../components/showtimes/showtimes.component';
 
 @Component({
   selector: 'movie-movie-page',
@@ -68,8 +69,6 @@ export class MoviePageComponent  implements OnInit{
       (dataBillboard) => {
         this.funciones = dataBillboard.data;
         this.fechas = dataBillboard.dates;
-
-        console.log(this.funciones);
       },
       error => console.error(error)
     );
@@ -92,9 +91,7 @@ export class MoviePageComponent  implements OnInit{
             ),
             map(response => {
               const region = response.address.state;
-              // Guardamos la región localmente (puedes usar localStorage
-              // o mejor aún, storageService.setData(...) para ser consistente)
-              //localStorage.setItem('user_ubication', region);
+
               this.storageService.saveData('user_ubication', region).subscribe({
                 next: () => {
                   console.log('Ubicación guardada en el almacenamiento local');
@@ -172,8 +169,23 @@ export class MoviePageComponent  implements OnInit{
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
 
-  openBillboards(){
+  openShowtimes(showtimes: ICinema[], cinemaType: string){
 
+    this.dialog.open(ShowtimesComponent, {
+      data: {
+        cinema: cinemaType,
+        showtimes: showtimes,
+        movie: this.movie,
+        dates: this.fechas
+      },
+      width: '100%',
+      height: '80%',
+      maxWidth: '100%',
+    })
+
+  }
+
+  openBillboards(){
 
     this.dialog.open(ExpansionPanelComponent, {
       data: {
@@ -181,11 +193,9 @@ export class MoviePageComponent  implements OnInit{
         movie: this.movie,
         dates: this.fechas
       },
-      width: '80%',
+      width: '100%',
       height: '80%',
       maxWidth: '100%',
-      panelClass: 'custom-dialog-container',    // Clase personalizada para el contenedor
-      backdropClass: 'custom-dialog-backdrop'     // (Opcional) Clase para el backdrop
     });
   }
 
@@ -194,11 +204,10 @@ export class MoviePageComponent  implements OnInit{
       data: {
         embedUrl: this.getYouTubeEmbedUrl(this.movie?.trailer_url)
       },
-      width: '90%',
+      width: '100%',
       maxWidth: '100%',
       height: '90%'
     });
   }
-
 
 }

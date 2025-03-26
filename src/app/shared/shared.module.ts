@@ -6,6 +6,7 @@ import { Error404PageComponent } from './pages/error404-page/error404-page.compo
 import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../auth/services/auth.service';
+import { PrimengModule } from '../primeng/primeng.module';
 
 @NgModule({
   providers:[
@@ -19,6 +20,7 @@ import { AuthService } from '../auth/services/auth.service';
   imports: [
     CommonModule,
     MaterialModule,
+    PrimengModule,
     RouterModule
   ],
   exports:[

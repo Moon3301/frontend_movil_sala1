@@ -5,7 +5,6 @@ body {
   margin: 0;
   font-family: Roboto,
   "Helvetica Neue", sans-serif;
-
 }
 
 /* Para el contenedor del diálogo */
@@ -19,18 +18,9 @@ body {
   background-color: transparent !important;
 }
 
-:host ::ng-deep .p-galleria-thumbnail {
-  background: transparent !important;
+:root {
+  --p-dock-background: #000000; /* Negro total */
 }
 
-:host ::ng-deep .p-galleria-thumbnail-container {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background: transparent !important;
-}
 
 

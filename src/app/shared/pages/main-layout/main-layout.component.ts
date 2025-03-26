@@ -6,6 +6,7 @@ import { Region, SharedService } from '../../services/shared.service';
 import * as stringSimilarity from 'string-similarity';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { StorageService } from '../../../storage/storage.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-main-layout',
@@ -16,11 +17,26 @@ import { StorageService } from '../../../storage/storage.service';
 })
 export class MainLayoutComponent implements OnInit{
 
+  items: MenuItem[] | undefined;
+
   logging: boolean = false;
 
   currentUser!: User | undefined;
 
   regions: Region[] = []
+
+  accountOptions = [
+    {
+      title: 'Administracion',
+      route: 'administration'
+    },
+    {
+      title: 'Cuenta',
+      route: 'account'
+    },
+
+  ]
+
   userCurrentRegion!: string;
 
   constructor(
@@ -33,6 +49,22 @@ export class MainLayoutComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
+
+    this.items = [
+      {
+          label: 'Peliculas',
+          icon: 'img/3.png'
+      },
+      {
+        label: 'Ubicacion',
+        icon: 'img/8.png'
+      },
+      {
+          label: 'Cuenta',
+          icon: 'img/12.png'
+      },
+
+    ];
 
     // Se verifica la auntenticidad del usuario validando que existen un usuario en localStorage
     this.authService.checkAuthentication().subscribe((isAuthenticated) => {

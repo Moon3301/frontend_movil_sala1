@@ -5,6 +5,23 @@
 
 }
 
+.dock-content {
+  --p-dock-background: rgb(15, 15, 30);
+  --p-dock-item-size: 60px;
+  opacity: 1;
+  background-color: black;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%); /* para centrar horizontalmente */
+  z-index: 1000;               /* o el valor que necesites */
+  /* width: 300px; (opcional) si deseas forzar un ancho fijo */
+}
+
+.dock-content .p-dock {
+  margin: 0 auto; /* opcional, para asegurarte de que el dock no se desplace */
+}
+
 .title-toolbar {
   /* quiero aumtar el ancho de las letras */
   font-size: 2rem;
@@ -94,6 +111,7 @@
 
 /* Estilo general para el botón de ubicacion */
 .ubicacion-button {
+
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap; /* Permite que el contenido se acomode en varias líneas */

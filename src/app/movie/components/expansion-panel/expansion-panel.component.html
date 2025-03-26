@@ -1,22 +1,17 @@
-
-<mat-dialog-content class="dialog-content">
-
+<mat-dialog-actions>
   <div class="row">
     <div class="col-12 d-flex align-items-center">
-      <!-- H3 crece a lo ancho y centra el texto -->
-      <h3 class="flex-grow-1 text-center mb-0">
-        {{ data.movie.title }}
-      </h3>
-
       <!-- Botón de cierre en el extremo derecho -->
       <button class="btn-close" style="background-color: cyan;" (click)="onClose()"></button>
     </div>
   </div>
+</mat-dialog-actions>
+<mat-dialog-content class="dialog-content">
 
   <mat-accordion >
     <br>
 
-    <div style="display: flex; justify-content: flex-end; width: 100%;">
+    <div style="display: flex; width: 100%;">
       <mat-form-field appearance="outline" class="fechas-funciones">
         <mat-label>Funciones disponibles</mat-label>
         <mat-select [value]="dates[0]">
@@ -126,5 +121,7 @@
 
 </mat-dialog-content>
 
+<mat-dialog-actions>
 
+</mat-dialog-actions>
 

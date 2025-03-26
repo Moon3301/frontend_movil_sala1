@@ -10,6 +10,8 @@ import { GalleriaModule } from 'primeng/galleria';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { DockModule } from 'primeng/dock';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   exports: [
@@ -23,7 +25,9 @@ import { InputTextModule } from 'primeng/inputtext';
     GalleriaModule,
     TableModule,
     DialogModule,
-    InputTextModule
+    InputTextModule,
+    DockModule,
+    TooltipModule,
   ],
 })
 export class PrimengModule { }

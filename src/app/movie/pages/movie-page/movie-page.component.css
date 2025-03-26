@@ -6,68 +6,38 @@ h1, h2, h3, h4, h5 {
   color: cyan;
 }
 
-/* Contenedor del video con altura fija para evitar que se solapen con el contenido */
+/* Contenedor del video */
 .video-container {
-  position: relative;
-  margin-bottom: 20px; /* Separa visualmente del contenido de abajo */
-  border-radius: 20px;
   width: 100%;
+  aspect-ratio: 16/9;
+  margin-bottom: 40px;
+  overflow: hidden;     /* Opcional, recorta la imagen si se sale */
 }
 
+/* Quitamos el margin-top grande */
 .movie-detail {
-  margin-top: 100px;
+  display: grid;
   align-items: center;
   justify-content: center;
-  display: grid;
 }
 
+/* Miniatura del video */
 .img-video {
-  height: 400px;
-  border-radius: 20px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;  /* Para que ocupe todo sin deformarse */
   cursor: pointer;
 }
 
-/* Estilos base para móviles (mobile-first) */
+/* Póster posicionado dentro de .video-container */
 .movie-poster {
   position: absolute;
-  bottom: 250px;        /* Posiciona verticalmente dentro del contenedor */
-  left: 14%;            /* Ajuste para móviles: se puede modificar si es necesario */
-  transform: translateX(-50%);
-  z-index: 10;          /* Se asegura que esté por encima del video */
-  width: 100px;         /* Tamaño base para pantallas pequeñas */
-  border-radius: 20px;
-  margin-bottom: 10px;
-}
-
-/* Para pantallas medianas (a partir de 477px hasta 991px) */
-@media (min-width: 477px) and (max-width: 991px) {
-  .movie-poster {
-    left: 13%;         /* Ajuste para centrar en pantallas medianas */
-    width: 120px;      /* Incrementa ligeramente el tamaño */
-  }
-
-  .list-movies-container {
-    margin-top: 850px; /* Ajusta el margen según corresponda */
-  }
-}
-
-/* Para pantallas grandes (992px en adelante) */
-@media (min-width: 992px) {
-  .movie-poster {
-    left: 13%;         /* Mantiene la posición según tu diseño */
-    width: 180px;      /* Tamaño para escritorio */
-  }
-
-  .list-movies-container {
-    margin-top: 850px; /* Margen para pantallas grandes */
-  }
-}
-
-/* Para pantallas extra grandes (1200px en adelante) */
-@media (min-width: 1200px) {
-  .list-movies-container {
-    margin-top: 900px; /* Margen un poco mayor para pantallas muy grandes */
-  }
+  bottom: -15px;
+  left: 15px;        /* Ajusta horizontalmente */
+  z-index: 10;
+  width: 80px;       /* Tamaño base; ajusta a tu gusto */
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 

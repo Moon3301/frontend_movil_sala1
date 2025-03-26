@@ -1,37 +1,34 @@
 import { Injectable, OnInit } from "@angular/core";
-import { Storage } from '@capacitor/storage';
+//import { Storage } from '@capacitor/storage';
 import { from, map, Observable } from "rxjs";
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StorageService implements OnInit{
-
-  constructor(){}
-
-  async ngOnInit(){}
+export class StorageService{
 
   saveData(key: string, value: string): Observable<void> {
     return from(
-      Storage.set({ key, value })
+      Preferences.set({ key, value })
     );
   }
 
   getData(key: string): Observable<string | null> {
-    return from(Storage.get({ key })).pipe(
+    return from(Preferences.get({ key })).pipe(
       map(response => response.value) // string | null
     );
   }
 
   deleteData(key: string): Observable<void> {
     return from(
-      Storage.remove({ key })
+      Preferences.remove({ key })
     );
   }
 
   cleanAllData(): Observable<void> {
     return from(
-      Storage.clear()
+      Preferences.clear()
     );
   }
 

@@ -4,7 +4,7 @@ import { environments } from '../environments/environments';
 import { IUbication } from './common/interfaces';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
-import { Region, SharedService } from './shared/services/shared.service';
+import { Region } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from './storage/storage.service';
 
@@ -13,7 +13,6 @@ import { StorageService } from './storage/storage.service';
   templateUrl: './app.component.html',
   standalone: false,
   styleUrl: './app.component.css',
-
 })
 
 export class AppComponent implements OnInit{
@@ -22,7 +21,6 @@ export class AppComponent implements OnInit{
   constructor(
     private readonly http: HttpClient,
     private readonly authService: AuthService,
-    private sharedService: SharedService,
     private storageService: StorageService
 
   ){}
@@ -42,7 +40,6 @@ export class AppComponent implements OnInit{
           }
         })
 
-        //localStorage.setItem("regions", JSON.stringify(this.regions))
       },
       error: (error) => {
         console.log(error);
@@ -54,13 +51,6 @@ export class AppComponent implements OnInit{
         this.getUserLocationANDROID();
       }
     })
-
-    // const ubicationSession = sessionStorage.getItem("user_ubication")
-
-    // console.log('ubicationSession: ', ubicationSession)
-    // if(!ubicationSession){
-    //   this.getUserLocationANDROID();
-    // }
 
     this.authService.checkAuthentication()
     .subscribe( ()=>{
@@ -88,9 +78,6 @@ export class AppComponent implements OnInit{
 
       // 4) Llamas a tu API (exactamente como antes)
       this.getUbicationByGeoCode(lat, lng).subscribe(response => {
-        console.log(response);
-        // localStorage.setItem("user_ubication", response.address.state)
-        //sessionStorage.setItem("user_ubication", response.address.state);
 
         // Guarda la ubicación en el almacenamiento local o en la sesión según sea necesario
         this.storageService.saveData("user_ubication", response.address.state).subscribe({
@@ -101,7 +88,7 @@ export class AppComponent implements OnInit{
             console.error('Error al guardar ubicación:', error);
           }
         })
-        
+
       });
 
     } catch (error) {
@@ -117,12 +104,7 @@ export class AppComponent implements OnInit{
         const lng = position.coords.longitude;
 
         this.getUbicationByGeoCode(lat, lng).subscribe(response => {
-
-          console.log(response);
-
-          //localStorage.setItem("user_ubication",response.address.state)
           sessionStorage.setItem("user_ubication",response.address.state)
-
         })
       }
     )

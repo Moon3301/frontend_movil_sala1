@@ -1,0 +1,93 @@
+<mat-dialog-actions>
+  <div class="row">
+    <div class="col-12 d-flex align-items-center">
+      <!-- Botón de cierre en el extremo derecho -->
+      <button class="btn-close" style="background-color: cyan;" (click)="onClose()"></button>
+    </div>
+  </div>
+</mat-dialog-actions>
+<mat-dialog-content class="dialog-content">
+
+  @for(showtime of dataShowtimes.showtimes; track showtime){
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{showtime.cinemaName}}</mat-card-title>
+      </mat-card-header>
+      <hr>
+      <mat-card-content>
+        <mat-card-subtitle>Funciones: </mat-card-subtitle>
+        <div class="row">
+          @for (schedule of showtime.showtimes; track schedule) {
+
+            <div class="col-6 col-md-2">
+              @if(cinemaType === 'Cinepolis'){
+                <button mat-button
+                  [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                  (click)="buildUrlPaymentCinepolis(
+                  showtime.vistaId,
+                  schedule.showtimeExternalId)"
+                  class="notranslate" translate="no"
+                  >
+
+                {{ schedule.showtime }} {{schedule.language}}</button>
+
+              }@else if
+              (cinemaType === 'Cinemark'){
+                <button mat-button
+                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                (click)="buildUrlPaymentCinemark(
+                  showtime.cinemaExternalId,
+                  schedule.showtimeExternalId,
+                  schedule.showdate,
+                  schedule.showtime,
+                  showtime.cinemaSlug,
+                  schedule.sessionId)"
+                  class="notranslate" translate="no"
+                  >
+
+                {{ schedule.showtime }} {{schedule.language}}</button>
+
+              }@else if
+              (cinemaType === 'Cineplanet'){
+                <button mat-button
+                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                  (click)="buildUrlPaymentCineplanet(
+                    showtime.version.title,
+                    showtime.cinemaExternalId,
+                    schedule.sessionId
+                  )"
+                  class="notranslate" translate="no"
+                  >
+
+                {{ schedule.showtime }} {{schedule.language}}</button>
+              }@else if
+              (cinemaType === 'Muvix'){
+                <button mat-button
+                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                  (click)="buildUrlPaymentMuvix(
+                    showtime.cinemaExternalId,
+                    schedule.sessionId
+                  )"
+                  class="notranslate" translate="no"
+                  >
+
+                {{ schedule.showtime }} {{schedule.language}}</button>
+              }
+              <hr>
+            </div>
+
+          }
+        </div>
+      </mat-card-content>
+
+    </mat-card>
+    <hr>
+
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+</mat-dialog-actions>
