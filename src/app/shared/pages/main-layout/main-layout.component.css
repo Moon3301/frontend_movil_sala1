@@ -1,13 +1,19 @@
+.ptr--top .ptr__text {
+  color: #fff !important; /* O el color que prefieras */
+}
+
 .layout {
   display: grid;
   min-height: 100dvh;
   grid-template-rows: auto 1fr auto;
-
+  overflow-y: auto;
+  color: white;
 }
 
 .dock-content {
   --p-dock-background: rgb(15, 15, 30);
-  --p-dock-item-size: 60px;
+  --p-dock-item-size: 55px;
+
   opacity: 1;
   background-color: black;
   position: fixed;

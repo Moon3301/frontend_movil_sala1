@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
@@ -12,6 +12,8 @@ import { getFormattedDate } from '../../../common/helpers';
 import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from '../../../storage/storage.service';
 import { ShowtimesComponent } from '../../components/showtimes/showtimes.component';
+import { MatOptionSelectionChange } from '@angular/material/core';
+
 
 @Component({
   selector: 'movie-movie-page',
@@ -24,7 +26,8 @@ export class MoviePageComponent  implements OnInit{
 
   movie?: Movie
   funciones?: ICines[]
-  fechas?: string[]
+  dates: string[] = []
+  isLoading: boolean = false;
 
   trailerSafeUrl!: SafeResourceUrl;
 
@@ -34,7 +37,8 @@ export class MoviePageComponent  implements OnInit{
     private router: Router,
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private cdr: ChangeDetectorRef
   ){}
 
   ngOnInit(): void {
@@ -68,7 +72,7 @@ export class MoviePageComponent  implements OnInit{
     ).subscribe(
       (dataBillboard) => {
         this.funciones = dataBillboard.data;
-        this.fechas = dataBillboard.dates;
+        this.dates = dataBillboard.dates;
       },
       error => console.error(error)
     );
@@ -176,7 +180,7 @@ export class MoviePageComponent  implements OnInit{
         cinema: cinemaType,
         showtimes: showtimes,
         movie: this.movie,
-        dates: this.fechas
+        dates: this.dates
       },
       width: '100%',
       height: '80%',
@@ -191,7 +195,7 @@ export class MoviePageComponent  implements OnInit{
       data: {
         billboards: this.funciones,
         movie: this.movie,
-        dates: this.fechas
+        dates: this.dates
       },
       width: '100%',
       height: '80%',
@@ -208,6 +212,43 @@ export class MoviePageComponent  implements OnInit{
       maxWidth: '100%',
       height: '90%'
     });
+  }
+
+  onSelectDate(fecha: string, event?: MatOptionSelectionChange) {
+    if(event?.isUserInput){
+
+      const regionName = sessionStorage.getItem("user_ubication");
+      const movieId = this.movie!.id;
+
+      this.getShowtimes(movieId, regionName!, fecha)
+
+    }
+  }
+
+  getShowtimes(movieId: number, regionName: string, fecha: string){
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
+      next: (response) => {
+
+        this.funciones = response.data;
+
+        this.dates = response.dates
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+
+        console.log(error);
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+
   }
 
 }

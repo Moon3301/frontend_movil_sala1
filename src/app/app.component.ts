@@ -7,6 +7,8 @@ import { AuthService } from './auth/services/auth.service';
 import { Region } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from './storage/storage.service';
+import PullToRefresh from 'pulltorefreshjs';
+import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,9 @@ import { StorageService } from './storage/storage.service';
 export class AppComponent implements OnInit{
 
   regions: Region[] = []
+
+  ptrInstance: any;
+
   constructor(
     private readonly http: HttpClient,
     private readonly authService: AuthService,
@@ -58,6 +63,31 @@ export class AppComponent implements OnInit{
       }
     )
 
+  }
+
+  ngAfterViewInit(): void {
+
+    this.ptrInstance = PullToRefresh.init({
+      mainElement: '#scrollableContainer',
+      instructionsPullToRefresh: 'Desliza para refrescar',
+      instructionsReleaseToRefresh: 'Suelta para refrescar',
+      instructionsRefreshing: 'Cargando...',
+      getStyles: () => {
+        return pullToRefreshCss
+      },
+
+      onRefresh: async () => {
+        window.location.reload();
+      }
+    })
+
+  }
+
+  ngOnDestroy(): void {
+
+    if (this.ptrInstance) {
+      this.ptrInstance.destroy();
+    }
   }
 
   async getUserLocationANDROID() {

@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ListMoviePageComponent implements OnInit{
 
   movies: Movie[] = []
+  moviesSkeleton = Array.from({ length : 6})
 
   moviesPremiere: Movie[] = []
   moviesPresale: Movie[] = []

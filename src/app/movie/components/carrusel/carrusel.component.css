@@ -2,9 +2,8 @@
  * Estilos generales del Hero
  ****************************************/
  .hero-container {
-  position: relative;
+
   width: 100%;
-  height: 700px; /* Ajusta la altura según tu preferencia */
   overflow: hidden;
   display: flex;
   align-items: center;

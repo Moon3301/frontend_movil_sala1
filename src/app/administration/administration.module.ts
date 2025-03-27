@@ -20,6 +20,7 @@ import { EditMoviesPagesComponent } from './pages/edit-movies-pages/edit-movies-
 
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material/material.module';
 
 @NgModule({
   declarations: [
@@ -34,11 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     AdministrationRoutingModule,
     PrimengModule,
-    MatTableModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatListModule,
-    MatRippleModule,
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule
   ],

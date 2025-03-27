@@ -1,17 +1,8 @@
 <div class="layout">
 
-  <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 10;">
-    <!-- <button (click)="drawer.toggle()" mat-icon-button>
-      <mat-icon>menu</mat-icon>
-    </button> -->
-    <!-- <span class="title-toolbar">Sala 1</span> -->
-    <!-- <button mat-button [routerLink]="['/movies']" style="font-size: 20px;">Peliculas</button> -->
+  <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 1;">
     <span class="spacer"></span>
-    <!-- Botón que activa el menú de ubicaciones -->
-    <!-- <button mat-button [matMenuTriggerFor]="menu" class="ubicacion-button ">
-      <mat-icon>location_on</mat-icon>
-      <span class="title-ubication">{{ userCurrentRegion || 'Ubicación' }}</span>
-    </button> -->
+    <span style="font-size: 13px; word-wrap: break-word; overflow-wrap: break-word;">{{userCurrentRegion}}</span>
   </mat-toolbar>
 
   <router-outlet />
@@ -62,9 +53,38 @@
 </mat-menu>
 
 <mat-menu #menu1="matMenu">
-  <ng-container *ngFor="let option of accountOptions">
-    <button mat-menu-item [routerLink]="[option.route]">
-      {{ option.title }}
+
+  @if(currentUser?.role === 'Administrador'){
+    <button mat-menu-item [routerLink]="['administration']">
+      Administracion
     </button>
-  </ng-container>
+  }
+
+  @if(currentUser){
+    <button mat-menu-item [routerLink]="['account']">
+      Cuenta
+    </button>
+  }@else{
+    <button mat-menu-item [routerLink]="['auth/login']">
+      Iniciar sesion
+    </button>
+  }
+
 </mat-menu>
+
+<!-- <p-dialog header="Editar imagen" [modal]="true" [(visible)]="ubicationVisible" [style]="{ width: '40rem' }">
+
+  <span class="p-text-secondary block mb-8">Actualizar la imagen con una URL (300x400)</span>
+  <hr>
+  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()">
+    <div class="flex items-center gap-4 mb-4">
+      <input pInputText id="img_url" class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.img_url" formControlName="img_url"/>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <p-button type="button" label="Cancelar" severity="secondary" (click)="visible = false" />
+      <p-button (click)="onChangesInput()" type="submit" label="Actualizar" (click)="visible = false" />
+    </div>
+  </form>
+
+</p-dialog> -->

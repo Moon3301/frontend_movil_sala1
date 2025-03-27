@@ -61,23 +61,37 @@
 </div>
 
 <h1 class="text-center mt-2">Funciones</h1>
-<mat-divider></mat-divider>
+<hr>
+<div class="container">
 
-<mat-list>
-  @for(cinema of funciones; track cinema){
+  <mat-form-field appearance="outline" class="fechas-funciones" class="w-100">
+    <mat-label>Funciones disponibles</mat-label>
+    <mat-select [value]="dates[0]">
+      @for (date of dates; track date) {
+        <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 
-    <mat-list-item
-      (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
-      matRipple
-      style="background-color: rgba(0, 255, 255, 0.2)">
+  <mat-list>
+    @for(cinema of funciones; track cinema){
 
-      {{cinema.cinemaType | uppercase}}
+      <mat-list-item
+        (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
+        matRipple
+        style="background-color: rgba(0, 255, 255, 0.2)">
 
-    </mat-list-item>
+        {{cinema.cinemaType | uppercase}}
 
-  }
+      </mat-list-item>
 
-</mat-list>
+    }
+
+  </mat-list>
+
+</div>
+<hr>
+
 
 
 

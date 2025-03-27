@@ -3,3 +3,7 @@ div {
   min-height: 100dvh;
   grid-template-rows: auto 1fr auto;
 }
+
+.ptr--top .ptr__text {
+  color: white !important; /* O el color que prefieras */
+}

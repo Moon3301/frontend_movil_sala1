@@ -51,6 +51,10 @@ export class EditCarruselPageComponent {
     this.visible = true;
   }
 
+  closeDialog(){
+    this.editForm.reset();
+  }
+
   onChangesInput(){
 
     const movieCarrsuelId = this.movieCarrusel?.id

@@ -25,6 +25,8 @@
       </div>
     </div>
 
+  }@else {
+    <p-skeleton width="24rem" height="24rem"></p-skeleton>
   }
 
 </div>
@@ -40,12 +42,21 @@
 
     <!-- Contenedor para el carrusel/scroll horizontal de posters -->
     <div class="trending-carousel" #carouselContainer>
-      @for(movies of moviesCarrusel; track $index){
 
-        <div class="movie-poster" (click)="selectMovie(movies)">
-          <img [src]="movies.img_url" alt="The Good Dinosaur">
-        </div>
+      @if(moviesCarrusel.length){
+        @for(movies of moviesCarrusel; track $index){
+
+          <div class="movie-poster" (click)="selectMovie(movies)">
+            <img [src]="movies.img_url" alt="The Good Dinosaur">
+          </div>
+        }
+      }@else {
+        <p-skeleton width="6rem" height="8rem"></p-skeleton>
+        <p-skeleton width="6rem" height="8rem"></p-skeleton>
+        <p-skeleton width="6rem" height="8rem"></p-skeleton>
+        <p-skeleton width="6rem" height="8rem"></p-skeleton>
       }
+
     </div>
 
     <button class="carousel-button right" (click)="scrollCarousel('right')">

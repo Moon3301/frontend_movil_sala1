@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../../../users/interfaces/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,8 @@ import * as stringSimilarity from 'string-similarity';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { StorageService } from '../../../storage/storage.service';
 import { MenuItem } from 'primeng/api';
+import PullToRefresh from 'pulltorefreshjs';
+import { pullToRefreshCss } from './pull-to-refresh-css';
 
 @Component({
   selector: 'app-main-layout',
@@ -15,7 +17,11 @@ import { MenuItem } from 'primeng/api';
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
-export class MainLayoutComponent implements OnInit{
+export class MainLayoutComponent implements OnInit, OnDestroy{
+
+  ubicationVisible: boolean = false;
+
+  ptrInstance: any;
 
   items: MenuItem[] | undefined;
 
@@ -24,18 +30,6 @@ export class MainLayoutComponent implements OnInit{
   currentUser!: User | undefined;
 
   regions: Region[] = []
-
-  accountOptions = [
-    {
-      title: 'Administracion',
-      route: 'administration'
-    },
-    {
-      title: 'Cuenta',
-      route: 'account'
-    },
-
-  ]
 
   userCurrentRegion!: string;
 
@@ -48,23 +42,32 @@ export class MainLayoutComponent implements OnInit{
 
   ){}
 
+
+  ngOnDestroy(): void {
+
+    if (this.ptrInstance) {
+      this.ptrInstance.destroy();
+    }
+  }
+
   ngOnInit(): void {
 
     this.items = [
       {
-          label: 'Peliculas',
-          icon: 'img/3.png'
+        label: 'Peliculas',
+        icon: 'img/3.png'
       },
       {
         label: 'Ubicacion',
         icon: 'img/8.png'
       },
       {
-          label: 'Cuenta',
-          icon: 'img/12.png'
+        label: 'Cuenta',
+        icon: 'img/12.png'
       },
 
     ];
+
 
     // Se verifica la auntenticidad del usuario validando que existen un usuario en localStorage
     this.authService.checkAuthentication().subscribe((isAuthenticated) => {
@@ -113,6 +116,24 @@ export class MainLayoutComponent implements OnInit{
     this.cdr.detectChanges();
 
   }
+
+  // ngAfterViewInit(): void {
+
+  //   this.ptrInstance = PullToRefresh.init({
+  //     mainElement: '#scrollableContainer',
+  //     instructionsPullToRefresh: 'Desliza para refrescar',
+  //     instructionsReleaseToRefresh: 'Suelta para refrescar',
+  //     instructionsRefreshing: 'Cargando...',
+  //     getStyles: () => {
+  //       return pullToRefreshCss
+  //     },
+
+  //     onRefresh: async () => {
+  //       window.location.reload();
+  //     }
+  //   })
+
+  // }
 
   onChangeUbication(newUbication: string): void {
 
