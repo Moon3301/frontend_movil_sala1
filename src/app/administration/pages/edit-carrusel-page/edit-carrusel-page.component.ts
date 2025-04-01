@@ -204,51 +204,14 @@ export class EditCarruselPageComponent {
 
   }
 
-  // downPositionPoster(event: any){
-  //   const reorderedList: MovieCarrusel[] = event.items;
-  //   // Asume que el pickList ya actualizó el array con la nueva posición (si no, puedes re-calcularla)
-  //   // Si no se actualizan automáticamente las posiciones, puedes asignarlas:
-  //   reorderedList.forEach((item, index) => item.position = index + 1);
-
-  //   forkJoin(
-  //     reorderedList.map(item =>
-  //       this.administrationService.updatePosterPosition(item.id, item.position)
-  //     )
-  //   ).subscribe({
-  //     next: (responses) => {
-  //       this.messageService.add({
-  //         severity: 'success',
-  //         summary: 'Orden actualizado',
-  //         detail: 'La posición de los posters se ha actualizado correctamente'
-  //       });
-  //       // Refresca la data con la nueva lista ordenada
-  //       this.loadCarruselData();
-  //     },
-  //     error: (err) => {
-  //       console.error('Error actualizando el orden:', err);
-  //       this.messageService.add({
-  //         severity: 'error',
-  //         summary: 'Error',
-  //         detail: 'No se pudo actualizar el orden'
-  //       });
-  //     }
-  //   });
-  // }
-
   async updatePosterPosition(event: any){
-
-    console.log('update position poster', event.items)
 
     const listMoviePoster: MovieCarrusel[] = event.items
 
     for (const moviePoster of listMoviePoster) {
 
-      console.log(`moviePoster.id: ${moviePoster.id}, moviePoster.position: ${moviePoster.position}`);
-
       this.administrationService.updatePosterPosition(moviePoster.id,moviePoster.position).subscribe({
         next: (resp) => {
-          console.log('Nueva lista de pósters:', resp);
-
           this.loadCarruselData();
         },
         error: (err) => {
@@ -258,66 +221,6 @@ export class EditCarruselPageComponent {
 
     }
 
-    // this.administrationService.updatePosterPosition(id,newPosition).subscribe({
-    //   next: (resp) => {
-    //     console.log('Nueva lista de pósters:', resp);
-
-    //     this.loadCarruselData();
-    //   },
-    //   error: (err) => {
-    //     console.error('Error:', err);
-    //   }
-    // })
-
   }
-
-  // async handleFileUpload(event: Event, movieCarrusel: MovieCarrusel) {
-  //   const input = event.target as HTMLInputElement;
-  //   const file = input.files?.[0];
-
-  //   if (file) {
-  //     try {
-  //       // 1. Mostrar preview inmediata
-  //       const previewUrl = await this.readFileAsDataURL(file);
-  //       movieCarrusel.poster_url = previewUrl;
-
-  //       console.log('movieCarrusel:', movieCarrusel);
-
-  //       // Armamos FormData
-  //       const formData = new FormData();
-  //       formData.append('poster', file); // El nombre 'poster' debe coincidir con FileInterceptor('poster')
-  //       formData.append('id', movieCarrusel.id.toString() || '');
-
-  //       // Llamamos a la nueva ruta de NestJS
-  //       this.administrationService.uploadMoviePoster(formData).subscribe({
-  //         next: (resp) => {
-
-  //           movieCarrusel.poster_url = resp.poster_url
-  //           this.loadCarruselData();
-  //         },
-  //         error: (err) => {
-  //           console.error('Error:', err);
-  //         },
-  //       });
-
-  //     } catch (error) {
-  //       console.error('Error uploading image:', error);
-  //       // Manejar errores
-  //     }
-  //   }
-  // }
-
-  // private readFileAsDataURL(file: File): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onload = () => resolve(reader.result as string);
-  //     reader.onerror = reject;
-  //     reader.readAsDataURL(file);
-  //   });
-  // }
-
-  // buildPosterUrl(posterUrl: string): String{
-  //   return `${this.baseUrl}/uploads/${posterUrl}`
-  // }
 
 }

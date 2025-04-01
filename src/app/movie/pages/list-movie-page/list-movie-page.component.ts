@@ -43,7 +43,7 @@ export class ListMoviePageComponent implements OnInit{
 
         this.movieService.saveAllMoviesT(this.movies).subscribe({
           next: (resp)=> {
-            console.log('Peliculas guardadas en localStorage');
+            // console.log('Peliculas guardadas en localStorage');
           },
           error: (error)=> {
             console.log('Error al guardar las peliculas', error);

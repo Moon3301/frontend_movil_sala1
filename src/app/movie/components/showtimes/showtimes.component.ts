@@ -57,12 +57,6 @@ export class ShowtimesComponent implements OnInit {
 
     }
 
-
-
-
-
-
-
   }
 
   buildUrlPaymentCinepolis(vistaId:string, showtimeId: string){
@@ -133,31 +127,5 @@ export class ShowtimesComponent implements OnInit {
       return dShow < dNow;
     }
   }
-
-  // getShowtimes(movieId: number, regionName: string, fecha: string){
-
-  //   this.isLoading = true;
-  //   this.cdr.detectChanges();
-
-  //   this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
-  //     next: (response) => {
-
-  //       this.data.billboards = response.data;
-
-  //       this.dates = response.dates
-
-  //       this.isLoading = false;
-  //       this.cdr.detectChanges();
-  //     },
-  //     error: (error) => {
-
-  //       console.log(error);
-
-  //       this.isLoading = false;
-  //       this.cdr.detectChanges();
-  //     }
-  //   });
-
-  // }
 
 }

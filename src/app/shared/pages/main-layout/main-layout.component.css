@@ -12,13 +12,13 @@
 
 .dock-content {
   --p-dock-background: rgb(15, 15, 30);
-  --p-dock-item-size: 55px;
-
+  --p-dock-item-size: 45px;
   opacity: 1;
   background-color: black;
   position: fixed;
   bottom: 0;
   left: 50%;
+
   transform: translateX(-50%); /* para centrar horizontalmente */
   z-index: 1000;               /* o el valor que necesites */
   /* width: 300px; (opcional) si deseas forzar un ancho fijo */

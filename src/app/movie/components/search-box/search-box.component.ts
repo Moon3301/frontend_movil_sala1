@@ -32,15 +32,11 @@ export class SearchBoxComponent implements OnInit{
 
   private _filter(value: string): Movie[] {
     const filterValue = value.toLowerCase();
-
     return this.movies.filter(option => option.title.toLowerCase().includes(filterValue));
   }
 
   redirectToMovie(value: Movie){
-
-    console.log(value);
     this.router.navigate(['movies', value.id])
-
   }
 
 }

@@ -44,10 +44,11 @@
     <div class="trending-carousel" #carouselContainer>
 
       @if(moviesCarrusel.length){
-        @for(movies of moviesCarrusel; track $index){
 
-          <div class="movie-poster" (click)="selectMovie(movies)">
-            <img [src]="movies.img_url" alt="The Good Dinosaur">
+        @for(movie of moviesCarrusel; track $index){
+
+          <div class="movie-posters" (click)="selectMovie(movie)" >
+            <img [src]="movie.img_url" alt="The Good Dinosaur">
           </div>
         }
       }@else {

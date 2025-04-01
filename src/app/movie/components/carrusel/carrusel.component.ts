@@ -47,6 +47,7 @@ export class CarruselComponent implements OnInit{
     });
   }
 
+
   selectMovie(movie: any){
     this.moviePoster = movie;
   }

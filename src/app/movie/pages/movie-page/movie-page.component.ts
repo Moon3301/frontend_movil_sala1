@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
@@ -13,7 +13,8 @@ import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from '../../../storage/storage.service';
 import { ShowtimesComponent } from '../../components/showtimes/showtimes.component';
 import { MatOptionSelectionChange } from '@angular/material/core';
-
+import { App } from '@capacitor/app';
+import { Location } from '@angular/common';  // Para retroceder en Angular
 
 @Component({
   selector: 'movie-movie-page',
@@ -22,7 +23,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
   templateUrl: './movie-page.component.html',
   styleUrl: './movie-page.component.css'
 })
-export class MoviePageComponent  implements OnInit{
+export class MoviePageComponent  implements OnInit {
 
   movie?: Movie
   funciones?: ICines[]
@@ -38,11 +39,24 @@ export class MoviePageComponent  implements OnInit{
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
     private storageService: StorageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private location: Location
   ){}
 
   ngOnInit(): void {
-    console.log('Entrando a movie');
+
+    window.scrollTo(0, 0);
+
+    App.addListener('backButton', ({ canGoBack }) => {
+      if (canGoBack) {
+        // Retrocede con la API de Angular
+        this.location.back();
+      } else {
+        // Si no hay historial (o no quieres retroceder más), salir de la app
+        App.exitApp();
+      }
+    });
+
     const currentDate = getFormattedDate();
 
     this.activateRoute.params.pipe(
@@ -98,7 +112,7 @@ export class MoviePageComponent  implements OnInit{
 
               this.storageService.saveData('user_ubication', region).subscribe({
                 next: () => {
-                  console.log('Ubicación guardada en el almacenamiento local');
+                  // console.log('Ubicación guardada en el almacenamiento local');
                 },
                 error: (error) => {
                   console.error('Error al guardar ubicación:', error);

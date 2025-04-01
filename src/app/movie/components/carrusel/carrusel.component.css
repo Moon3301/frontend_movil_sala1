@@ -23,7 +23,7 @@
 
 .hero-content {
   z-index: 1;
-  max-width: 800px;
+  max-width: 100%;
   color: #fff;
   margin: 0 20px;
   text-align: left; /* en móviles, o left en escritorio, según prefieras */
@@ -49,10 +49,10 @@
  * Sección de Trending Movies
  ****************************************/
 .trending-movies-container {
+  z-index: 11;
   bottom: 200px;
   position: relative;
   width: 100%;
-
   padding: 2rem 2rem 3rem;
   background-color: transparent;
   /* Para que visualmente se note cambio de sección */
@@ -69,7 +69,6 @@
   gap: 1rem;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 20px;
-
   overflow-x: auto; /* hace que el contenedor scrollee horizontalmente */
   padding: 0.5rem 0;
   scroll-behavior: smooth; /* scroll suave */
@@ -80,7 +79,7 @@
   display: none;
 }
 
-.movie-poster {
+.movie-posters {
   padding-left: 10px;
   padding-right: 10px;
   flex: 0 0 auto;
@@ -88,13 +87,13 @@
   transition: transform 0.3s;
 }
 
-.movie-poster img {
+.movie-posters img {
   width: 100%;
   border-radius: 8px;
   display: block;
 }
 
-.movie-poster:hover {
+.movie-posters:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
@@ -167,7 +166,7 @@
     gap: 0.5rem;
     padding: 0.5rem; /* Ajuste para menor espacio */
   }
-  .movie-poster {
+  .movie-posters {
     width: 150px; /* Posters más pequeños en móvil */
   }
   /* Si el contenedor de la lista de movies tiene un margin-top fijo, se puede ajustar */

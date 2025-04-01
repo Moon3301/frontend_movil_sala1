@@ -1,60 +1,51 @@
-
-<button mat-button style="color: white; position: fixed; z-index: 10; margin-top: 5px; width: 100px; height: 50px;" [routerLink]="['/movies']">
-  <mat-icon style="font-size: 20px; font-weight: bold;">
-    arrow_back_ios_new
-  </mat-icon>
-</button>
-
-
 <div class="video-container">
+  <mat-toolbar style="width: 100%;">
+    <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
+      arrow_back_ios_new
+    </mat-icon>
+    <p style="margin: 0 auto; width: 90%; text-align: center;">{{movie?.title}}</p>
+  </mat-toolbar>
+
   <img
     class="img-video"
     [src]="getYouTubeThumbnailUrl(movie?.trailer_url)"
     alt="Video thumbnail"
     (click)="openVideoDialog()"
   />
+
 </div>
 
-<div class="container">
-  <mat-card>
-    <!-- Póster posicionado de forma absoluta dentro de .video-container -->
-    <img
-      class="movie-poster"
-      [src]="movie?.img_url"
-      [alt]="movie?.title"
-    />
-  </mat-card>
-
+<div class="movie-detail-container container">
   <mat-card>
     <mat-card-content>
-      <div class="row">
-        <div class="col-3 col-md-3 movie-detail">
-          <h5>
-            Titulo
-            <mat-divider class="mb-2"></mat-divider>
-            <h6>{{ movie?.title }}</h6>
-          </h5>
 
-          <h5>
-            Rating
-            <mat-divider class="mb-2"></mat-divider>
-            <h6>{{ movie?.rating }}</h6>
-          </h5>
+        <div class="row">
+          <div class="col-3 col-md-3 movie-detail">
+            <img [src]="movie?.img_url" width="100%">
+            <hr>
+            <h5>
+              Titulo
+              <mat-divider class="mb-2"></mat-divider>
+              <h6>{{ movie?.title }}</h6>
+            </h5>
 
-          <h5>
-            Categoria
-            <mat-divider></mat-divider>
-          </h5>
+            <h5>
+              Rating
+              <mat-divider class="mb-2"></mat-divider>
+              <h6>{{ movie?.rating }}</h6>
+            </h5>
 
+          </div>
+
+          <div class="col-9 col-md-9">
+            <h3>{{ movie?.synopsis_alt }}</h3>
+            <br />
+            <h5>Sinopsis</h5>
+            <h6 style="max-height: 200px; overflow-y: auto;">{{ movie?.synopsis }}</h6>
+          </div>
         </div>
 
-        <div class="col-9 col-md-9">
-          <h3>{{ movie?.synopsis_alt }}</h3>
-          <br />
-          <h5>Sinopsis</h5>
-          <h6 style="max-height: 200px; overflow-y: auto;">{{ movie?.synopsis }}</h6>
-        </div>
-      </div>
+
     </mat-card-content>
   </mat-card>
 

@@ -22,8 +22,6 @@ export class CardComponent implements OnInit {
   }
 
   navigateToMovie(movieId: any){
-    console.log('Navegando a movie');
-
     this.router.navigate(['/movie', movieId])
   }
 

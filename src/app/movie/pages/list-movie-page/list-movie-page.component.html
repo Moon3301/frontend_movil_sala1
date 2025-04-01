@@ -2,63 +2,69 @@
   <movie-carrusel></movie-carrusel>
 </div>
 
-<div class="list-movies-container container">
+<div class="container" style="position: absolute;">
+  <div class="list-movies-container" >
+    <movie-search-box [movies]="movies"></movie-search-box>
 
-  <movie-search-box [movies]="movies"></movie-search-box>
+    <mat-tab-group
+      style="min-height: 400px; "
+      [dynamicHeight]="true"
+      [selectedIndex]="selectedTabIndex"
+      (selectedTabChange)="onTabChange($event)"
+      >
 
-  <mat-tab-group
-    [dynamicHeight]="true"
-    style="min-height: 400px;"
-    [selectedIndex]="selectedTabIndex"
-    (selectedTabChange)="onTabChange($event)"
-    >
-    <mat-tab label="En cartelera">
-      <div class="row mt-4">
-        <ng-container *ngIf="moviesPremiere?.length; else loadingMovies">
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let movie of moviesPremiere">
-            <movie-card [movie]="movie"></movie-card>
-            <br>
-          </div>
-        </ng-container>
+      <mat-tab label="En cartelera">
+        <div class="row mt-4">
 
-      </div>
+          <ng-container *ngIf="moviesPremiere?.length; else loadingMovies">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let movie of moviesPremiere">
+              <movie-card [movie]="movie"></movie-card>
+              <br>
+            </div>
+          </ng-container>
 
-      <ng-template #loadingMovies>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let item of moviesSkeleton">
+          <ng-template #loadingMovies>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let item of moviesSkeleton">
+              <br>
+              <p-skeleton height="15rem"></p-skeleton>
+            </div>
+          </ng-template>
 
-          <br>
-          <p-skeleton height="15rem"></p-skeleton>
         </div>
-      </ng-template>
-
-    </mat-tab>
-
-    <mat-tab label="Preventas">
-
-      <div class="row mt-4">
-        @for (movie of moviesPresale; track movie) {
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <movie-card [movie]="movie"></movie-card>
-            <br>
-          </div>
-        }
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Proximamente">
-      <div class="row mt-4">
-        @for (movie of moviesComingSoon; track movie) {
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-            <movie-card [movie]="movie"></movie-card>
-            <br>
-          </div>
-        }
-      </div>
-    </mat-tab>
-  </mat-tab-group>
 
 
+
+      </mat-tab>
+
+      <mat-tab label="Preventas">
+
+        <div class="row mt-4">
+          @for (movie of moviesPresale; track movie) {
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <movie-card [movie]="movie"></movie-card>
+              <br>
+            </div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Proximamente">
+        <div class="row mt-4">
+          @for (movie of moviesComingSoon; track movie) {
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <movie-card [movie]="movie"></movie-card>
+              <br>
+            </div>
+          }
+        </div>
+      </mat-tab>
+
+
+    </mat-tab-group>
+
+  </div>
 </div>
+
 
 <br class="mb-5">
 

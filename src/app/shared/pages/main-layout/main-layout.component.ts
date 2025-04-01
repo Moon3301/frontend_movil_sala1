@@ -52,23 +52,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
 
-    this.items = [
-      {
-        label: 'Peliculas',
-        icon: 'img/3.png'
-      },
-      {
-        label: 'Ubicacion',
-        icon: 'img/8.png'
-      },
-      {
-        label: 'Cuenta',
-        icon: 'img/12.png'
-      },
-
-    ];
-
-
     // Se verifica la auntenticidad del usuario validando que existen un usuario en localStorage
     this.authService.checkAuthentication().subscribe((isAuthenticated) => {
       if (isAuthenticated) {
@@ -117,29 +100,11 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
 
   }
 
-  // ngAfterViewInit(): void {
-
-  //   this.ptrInstance = PullToRefresh.init({
-  //     mainElement: '#scrollableContainer',
-  //     instructionsPullToRefresh: 'Desliza para refrescar',
-  //     instructionsReleaseToRefresh: 'Suelta para refrescar',
-  //     instructionsRefreshing: 'Cargando...',
-  //     getStyles: () => {
-  //       return pullToRefreshCss
-  //     },
-
-  //     onRefresh: async () => {
-  //       window.location.reload();
-  //     }
-  //   })
-
-  // }
-
   onChangeUbication(newUbication: string): void {
 
     this.storageService.saveData("user_ubication", newUbication).subscribe({
       next: ()=> {
-        console.log('Ubicacion actualizada correctamente');
+        // console.log('Ubicacion actualizada correctamente');
       },
       error: ()=> {
         console.log('La ubicacion no pudo actualizarse correctamente');

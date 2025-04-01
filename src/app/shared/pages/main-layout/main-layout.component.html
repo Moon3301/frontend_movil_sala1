@@ -1,47 +1,18 @@
 <div class="layout">
 
-  <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 1;">
+  <mat-toolbar style="background-color: rgba(0, 0, 0, 0); position: fixed; z-index: 10;">
+    <button mat-icon-button [matMenuTriggerFor]="menu1">
+      <mat-icon>manage_accounts</mat-icon>
+    </button>
+
     <span class="spacer"></span>
-    <span style="font-size: 13px; word-wrap: break-word; overflow-wrap: break-word;">{{userCurrentRegion}}</span>
+    <mat-icon>location_on</mat-icon>
+    <span [matMenuTriggerFor]="menu" style="font-size: 13px; word-wrap: break-word; overflow-wrap: break-word;">{{userCurrentRegion}}</span>
   </mat-toolbar>
 
   <router-outlet />
-</div>
 
-<div class="dock-content">
-  <p-dock [model]="items" position="bottom">
-    <ng-template #item let-item style="background-color: black;">
-      @if(item.label === 'Peliculas'){
-        <img
-        [pTooltip]="item.label"
-        tooltipPosition="top"
-        [src]="item.icon"
-        [alt]="item.label"
-        width="100%"
-        [routerLink]="['/movies']"
-        />
-      }@else if(item.label === 'Ubicacion'){
-        <img
-        [pTooltip]="item.label"
-        tooltipPosition="top"
-        [src]="item.icon"
-        [alt]="item.label"
-        width="100%"
-        [matMenuTriggerFor]="menu"
-        />
-      }@else{
-        <img
-        [pTooltip]="item.label"
-        tooltipPosition="top"
-        [src]="item.icon"
-        [alt]="item.label"
-        width="100%"
-        [matMenuTriggerFor]="menu1"
-        />
-      }
-
-    </ng-template>
-  </p-dock>
+  <mat-toolbar></mat-toolbar>
 </div>
 
 <mat-menu #menu="matMenu">
@@ -53,6 +24,10 @@
 </mat-menu>
 
 <mat-menu #menu1="matMenu">
+
+  <button mat-menu-item [routerLink]="['movies']">
+    Inicio
+  </button>
 
   @if(currentUser?.role === 'Administrador'){
     <button mat-menu-item [routerLink]="['administration']">
@@ -72,19 +47,3 @@
 
 </mat-menu>
 
-<!-- <p-dialog header="Editar imagen" [modal]="true" [(visible)]="ubicationVisible" [style]="{ width: '40rem' }">
-
-  <span class="p-text-secondary block mb-8">Actualizar la imagen con una URL (300x400)</span>
-  <hr>
-  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()">
-    <div class="flex items-center gap-4 mb-4">
-      <input pInputText id="img_url" class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.img_url" formControlName="img_url"/>
-    </div>
-
-    <div class="flex justify-end gap-2">
-      <p-button type="button" label="Cancelar" severity="secondary" (click)="visible = false" />
-      <p-button (click)="onChangesInput()" type="submit" label="Actualizar" (click)="visible = false" />
-    </div>
-  </form>
-
-</p-dialog> -->

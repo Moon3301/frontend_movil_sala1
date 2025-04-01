@@ -8,15 +8,26 @@ h1, h2, h3, h4, h5 {
 
 /* Contenedor del video */
 .video-container {
+  z-index: 1000;
+  position: fixed;
+  top: 0px;
   width: 100%;
   aspect-ratio: 16/9;
-  margin-bottom: 40px;
   overflow: hidden;     /* Opcional, recorta la imagen si se sale */
+}
+
+.poster-container {
+  /* No necesitamos position fijo de entrada; lo haremos dinámico con JS */
+  position: absolute;
+  left: 25px; /* Ajusta según tu diseño */
+}
+
+.movie-detail-container {
+  margin-top: 240px;
 }
 
 /* Quitamos el margin-top grande */
 .movie-detail {
-  display: grid;
   align-items: center;
   justify-content: center;
 }
@@ -31,14 +42,14 @@ h1, h2, h3, h4, h5 {
 
 /* Póster posicionado dentro de .video-container */
 .movie-poster {
-  position: absolute;
-  bottom: -15px;
-  left: 15px;        /* Ajusta horizontalmente */
-  z-index: 10;
-  width: 80px;       /* Tamaño base; ajusta a tu gusto */
+  width: 80px;
   border-radius: 8px;
   cursor: pointer;
+  /* Transición opcional para suavizar */
+  transition: top 0.3s ease, left 0.3s ease;
 }
+
+
 
 
 
