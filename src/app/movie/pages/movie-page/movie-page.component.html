@@ -1,5 +1,5 @@
 <div class="video-container">
-  <mat-toolbar style="width: 100%;">
+  <mat-toolbar style="width: 100%; background-color: rgba(255, 255, 255); color: black;">
     <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
       arrow_back_ios_new
     </mat-icon>
@@ -16,7 +16,7 @@
 </div>
 
 <div class="movie-detail-container container">
-  <mat-card>
+  <mat-card style="background-color: rgba(0, 0, 0);">
     <mat-card-content>
 
         <div class="row">
@@ -41,7 +41,7 @@
             <h4 class="synopsis-title">{{ movie?.synopsis_alt }}</h4>
 
             <h5>Sinopsis</h5>
-            <h6 class="movie-synopsis">{{ movie?.synopsis }}</h6>
+            <p class="movie-synopsis">{{ movie?.synopsis }}</p>
           </div>
         </div>
 
@@ -51,11 +51,11 @@
 
 </div>
 
-<h1 class="text-center mt-2">Funciones</h1>
+<p class="text-center mt-2;" style="font-size: 30px; color: black;">Funciones</p>
 <hr>
 <div class="container">
 
-  <mat-form-field appearance="outline" class="fechas-funciones" class="w-100">
+  <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
     <mat-label>Funciones disponibles</mat-label>
     <mat-select [value]="dates[0]">
       @for (date of dates; track date) {
@@ -70,9 +70,9 @@
       <mat-list-item
         (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
         matRipple
-        style="background-color: rgba(0, 255, 255, 0.2)">
+        style="background-color: rgb(0, 0, 0);">
 
-        {{cinema.cinemaType | uppercase}}
+        <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
 
       </mat-list-item>
 
