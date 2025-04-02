@@ -16,6 +16,16 @@ h1, h2, h3, h4, h5 {
   overflow: hidden;     /* Opcional, recorta la imagen si se sale */
 }
 
+.movie-synopsis {
+  font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
+  max-height: 250px;
+  text-align: justify; /* Justifica el texto */
+  overflow-y: auto;
+  /* Opcionales para partir palabras largas */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 .poster-container {
   /* No necesitamos position fijo de entrada; lo haremos dinámico con JS */
   position: absolute;

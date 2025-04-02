@@ -15,8 +15,6 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +36,7 @@ import { MessageService } from 'primeng/api';
       },
 
     }),
-    // Registra el interceptor como multi-provider
+
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

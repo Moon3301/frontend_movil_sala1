@@ -6,7 +6,6 @@ body {
   background-color: rgb(15, 15, 30);
   clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
   z-index: 1;
-
 }
 
 .login-form {

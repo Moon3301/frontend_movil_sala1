@@ -1,11 +1,5 @@
 /* En tu archivo CSS/SCSS del componente */
-mat-card-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  padding: 0 16px; /* Ajusta según el padding que necesites */
-}
+
 
 .centered-title {
   position: absolute;

@@ -10,7 +10,6 @@ import { GalleriaModule } from 'primeng/galleria';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { DockModule } from 'primeng/dock';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SpeedDialModule } from 'primeng/speeddial';
@@ -28,7 +27,6 @@ import { SpeedDialModule } from 'primeng/speeddial';
     TableModule,
     DialogModule,
     InputTextModule,
-    DockModule,
     TooltipModule,
     SkeletonModule,
     SpeedDialModule
