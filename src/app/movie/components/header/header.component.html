@@ -1,0 +1,17 @@
+<mat-toolbar class="header-toolbar">
+  <button mat-icon-button (click)="onToggleDrawer()"><mat-icon>menu</mat-icon></button>
+  <img src="img/LOGO_SALA1-removeng.png" width="70px">
+  <span class="spacer"></span>
+
+  <h3 style="font-size: 14px; margin: 0 auto;">{{userCurrentRegion}}</h3>
+  <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>location_on</mat-icon></button>
+
+</mat-toolbar>
+
+<mat-menu #menu="matMenu">
+  <ng-container *ngFor="let region of regions">
+    <button mat-menu-item (click)="onChangeUbication(region.name)">
+      {{ region.name }}
+    </button>
+  </ng-container>
+</mat-menu>

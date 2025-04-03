@@ -1,4 +1,10 @@
-<div class="container mt-5">
+<mat-toolbar style="border: 1px solid black;">
+  <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
+    arrow_back_ios_new
+  </mat-icon>
+</mat-toolbar>
+
+<div class="container">
   <mat-list>
     <mat-list-item matRipple role="listitem" [routerLink]="['edit-carrusel']">Editar Carrusuel</mat-list-item>
     <mat-list-item matRipple role="listitem" [routerLink]="['edit-movies']">Editar peliculas</mat-list-item>

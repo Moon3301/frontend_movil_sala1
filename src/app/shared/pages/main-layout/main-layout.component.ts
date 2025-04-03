@@ -1,14 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild  } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { User } from '../../../users/interfaces/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Region, SharedService } from '../../services/shared.service';
 import * as stringSimilarity from 'string-similarity';
-import { MatOptionSelectionChange } from '@angular/material/core';
 import { StorageService } from '../../../storage/storage.service';
 import { MenuItem } from 'primeng/api';
 import PullToRefresh from 'pulltorefreshjs';
 import { pullToRefreshCss } from './pull-to-refresh-css';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,6 +19,9 @@ import { pullToRefreshCss } from './pull-to-refresh-css';
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent implements OnInit, OnDestroy{
+
+  @ViewChild('drawer') drawer!: MatDrawer;
+  private subscription!: Subscription;
 
   ubicationVisible: boolean = false;
 
@@ -32,6 +36,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
   regions: Region[] = []
 
   userCurrentRegion!: string;
+
+  showFiller = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -48,9 +54,17 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
     if (this.ptrInstance) {
       this.ptrInstance.destroy();
     }
+
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
+
+    this.subscription = this.sharedService.toggleDrawer$.subscribe(() => {
+      this.drawer.toggle();
+    })
 
     // Se verifica la auntenticidad del usuario validando que existen un usuario en localStorage
     this.authService.checkAuthentication().subscribe((isAuthenticated) => {
@@ -98,6 +112,10 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
 
     this.cdr.detectChanges();
 
+  }
+
+  onToggleDrawer(): void {
+    this.drawer.toggle();
   }
 
   onChangeUbication(newUbication: string): void {

@@ -1,6 +1,6 @@
-<div style="display: grid; justify-content: center; align-items: center;">
+<div style="display: grid; justify-content: center; align-items: center; height: 100vh;">
 
-  <mat-card class="w-100">
+  <mat-card class="w-100" style="border-radius: 0%;">
 
     <mat-card-actions>
       <button [routerLink]="['/auth', 'login']" mat-button class="right-button">
@@ -8,9 +8,9 @@
       </button>
 
       <mat-card-title class="centered-title">Registro</mat-card-title>
-      <hr>
-    </mat-card-actions>
 
+    </mat-card-actions>
+    <hr>
     <form [formGroup]="registerForm" (ngSubmit)="register()">
 
       <mat-card-content>
@@ -46,23 +46,16 @@
 
       <mat-card-actions>
 
-        <div class="container text-center">
-          <div class="row justify-content-between">
-
-            <div class="col-12 col-md-6">
-              <button mat-button type="reset" (click)="resetValues()">Limpiar</button>
-            </div>
-
-            <div class="col-12 col-md-6" >
-              <button mat-flat-button type="submit">Crear</button>
-            </div>
-
-          </div>
+        <div class="row mx-auto w-100">
+          <button class="mb-2" mat-flat-button type="submit">Crear</button>
+          <button class="mt-2" mat-stroked-button type="reset" (click)="resetValues()">Limpiar</button>
         </div>
+
       </mat-card-actions>
+      
     </form>
 
-
+    <br>
   </mat-card>
 
 </div>

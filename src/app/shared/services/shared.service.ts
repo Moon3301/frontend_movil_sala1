@@ -6,6 +6,7 @@ import { IUbication } from "../../common/interfaces";
 import stringSimilarity from "string-similarity";
 import { StorageService } from "../../storage/storage.service";
 import { Geolocation } from '@capacitor/geolocation';
+import { Subject } from 'rxjs';
 
 export interface Region {
   id: number,
@@ -21,6 +22,9 @@ export class SharedService{
   currentRegion!: string;
   currentRegionSession!: string;
   userCurrentRegion!: string;
+
+  private toggleDrawerSubject = new Subject<void>();
+  toggleDrawer$ = this.toggleDrawerSubject.asObservable();
 
   private baseUrl: string = environments.baseUrl;
 
@@ -79,6 +83,10 @@ export class SharedService{
     const bestMatch = result.bestMatch;
     return bestMatch.target;
 
+  }
+
+  toggleDrawer(): void {
+    this.toggleDrawerSubject.next();
   }
 
 }

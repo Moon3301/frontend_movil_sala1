@@ -4,6 +4,7 @@ import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
 import { forkJoin } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SharedService } from '../../../shared/services/shared.service';
 
 @Component({
   selector: 'movie-list-movie-page',
@@ -27,7 +28,7 @@ export class ListMoviePageComponent implements OnInit{
   constructor(
     private movieService: MovieService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ){}
 
   ngOnInit(): void {
@@ -76,6 +77,8 @@ export class ListMoviePageComponent implements OnInit{
       this.selectedTabIndex = tabIndex;
     });
 
+
+
   }
 
   onTabChange(event: any) {
@@ -108,5 +111,7 @@ export class ListMoviePageComponent implements OnInit{
     // Devuelvo el array final ya ordenado
     return finalList;
   }
+
+
 
 }

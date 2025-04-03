@@ -13,6 +13,7 @@ import { CarruselComponent } from './components/carrusel/carrusel.component';
 import { ListPremiereComponent } from './components/list-premiere/list-premiere.component';
 import { PrimengModule } from '../primeng/primeng.module';
 import { ShowtimesComponent } from './components/showtimes/showtimes.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ShowtimesComponent } from './components/showtimes/showtimes.component';
     SearchBoxComponent,
     CarruselComponent,
     ListPremiereComponent,
+    HeaderComponent,
 
   ],
   imports: [

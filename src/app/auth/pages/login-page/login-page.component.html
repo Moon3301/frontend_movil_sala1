@@ -1,8 +1,8 @@
-<div style="display: grid; justify-content: center; align-items: center;">
+<div style="display: grid; justify-content: center; align-items: center; height: 100vh;">
 
   <mat-card class="w-100">
 
-    <mat-card-title class="text-center mt-3" style="color: white;">Login</mat-card-title>
+    <mat-card-title class="text-center mt-3" style="color: black;">INICIAR SESION</mat-card-title>
     <hr>
 
     <form [formGroup]="loginForm" (ngSubmit)="login()">
@@ -10,7 +10,7 @@
       <mat-card-content>
         <div class="row w-100 mx-auto">
 
-          <mat-form-field appearance="outline" >
+          <mat-form-field appearance="outline" subscriptSizing="fixed">
             <mat-label>Email</mat-label>
             <mat-icon matSuffix>person</mat-icon>
             <input matInput formControlName="email">
@@ -29,7 +29,7 @@
       <mat-card-actions>
         <div class="row mx-auto">
           <button class="mb-2" mat-flat-button type="submit">Ingresar</button>
-          <button class="mb-2" mat-button [routerLink]="['/auth', 'new-account']">Registrarse</button>
+          <button class="mb-2" mat-stroked-button [routerLink]="['/auth', 'new-account']">Registrarse</button>
           <mat-divider></mat-divider>
           <button class="mt-2" mat-button>Olvido su contraseña?</button>
         </div>

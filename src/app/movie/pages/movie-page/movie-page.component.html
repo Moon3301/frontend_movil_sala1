@@ -1,5 +1,5 @@
 <div class="video-container">
-  <mat-toolbar style="width: 100%; background-color: rgba(255, 255, 255); color: black;">
+  <mat-toolbar style="width: 100%; background-color: whitesmoke; color: black;">
     <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
       arrow_back_ios_new
     </mat-icon>
@@ -16,7 +16,7 @@
 </div>
 
 <div class="movie-detail-container container">
-  <mat-card style="background-color: rgba(0, 0, 0);">
+  <mat-card style="background-color: rgb(31, 31, 31);">
     <mat-card-content>
 
         <div class="row">
@@ -26,13 +26,13 @@
             <h5>
               Titulo
               <mat-divider class="mb-2"></mat-divider>
-              <h6>{{ movie?.title }}</h6>
+              <p class="movie-title">{{ movie?.title }}</p>
             </h5>
 
             <h5>
               Rating
               <mat-divider class="mb-2"></mat-divider>
-              <h6>{{ movie?.rating }}</h6>
+              <h6 class="movie-rating">{{ movie?.rating }}</h6>
             </h5>
 
           </div>
@@ -41,7 +41,7 @@
             <h4 class="synopsis-title">{{ movie?.synopsis_alt }}</h4>
 
             <h5>Sinopsis</h5>
-            <p class="movie-synopsis">{{ movie?.synopsis }}</p>
+            <p class="movie-synopsis" style="color: white;">{{ movie?.synopsis }}</p>
           </div>
         </div>
 
@@ -51,8 +51,8 @@
 
 </div>
 
-<p class="text-center mt-2;" style="font-size: 30px; color: black;">Funciones</p>
-<hr>
+<p class="text-center mt-2 mb-2;" style="font-size: 30px; color: black;">Funciones</p>
+
 <div class="container">
 
   <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
@@ -70,18 +70,19 @@
       <mat-list-item
         (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
         matRipple
-        style="background-color: rgb(0, 0, 0);">
+        style="background-color: rgb(31, 31, 31);">
 
         <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
 
       </mat-list-item>
+      <mat-divider></mat-divider>
 
     }
 
   </mat-list>
 
 </div>
-<hr>
+
 
 
 

@@ -12,6 +12,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MovieService } from '../../services/movie.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatOptionSelectionChange } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'movie-showtimes',
@@ -26,7 +27,8 @@ import { MatOptionSelectionChange } from '@angular/material/core';
     MatChipsModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    CommonModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

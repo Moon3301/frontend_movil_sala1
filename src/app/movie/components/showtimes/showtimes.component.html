@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12 d-flex align-items-center">
       <!-- Botón de cierre en el extremo derecho -->
-      <button class="btn-close" style="background-color: black;" (click)="onClose()"></button>
+      <button class="btn-close" style="background-color: white;" (click)="onClose()"></button>
     </div>
   </div>
 </mat-dialog-actions>
@@ -10,14 +10,14 @@
 
   @for(showtime of dataShowtimes.showtimes; track showtime){
 
-    <mat-card>
+    <mat-card style="border: 1px solid rgb(31, 31, 31);">
       <mat-card-header>
         <mat-card-title>{{showtime.cinemaName}}</mat-card-title>
       </mat-card-header>
       <hr>
       <mat-card-content>
-        <mat-card-subtitle>Funciones: </mat-card-subtitle>
-        <div class="row" style="color: black;">
+        <!-- <mat-card-subtitle>Funciones: </mat-card-subtitle> -->
+        <div class="row">
           @for (schedule of showtime.showtimes; track schedule) {
 
             <div class="col-6 col-md-2">
@@ -25,6 +25,7 @@
                 <button mat-button
 
                   [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                  [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'rgb(3, 126, 3)'} : {}"
                   (click)="buildUrlPaymentCinepolis(
                   showtime.vistaId,
                   schedule.showtimeExternalId)"
@@ -37,6 +38,7 @@
               (cinemaType === 'Cinemark'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'rgb(3, 126, 3)'} : {}"
                 (click)="buildUrlPaymentCinemark(
                   showtime.cinemaExternalId,
                   schedule.showtimeExternalId,
@@ -53,7 +55,8 @@
               (cinemaType === 'Cineplanet'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                  (click)="buildUrlPaymentCineplanet(
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'rgb(3, 126, 3)'} : {}"
+                (click)="buildUrlPaymentCineplanet(
                     showtime.version.title,
                     showtime.cinemaExternalId,
                     schedule.sessionId
@@ -62,10 +65,12 @@
                   >
 
                 {{ schedule.showtime }} {{schedule.language}}</button>
+
               }@else if
               (cinemaType === 'Muvix'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'rgb(3, 126, 3)'} : {}"
                   (click)="buildUrlPaymentMuvix(
                     showtime.cinemaExternalId,
                     schedule.sessionId
@@ -74,16 +79,18 @@
                   >
 
                 {{ schedule.showtime }} {{schedule.language}}</button>
+
               }
-              <hr>
+
             </div>
 
           }
+
         </div>
       </mat-card-content>
 
     </mat-card>
-    <hr>
+    <br>
 
   }
 

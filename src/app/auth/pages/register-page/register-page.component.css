@@ -1,11 +1,9 @@
 /* En tu archivo CSS/SCSS del componente */
-
-
 .centered-title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: white;
+  color: black;
 }
 
 .left-button {

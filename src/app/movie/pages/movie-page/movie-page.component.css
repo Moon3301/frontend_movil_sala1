@@ -6,6 +6,7 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
+
 /* Contenedor del video */
 .video-container {
   z-index: 1000;
@@ -24,6 +25,7 @@ h1, h2, h3, h4, h5, h6 {
   /* Opcionales para partir palabras largas */
   word-wrap: break-word;
   overflow-wrap: break-word;
+  color: white;
 }
 
 .poster-container {
@@ -36,8 +38,22 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 240px;
 }
 
+.movie-title {
+  font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+}
+
+.movie-rating {
+  font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 /* Quitamos el margin-top grande */
 .movie-detail {
+
   align-items: center;
   justify-content: center;
 }
