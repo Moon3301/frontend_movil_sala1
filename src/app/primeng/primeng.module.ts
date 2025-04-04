@@ -29,7 +29,7 @@ import { SpeedDialModule } from 'primeng/speeddial';
     InputTextModule,
     TooltipModule,
     SkeletonModule,
-    SpeedDialModule
+    SpeedDialModule,
   ],
 })
 export class PrimengModule { }

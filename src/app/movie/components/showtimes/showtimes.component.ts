@@ -13,6 +13,11 @@ import { MovieService } from '../../services/movie.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { ProgressBarModule } from 'primeng/progressbar';
+// For dynamic progressbar demo
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'movie-showtimes',
@@ -28,11 +33,18 @@ import { CommonModule } from '@angular/common';
     MatSelectModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    CommonModule
+    CommonModule,
+    MatIconModule,
+    ProgressBarModule,
+    ToastModule,
+
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShowtimesComponent implements OnInit {
+
+  isRedirect!: boolean;
+  timeRedirect: number = 2000;
 
   dates: string[] = [];
   dataShowtimes!: { showtimes: ICinema[]; movie: Movie; dates: string[], cinema: string };
@@ -45,6 +57,7 @@ export class ShowtimesComponent implements OnInit {
     public dialogRef: MatDialogRef<ShowtimesComponent>,
     private movieService: MovieService,
     private cdr: ChangeDetectorRef,
+    private messageService: MessageService,
     @Inject(MAT_DIALOG_DATA) public data: { showtimes: ICinema[], movie: Movie, dates: string[], cinema: string },
   ){}
 
@@ -62,10 +75,18 @@ export class ShowtimesComponent implements OnInit {
   }
 
   buildUrlPaymentCinepolis(vistaId:string, showtimeId: string){
-    window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
+    const cinema = 'Cinepolis'
+    // necesito agregar un tiempo de espera antes de direccionar al usuario a la pagina de compra.
+    this.showMessage(cinema);
+    setTimeout(() => {
+      window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
+    }, this.timeRedirect)
+
   }
 
   buildUrlPaymentCinemark(tag: string, showtimeId: string, date:string,  hour: string, cineSlug:string, sessionId: string){
+
+    const cinema = 'Cinemark'
 
     const currentDate =  date.split('T')[0];
     const transformedString = cineSlug.replace(/-/g, "_");
@@ -80,15 +101,32 @@ export class ShowtimesComponent implements OnInit {
       transformedString
     }
 
-    window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
+    this.showMessage(cinema);
+    setTimeout(() => {
+      window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
+    }, this.timeRedirect)
+
   }
 
   buildUrlPaymentCineplanet(titleSlug: string, cinemaId: string, sessionId: string){
-    window.open(`https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`)
+
+    const cinema = 'Cineplanet'
+
+    this.showMessage(cinema);
+    setTimeout(() => {
+      window.open(`https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`)
+    }, this.timeRedirect)
+
   }
 
   buildUrlPaymentMuvix(cinemaId: string, sessionId: string){
-    window.open(`https://muvix.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`)
+
+    const cinema = 'Muvix'
+    this.showMessage(cinema);
+    setTimeout(() => {
+      window.open(`https://muvix.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`)
+    }, this.timeRedirect)
+
   }
 
   onClose(): void{
@@ -128,6 +166,16 @@ export class ShowtimesComponent implements OnInit {
       // Si no es el mismo día, se deshabilita el botón si la fecha del show es anterior al día actual.
       return dShow < dNow;
     }
+  }
+
+  showMessage(cinema:string){
+    this.messageService.add(
+      {
+        severity: 'contrast',
+        summary: `Redireccionando a ${cinema}`,
+        detail: 'Redireccionando a la pagina de compra ...',
+        life: this.timeRedirect + 100 }
+    );
   }
 
 }

@@ -46,3 +46,9 @@
     margin-top: 760px; /* un valor menor para pantallas pequeñas */
   }
 }
+
+@media (max-width: 350px) {
+  .list-movies-container {
+    margin-top: 780px; /* un valor menor para pantallas pequeñas */
+  }
+}

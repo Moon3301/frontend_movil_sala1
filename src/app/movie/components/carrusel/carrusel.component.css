@@ -136,7 +136,7 @@
 @media (max-width: 768px) {
 
   .trending-movies-container {
-    bottom: 0px;
+    bottom: 80px;
     position: relative;
     width: 100%;
 
@@ -145,10 +145,8 @@
   }
   .hero-content {
     position: relative; /* o mantener absolute pero sin tanta restricción */
-    left: 50%;
-    top: 30%;
-    transform: translate(-50%, -50%);
-    text-align: left; /* centra el contenido para móviles */
+    top: 10%;
+    text-align: center; /* centra el contenido para móviles */
     padding: 10px;
   }
   .hero-container {

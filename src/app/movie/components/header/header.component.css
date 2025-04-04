@@ -7,5 +7,18 @@
   top: 0;
   z-index: 100;
   background-color:"whitesmoke";
-  
+
+}
+
+.current-region {
+
+  font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
+  max-height: 250px;
+  max-width: 180px;
+  text-align: justify; /* Justifica el texto */
+  overflow-y: auto;
+  /* Opcionales para partir palabras largas */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  margin: 0 auto;
 }

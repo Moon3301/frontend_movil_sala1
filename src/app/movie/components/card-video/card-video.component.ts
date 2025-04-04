@@ -5,6 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -18,7 +19,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     MatDividerModule,
     MatExpansionModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './card-video.component.html',
   styleUrl: './card-video.component.css'

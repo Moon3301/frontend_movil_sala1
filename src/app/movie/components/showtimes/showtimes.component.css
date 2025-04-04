@@ -3,5 +3,41 @@
 }
 
 .enabled-button {
-  color: rgb(3, 126, 3);
+  color: black
+}
+
+/* Fuerza que el contenedor del toast se posicione en el centro */
+::ng-deep .center-toast {
+  position: fixed !important;
+  top: 10% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  overflow-y: auto !important;
+  max-height: 90vh !important; /* Evita que se desborde verticalmente */
+  padding: 1rem; /* Espacio interno para que el contenido respire */
+  box-sizing: border-box;
+}
+
+/* Para pantallas pequeñas (móviles) se adapta el ancho */
+@media (max-width: 599px) {
+  ::ng-deep .center-toast {
+    width: 95% !important;
+    max-width: 95% !important;
+  }
+}
+
+/* Para pantallas medianas */
+@media (min-width: 600px) and (max-width: 1023px) {
+  ::ng-deep .center-toast {
+    width: 80% !important;
+    max-width: 80% !important;
+  }
+}
+
+/* Para pantallas grandes */
+@media (min-width: 1024px) {
+  ::ng-deep .center-toast {
+    width: 400px !important;
+    max-width: 400px !important;
+  }
 }

@@ -15,6 +15,7 @@ import { ShowtimesComponent } from '../../components/showtimes/showtimes.compone
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { App } from '@capacitor/app';
 import { Location } from '@angular/common';  // Para retroceder en Angular
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'movie-movie-page',
@@ -23,7 +24,9 @@ import { Location } from '@angular/common';  // Para retroceder en Angular
   templateUrl: './movie-page.component.html',
   styleUrl: './movie-page.component.css'
 })
-export class MoviePageComponent  implements OnInit {
+export class MoviePageComponent  implements OnInit, AfterViewInit  {
+
+  @ViewChild('topFocus') topFocus!: ElementRef;
 
   movie?: Movie
   funciones?: ICines[]
@@ -40,8 +43,12 @@ export class MoviePageComponent  implements OnInit {
     private dialog: MatDialog,
     private storageService: StorageService,
     private cdr: ChangeDetectorRef,
-    private location: Location
+    private location: Location,
+    private viewportScroller: ViewportScroller,
   ){}
+  ngAfterViewInit() {
+    this.topFocus.nativeElement.focus();
+  }
 
   ngOnInit(): void {
 
