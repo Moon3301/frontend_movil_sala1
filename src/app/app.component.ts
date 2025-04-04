@@ -9,6 +9,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from './storage/storage.service';
 import PullToRefresh from 'pulltorefreshjs';
 import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css
 })
 
 export class AppComponent implements OnInit{
+
 
   regions: Region[] = []
 
@@ -31,6 +33,8 @@ export class AppComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
+
+    StatusBar.setOverlaysWebView({ overlay: false });
 
     this.getAllRegions().subscribe({
       next: (resp) => {
