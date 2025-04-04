@@ -43,7 +43,7 @@
 /* Ajuste para móviles */
 @media (max-width: 768px) {
   .list-movies-container {
-    margin-top: 760px; /* un valor menor para pantallas pequeñas */
+    margin-top: 780px; /* un valor menor para pantallas pequeñas */
   }
 }
 
