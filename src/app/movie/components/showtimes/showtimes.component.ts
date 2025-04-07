@@ -134,6 +134,17 @@ export class ShowtimesComponent implements OnInit {
 
   }
 
+  buildUrlPaymentCinestar(cinemaId: string, sessionId: string){
+
+    const cinema = 'Cinestar'
+    this.showMessage(cinema);
+    setTimeout(() => {
+      Browser.open({ url: `https://cinestar.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`})
+      //window.open(`https://cinestar.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`)
+    }, this.timeRedirect)
+
+  }
+
   onClose(): void{
     this.dialogRef.close(true);
   }
