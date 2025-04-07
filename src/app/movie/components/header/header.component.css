@@ -4,7 +4,7 @@
 
 .header-toolbar {
   position: fixed;
-  top: 0;
+  top: env(safe-area-inset-top);
   z-index: 100;
   background-color:"whitesmoke";
 

@@ -11,7 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 .video-container {
   z-index: 1000;
   position: fixed;
-  top: 0px;
+  top: env(safe-area-inset-top);
   width: 100%;
   aspect-ratio: 16/9;
   overflow: hidden;     /* Opcional, recorta la imagen si se sale */
