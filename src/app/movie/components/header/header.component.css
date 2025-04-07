@@ -10,6 +10,10 @@
 
 }
 
+.header-container {
+  padding-top: env(safe-area-inset-top);
+}
+
 .current-region {
 
   font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */

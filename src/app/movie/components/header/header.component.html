@@ -1,12 +1,14 @@
-<mat-toolbar class="header-toolbar">
-  <button mat-icon-button (click)="onToggleDrawer()"><mat-icon>menu</mat-icon></button>
-  <img src="img/LOGO_SALA1-removeng.png" width="70px">
-  <span class="spacer"></span>
+<header class="header-container">
+  <mat-toolbar class="header-toolbar">
+    <button mat-icon-button (click)="onToggleDrawer()"><mat-icon>menu</mat-icon></button>
+    <img src="img/LOGO_SALA1-removeng.png" width="70px">
+    <span class="spacer"></span>
 
-  <h3 class="current-region">{{userCurrentRegion}}</h3>
-  <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>location_on</mat-icon></button>
+    <h3 class="current-region">{{userCurrentRegion}}</h3>
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>location_on</mat-icon></button>
 
-</mat-toolbar>
+  </mat-toolbar>
+</header>
 
 <mat-menu #menu="matMenu">
   <ng-container *ngFor="let region of regions">
