@@ -45,6 +45,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     private cdr: ChangeDetectorRef,
     private location: Location,
     private viewportScroller: ViewportScroller,
+
   ){}
   ngAfterViewInit() {
     this.topFocus.nativeElement.focus();
@@ -238,11 +239,14 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   onSelectDate(fecha: string, event?: MatOptionSelectionChange) {
     if(event?.isUserInput){
 
-      const regionName = sessionStorage.getItem("user_ubication");
-      const movieId = this.movie!.id;
-
-      this.getShowtimes(movieId, regionName!, fecha)
-
+      this.storageService.getData("user_ubication").subscribe( value => {
+        if(!value){
+          this.getRegionName().subscribe(region => {
+            sessionStorage.setItem("user_ubication", region);
+            this.getShowtimes(this.movie!.id, region, fecha)
+          })
+        }
+      })
     }
   }
 

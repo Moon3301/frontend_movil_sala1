@@ -10,6 +10,7 @@ import { StorageService } from './storage/storage.service';
 import PullToRefresh from 'pulltorefreshjs';
 import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,9 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
 
-    StatusBar.setOverlaysWebView({ overlay: false });
+    if(Capacitor.getPlatform() === 'ios'){
+      StatusBar.setOverlaysWebView({ overlay: false });
+    }
 
     this.getAllRegions().subscribe({
       next: (resp) => {
@@ -66,24 +69,6 @@ export class AppComponent implements OnInit{
       console.log('CheckAuthentication finished');
       }
     )
-
-  }
-
-  ngAfterViewInit(): void {
-
-    this.ptrInstance = PullToRefresh.init({
-      mainElement: '#scrollableContainer',
-      instructionsPullToRefresh: 'Desliza para refrescar',
-      instructionsReleaseToRefresh: 'Suelta para refrescar',
-      instructionsRefreshing: 'Cargando...',
-      getStyles: () => {
-        return pullToRefreshCss
-      },
-
-      onRefresh: async () => {
-        window.location.reload();
-      }
-    })
 
   }
 
