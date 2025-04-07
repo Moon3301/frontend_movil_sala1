@@ -18,6 +18,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 // For dynamic progressbar demo
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'movie-showtimes',
@@ -79,7 +80,8 @@ export class ShowtimesComponent implements OnInit {
     // necesito agregar un tiempo de espera antes de direccionar al usuario a la pagina de compra.
     this.showMessage(cinema);
     setTimeout(() => {
-      window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
+      Browser.open({ url: `https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`})
+      //window.open(`https://compra.cinepolis.com/?cinemaVistaId=${vistaId}&showtimeVistaId=${showtimeId}&countryCode=CL`, '_blank')
     }, this.timeRedirect)
 
   }
@@ -103,7 +105,8 @@ export class ShowtimesComponent implements OnInit {
 
     this.showMessage(cinema);
     setTimeout(() => {
-      window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
+      Browser.open({ url: `https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`})
+      //window.open(`https://www.cinemark.cl/compra?tag=${tag}&movie_id=${showtimeId}&showtime=${sessionId}&date=${currentDate}&hour=${hour}&pelicula=${this.data.movie.title_slug}&cine=${transformedString}`, '_blank')
     }, this.timeRedirect)
 
   }
@@ -114,7 +117,8 @@ export class ShowtimesComponent implements OnInit {
 
     this.showMessage(cinema);
     setTimeout(() => {
-      window.open(`https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`)
+      Browser.open({ url: `https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`})
+      //window.open(`https://www.cineplanet.cl/compra/${titleSlug}/${cinemaId}/${sessionId}/asientos`)
     }, this.timeRedirect)
 
   }
@@ -124,7 +128,8 @@ export class ShowtimesComponent implements OnInit {
     const cinema = 'Muvix'
     this.showMessage(cinema);
     setTimeout(() => {
-      window.open(`https://muvix.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`)
+      Browser.open({ url: `https://muvix.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`})
+      //window.open(`https://muvix.cl/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${sessionId}&visLang=1`)
     }, this.timeRedirect)
 
   }
