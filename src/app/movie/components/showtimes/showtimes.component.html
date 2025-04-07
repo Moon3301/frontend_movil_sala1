@@ -25,7 +25,7 @@
                 <button mat-button
 
                   [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                  [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {}"
+                  [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : { 'color': 'grey' }"
                   (click)="buildUrlPaymentCinepolis(
                   showtime.vistaId,
                   schedule.showtimeExternalId)"
@@ -38,7 +38,7 @@
               (cinemaType === 'Cinemark'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {}"
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
                 (click)="buildUrlPaymentCinemark(
                   showtime.cinemaExternalId,
                   schedule.showtimeExternalId,
@@ -55,7 +55,7 @@
               (cinemaType === 'Cineplanet'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {}"
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
                 (click)="buildUrlPaymentCineplanet(
                     showtime.version.title,
                     showtime.cinemaExternalId,
@@ -70,7 +70,7 @@
               (cinemaType === 'Muvix'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {}"
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
                   (click)="buildUrlPaymentMuvix(
                     showtime.cinemaExternalId,
                     schedule.sessionId
@@ -84,6 +84,7 @@
               (cinemaType === 'Cinestar'){
                 <button mat-button
                 [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
+                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
                   (click)="buildUrlPaymentCinestar(
                     showtime.cinemaExternalId,
                     schedule.sessionId
