@@ -65,7 +65,7 @@
 .trending-carousel {
   display: flex;
   gap: 1rem;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(245, 245, 245, 0.3);
   border-radius: 20px;
   overflow-x: auto; /* hace que el contenedor scrollee horizontalmente */
   padding: 0.5rem 0;
