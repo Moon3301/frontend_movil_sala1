@@ -1,66 +1,129 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+@for(movie of dataSource; track movie){
 
-  <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
+  <mat-card matRipple style="background-color: whitesmoke; width: 100%;" (click)="showDialog(movie)">
+    <mat-card-content>
+      <div class="row">
+        <div class="col-4">
+          <img [src]="movie.img_url" width="100px">
+        </div>
 
-  <!-- Position Column -->
-  <ng-container matColumnDef="ID">
-    <th mat-header-cell *matHeaderCellDef> No. </th>
-    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-  </ng-container>
+        <div class="col-8">
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="Titulo">
-    <th mat-header-cell *matHeaderCellDef> Titulo </th>
-    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-  </ng-container>
+          <div class="row">
+            <div class="col-3">
+              No.
+            </div>
+            <div class="col-9">
+              {{movie.id}}
+            </div>
+          </div>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="Imagen">
-    <th mat-header-cell *matHeaderCellDef> Imagen </th>
-    <td mat-cell *matCellDef="let element"> <img [src]="element.img_url" width="50px" (click)="showDialog(element)">
+          <div class="row">
+            <div class="col-3">
+              Titulo:
+            </div>
+            <div class="col-9">
+              {{movie.title}}
+            </div>
+          </div>
 
-    </td>
+          <div class="row">
+            <div class="col-3">
+              Rating:
+            </div>
+            <div class="col-9">
+              {{movie.rating}}
+            </div>
+          </div>
 
-  </ng-container>
+          <div class="row">
+            <div class="col-3">
+              Tipo:
+            </div>
+            <div class="col-9">
+              {{movie.screen_type}}
+            </div>
+          </div>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="Rating">
-    <th mat-header-cell *matHeaderCellDef> Rating </th>
-    <td mat-cell *matCellDef="let element"> {{element.rating}} </td>
-  </ng-container>
+        </div>
+      </div>
 
-  <!-- Weight Column -->
-  <ng-container matColumnDef="Tipo">
-    <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <br>
+      <div style="border: 1px solid black; border-radius: 20px; padding: 15px;">
+        <div class="row">
+          <div class="col-5">
+            <h6>Titulo Sinopsis:</h6>
+          </div>
 
-    <td mat-cell *matCellDef="let element">
-      <mat-form-field appearance="outline" style="margin-top: 20px; ">
-        <mat-label>Tipo</mat-label>
-        <mat-select
-         [value]="element.screen_type"
-         (selectionChange)="onChangeSelect($event, element)"
-         >
-          <mat-option *ngFor="let food of foods" [value]="food.value">
-            {{ food.viewValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </td>
-  </ng-container>
+          <div class="col-7">
+            {{movie.synopsis_alt}}
+          </div>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+        </div>
 
-<p-dialog header="Editar imagen" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
+        <div class="row">
+          <h6>Sinopsis</h6>
+          <div class="col-12">
+            {{movie.synopsis}}
+          </div>
+        </div>
+      </div>
 
-  <span class="p-text-secondary block mb-8">Actualizar la imagen con una URL (300x400)</span>
-  <hr>
-  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()">
-    <div class="flex items-center gap-4 mb-4">
-      <input pInputText id="img_url" class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.img_url" formControlName="img_url"/>
+    </mat-card-content>
+  </mat-card>
+  <br>
+
+}
+
+<p-dialog header="Editar Pelicula" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
+
+  <div class="container">
+    <div class="row">
+
     </div>
+  </div>
+
+
+  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()">
+
+    <div>
+      <span class="p-text-secondary block mb-8">Titulo</span>
+      <div class="flex items-center gap-4 mb-4">
+        <input pInputText class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.title" formControlName="title"/>
+      </div>
+    </div>
+
+    <div>
+      <span class="p-text-secondary block mb-8">Tipo</span>
+      <div class="flex items-center gap-4 mb-4">
+        <p-select pselect [options]='foods' optionLabel="value" optionValue="viewValue" class="flex-auto w-100" autocomplete="off" formControlName="screen_type"/>
+      </div>
+    </div>
+
+    <div>
+      <span class="p-text-secondary block mb-8">Actualizar la imagen con una URL (300x400)</span>
+      <div class="flex items-center gap-4 mb-4">
+        <input pInputText id="img_url" class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.img_url" formControlName="img_url"/>
+      </div>
+    </div>
+
+    <div>
+      <span class="p-text-secondary block mb-8">Titulo sinopsis</span>
+      <div class="flex items-center gap-4 mb-4">
+        <input pInputText class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.synopsis_alt" formControlName="title_sinopsis"/>
+      </div>
+    </div>
+
+    <div>
+      <span class="p-text-secondary block mb-8">Sinopsis</span>
+      <div class="flex items-center gap-4 mb-4">
+        <!-- <input pInputText id="img_url" class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.title" formControlName="img_url"/> -->
+        <textarea rows="5" cols="30" class="flex-auto w-100" pTextarea  [value]="Editmovie?.synopsis" formControlName="synopsis"></textarea>
+      </div>
+    </div>
+
+
+
 
     <div class="flex justify-end gap-2">
       <p-button type="button" label="Cancelar" severity="secondary" (click)="visible = false" />
@@ -69,3 +132,5 @@
   </form>
 
 </p-dialog>
+
+

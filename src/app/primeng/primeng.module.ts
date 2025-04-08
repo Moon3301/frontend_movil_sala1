@@ -13,6 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SpeedDialModule } from 'primeng/speeddial';
+import { SelectModule } from 'primeng/select';
 
 @NgModule({
   exports: [
@@ -30,6 +31,7 @@ import { SpeedDialModule } from 'primeng/speeddial';
     TooltipModule,
     SkeletonModule,
     SpeedDialModule,
+    SelectModule
   ],
 })
 export class PrimengModule { }

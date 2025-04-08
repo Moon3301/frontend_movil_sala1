@@ -29,6 +29,7 @@ export interface Movie {
   trailer_url:  string;
   synopsis:     string;
   synopsis_alt: string;
+  screen_type: string;
 
 }
 

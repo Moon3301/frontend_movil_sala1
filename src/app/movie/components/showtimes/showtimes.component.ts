@@ -66,12 +66,13 @@ export class ShowtimesComponent implements OnInit {
 
     this.dates = this.data.dates
     this.cinemaType = this.data.cinema;
-
     this.dataShowtimes = this.data
 
-    if(this.dataShowtimes.showtimes.length == 0){
-
-    }
+    this.dataShowtimes.showtimes.forEach(cinema => {
+      cinema.showtimes.sort((a, b) => {
+        return this.timeToMinutes(a.showtime) - this.timeToMinutes(b.showtime);
+      });
+    });
 
   }
 
@@ -192,6 +193,12 @@ export class ShowtimesComponent implements OnInit {
         detail: 'Redireccionando a la pagina de compra ...',
         life: this.timeRedirect + 100 }
     );
+  }
+
+  // Método de ayuda que convierte "HH:MM" en minutos
+  private timeToMinutes(time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
   }
 
 }

@@ -24,6 +24,19 @@ export class AdministrationService {
     })
   }
 
+  public updateMovie(movieId: number, screenType: string, imgUrl: string, title: string, titleSynopsis: string, synopsis: string){
+
+    return this.http.post<any>(`${this.baseUrl}/movies/update-movie`, {
+      movieId,
+      screenType,
+      imgUrl,
+      title,
+      titleSynopsis,
+      synopsis
+    })
+
+  }
+
   public updateImgUrl(movieId: number, imgUrl: string){
     return this.http.post<any>(`${this.baseUrl}/movies/update-movie-url`,{
       movieId,

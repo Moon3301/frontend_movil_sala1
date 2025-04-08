@@ -21,6 +21,7 @@ import { EditMoviesPagesComponent } from './pages/edit-movies-pages/edit-movies-
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
+import { TextareaModule } from 'primeng/textarea';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MaterialModule } from '../material/material.module';
     PrimengModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TextareaModule,
   ],
   providers: [
     AdministrationService
