@@ -55,35 +55,40 @@
 
 <p class="text-center mt-2 mb-2;" style="font-size: 30px; color: black;">Funciones</p>
 
-<div class="container">
+  <div class="container">
+    @if(funciones && funciones!.length > 0){
+      <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
+        <mat-label>Funciones disponibles</mat-label>
+        <mat-select [value]="dates[0]">
+          @for (date of dates; track date) {
+            <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
-    <mat-label>Funciones disponibles</mat-label>
-    <mat-select [value]="dates[0]">
-      @for (date of dates; track date) {
-        <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+      <mat-list>
 
-  <mat-list>
-    @for(cinema of funciones; track cinema){
+        @for(cinema of funciones; track cinema){
 
-      <mat-list-item
-        (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
-        matRipple
-        style="background-color: rgb(31, 31, 31);">
+          <mat-list-item
+            (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
+            matRipple
+            style="background-color: rgb(31, 31, 31);">
 
-        <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
+            <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
 
-      </mat-list-item>
-      <mat-divider></mat-divider>
+          </mat-list-item>
+          <mat-divider></mat-divider>
 
+        }
+
+      </mat-list>
+    }@else {
+      <div class="alert alert-info" style="display: flex; justify-content: center; align-items: center; ">No existen funciones disponibles aun.</div>
     }
+  </div>
 
-  </mat-list>
 
-</div>
 
 
 
