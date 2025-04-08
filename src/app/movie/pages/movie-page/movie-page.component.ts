@@ -16,6 +16,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
 import { App } from '@capacitor/app';
 import { Location } from '@angular/common';  // Para retroceder en Angular
 import { ViewportScroller } from '@angular/common';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'movie-movie-page',
@@ -60,6 +61,10 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   }
 
   ngOnInit(): void {
+
+    if( Capacitor.getPlatform() === 'ios'){
+      document.body.classList.add('ios-device');
+    }
 
     window.scrollTo(0, 0);
 
