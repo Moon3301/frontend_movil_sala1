@@ -35,38 +35,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .movie-detail-container {
-  margin-top: 60%;
-}
+  margin-top: calc(100vw * 9 / 16 + 20px);
 
-/* @media (max-height: 500px) {
-  .movie-detail-container {
-    margin-top: 200px;
-  }
 }
-
-@media (max-height: 600px) {
-  .movie-detail-container {
-    margin-top: 220px;
-  }
-}
-
-@media (max-height: 768px) {
-  .movie-detail-container {
-    margin-top: 220px;
-  }
-}
-
-@media (min-height: 874px) {
-  .movie-detail-container {
-    margin-top: 280px;
-  }
-}
-
-@media (min-height: 900px) {
-  .movie-detail-container {
-    margin-top: 280px;
-  }
-} */
 
 .movie-title {
   font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
