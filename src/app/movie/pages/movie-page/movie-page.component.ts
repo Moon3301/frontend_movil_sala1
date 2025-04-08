@@ -55,6 +55,10 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
     this.topFocus.nativeElement.focus();
 
+    if (Capacitor.getPlatform() === 'ios') {
+      this.detailContainerRef.nativeElement.classList.add('ios-device');
+    }
+
     // const videoHeight = this.videoContainerRef.nativeElement.clientHeight;
     // // Ajusta el margen superior al alto real del contenedor del video + un extra si lo requieres
     // this.detailContainerRef.nativeElement.style.marginTop = `${videoHeight + 250}px`;
@@ -62,7 +66,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   ngOnInit(): void {
 
-    
+
 
     window.scrollTo(0, 0);
 

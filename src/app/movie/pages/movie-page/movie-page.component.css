@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Para dispositivos iOS, agrega 50px extra */
-body.ios-device .movie-detail-container {
+.movie-detail-container.ios-device {
   margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top, 0px) + 20px + 50px) !important;
 }
 

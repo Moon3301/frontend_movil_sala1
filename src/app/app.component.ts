@@ -36,7 +36,7 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
 
     if(Capacitor.getPlatform() === 'ios'){
-      document.body.classList.add('ios-device');
+      // document.body.classList.add('ios-device');
       StatusBar.setOverlaysWebView({ overlay: false });
     }
 
