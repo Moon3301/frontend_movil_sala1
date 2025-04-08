@@ -28,6 +28,9 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   @ViewChild('topFocus') topFocus!: ElementRef;
 
+  @ViewChild('videoContainer') videoContainerRef!: ElementRef;
+  @ViewChild('detailContainer') detailContainerRef!: ElementRef;
+
   movie?: Movie
   funciones?: ICines[]
   dates: string[] = []
@@ -48,7 +51,12 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   ){}
   ngAfterViewInit() {
+
     this.topFocus.nativeElement.focus();
+
+    // const videoHeight = this.videoContainerRef.nativeElement.clientHeight;
+    // // Ajusta el margen superior al alto real del contenedor del video + un extra si lo requieres
+    // this.detailContainerRef.nativeElement.style.marginTop = `${videoHeight + 250}px`;
   }
 
   ngOnInit(): void {

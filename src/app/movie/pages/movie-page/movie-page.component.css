@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .movie-detail-container {
   position: relative;
-  margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top) + 50px);
+  margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top) + 60px);
 }
 
 .movie-title {
