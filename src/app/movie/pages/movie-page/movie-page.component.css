@@ -35,12 +35,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .movie-detail-container {
   position: relative;
-  margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top) + 20px);
+  margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top, 0px) + 20px);
 }
 
 /* Para dispositivos iOS, agrega 50px extra */
-.ios-device .movie-detail-container {
-  margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top) + 20px + 50px);
+body.ios-device .movie-detail-container {
+  margin-top: calc(100vw * 9 / 16 + env(safe-area-inset-top, 0px) + 20px + 50px) !important;
 }
 
 .movie-title {

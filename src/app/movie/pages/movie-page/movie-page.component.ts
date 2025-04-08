@@ -62,9 +62,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   ngOnInit(): void {
 
-    if( Capacitor.getPlatform() === 'ios'){
-      document.body.classList.add('ios-device');
-    }
+    
 
     window.scrollTo(0, 0);
 
