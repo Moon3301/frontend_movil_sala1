@@ -6,7 +6,7 @@
 
   position: fixed;
   top: 0;
-  padding-top: max(env(safe-area-inset-top), 20px); /* Soporte para iOS y Android */
+  padding-top: max(env(safe-area-inset-top)); /* Soporte para iOS y Android */
   z-index: 100;
   background-color: whitesmoke;
   height: 64px; /* Altura base + padding */
@@ -16,7 +16,7 @@
 
 /* Asegura que el contenido no quede bajo el notch */
 .safe-area-container {
-  
+
   width: 100%;
   display: flex;
   align-items: center;
