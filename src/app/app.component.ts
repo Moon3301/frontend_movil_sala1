@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environments } from '../environments/environments';
 import { IUbication } from './common/interfaces';
-import { catchError, from, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
@@ -40,6 +40,8 @@ export class AppComponent implements OnInit{
       StatusBar.setOverlaysWebView({ overlay: false });
     }
 
+
+
     this.getAllRegions().pipe(
 
       tap(resp => this.regions = resp),
@@ -48,8 +50,14 @@ export class AppComponent implements OnInit{
 
       // Llama a la función que retorna un Observable de la ubicación
       switchMap(() => this.getUserLocationANDROID()),
-      tap(() => console.log('Ubicación obtenida y guardada')),
+      tap(() => {
+        console.log('Ubicación obtenida y guardada')
+        // Neesito almacenar un valor por defecto si el usuario no permite el acceso a la ubicacion
 
+
+      }
+
+    ),
 
       switchMap(() => this.authService.checkAuthentication()),
       tap(() => console.log('CheckAuthentication finished')),
@@ -75,9 +83,12 @@ export class AppComponent implements OnInit{
   }
 
   getUserLocationANDROID() {
+    const DEFAULT_LOCATION = 'Metropolitana de Santiago'; // El valor por defecto que desees
+
     return from(Geolocation.checkPermissions()).pipe(
       switchMap(permissions => {
         if (permissions.location === 'denied') {
+          // El usuario no otorgó permiso aún: se solicita
           return from(Geolocation.requestPermissions());
         }
         return of(null);
@@ -85,26 +96,34 @@ export class AppComponent implements OnInit{
       switchMap(() => from(Geolocation.getCurrentPosition())),
       switchMap((position) => {
         const { latitude: lat, longitude: lng } = position.coords;
-        // Llamada a la API
+        // Llamada a la API que, dado lat/lng, devuelve un Observable con la ubicación
         return this.getUbicationByGeoCode(lat, lng);
       }),
       switchMap(response => {
-        // Guardar ubicación en storage
+        // Guardar la ubicación real en storage
         return this.storageService.saveData('user_ubication', response.address.state).pipe(
           // Encadena y retorna la ubicación guardada
           switchMap(() => this.storageService.getData('user_ubication'))
         );
       }),
-      tap(saved =>{
+      tap(saved => {
         console.log('Ubicación guardada en el almacenamiento local:', saved);
-        // A la vez, actualizamos el BehaviorSubject:
+        // A la vez, actualizamos BehaviorSubject o tu service
         this.sharedService.setRegion(saved!);
-      }
-
-      ),
+      }),
       catchError(err => {
         console.error('Error al obtener ubicación:', err);
-        return of(null);
+
+        // === AQUÍ asignamos el valor por defecto ===
+        return this.storageService.saveData('user_ubication', DEFAULT_LOCATION).pipe(
+          tap(() => {
+            console.log('Ubicación guardada por defecto:', DEFAULT_LOCATION);
+            this.sharedService.setRegion(DEFAULT_LOCATION);
+          }),
+          // Devolvemos algo para que el flujo continúe y no rompa
+          // Por ejemplo, devolvemos un string con la ubicación por defecto
+          map(() => DEFAULT_LOCATION)
+        );
       })
     );
   }
