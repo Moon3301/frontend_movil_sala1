@@ -3,15 +3,37 @@
 }
 
 .header-toolbar {
+  
   position: fixed;
-  top: env(safe-area-inset-top);
+  top: 0;
+  padding-top: max(env(safe-area-inset-top), 20px); /* Soporte para iOS y Android */
   z-index: 100;
-  background-color:"whitesmoke";
-
+  background-color: whitesmoke;
+  height: 64px; /* Altura base + padding */
+  display: flex;
+  align-items: center; /* Alinea elementos verticalmente */
 }
 
-.header-container {
-  padding-top: env(safe-area-inset-top);
+/* Asegura que el contenido no quede bajo el notch */
+.safe-area-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: env(safe-area-inset-top); /* Para iOS */
+}
+
+/* Fallback para Android */
+@supports not (padding-top: env(safe-area-inset-top)) {
+  .header-toolbar {
+    padding-top: 28px; /* Valor común en dispositivos con notch */
+  }
+}
+
+/* Ajusta la posición del menú */
+.mat-menu-panel {
+  margin-top: 5px !important;
+  position: relative;
+  z-index: 1000;
 }
 
 .current-region {

@@ -1,9 +1,3 @@
-.carousel-bg {
-  position: absolute;
-  top: 40px;
-  width: 100%;
-  /* La altura la determinas según lo que necesites, p. ej.: */
-}
 
 .spacer {
   flex: 1 1 auto;

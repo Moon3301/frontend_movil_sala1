@@ -1,12 +1,15 @@
 <div tabindex="-1" #topFocus style="position: absolute; top: 0;"></div>
 
-<div #videoContainer class="video-container">
-  <mat-toolbar style="width: 100%; background-color: whitesmoke; color: black;">
+<mat-toolbar class="header-toolbar">
+  <div class="safe-area-content"> <!-- Nuevo contenedor -->
     <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
       arrow_back_ios_new
     </mat-icon>
-    <p style="margin: 0 auto; width: 90%; text-align: center;">{{movie?.title}}</p>
-  </mat-toolbar>
+    <p class="video-title">{{movie?.title}}</p>
+  </div>
+</mat-toolbar>
+
+<div #videoContainer class="video-container">
 
   <img
     class="img-video"
@@ -14,7 +17,6 @@
     alt="Video thumbnail"
     (click)="openVideoDialog()"
   />
-
 </div>
 
 <div #detailContainer class="movie-detail-container container">
