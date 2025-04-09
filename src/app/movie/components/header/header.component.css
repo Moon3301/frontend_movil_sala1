@@ -2,11 +2,18 @@
   flex: 1 1 auto;
 }
 
+.responsive-logo {
+  /* Ejemplo usando clamp(): */
+  width: clamp(60px, 14vw, 120px);
+  height: auto;
+  /* Para que la imagen mantenga su proporción. */
+}
+
 .header-toolbar {
 
   position: fixed;
   top: 0;
-  padding-top: max(env(safe-area-inset-top)); /* Soporte para iOS y Android */
+  padding-top: max(env(safe-area-inset-top), 20px); /* Soporte para iOS y Android */
   z-index: 100;
   background-color: whitesmoke;
   height: 64px; /* Altura base + padding */
