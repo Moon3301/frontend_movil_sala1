@@ -3,7 +3,7 @@
 }
 
 .header-toolbar {
-  
+
   position: fixed;
   top: 0;
   padding-top: max(env(safe-area-inset-top), 20px); /* Soporte para iOS y Android */
@@ -16,6 +16,7 @@
 
 /* Asegura que el contenido no quede bajo el notch */
 .safe-area-container {
+  
   width: 100%;
   display: flex;
   align-items: center;
@@ -38,7 +39,7 @@
 
 .current-region {
 
-  font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
+  font-size: clamp(10px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
   max-height: 250px;
   max-width: 180px;
   text-align: justify; /* Justifica el texto */

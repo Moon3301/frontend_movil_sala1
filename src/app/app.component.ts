@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environments } from '../environments/environments';
 import { IUbication } from './common/interfaces';
-import { Observable } from 'rxjs';
+import { catchError, from, Observable, of, switchMap, tap } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
-import { Region } from './shared/services/shared.service';
+import { Region, SharedService } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from './storage/storage.service';
 import PullToRefresh from 'pulltorefreshjs';
@@ -21,7 +21,6 @@ import { Capacitor } from '@capacitor/core';
 
 export class AppComponent implements OnInit{
 
-
   regions: Region[] = []
 
   ptrInstance: any;
@@ -29,7 +28,8 @@ export class AppComponent implements OnInit{
   constructor(
     private readonly http: HttpClient,
     private readonly authService: AuthService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private sharedService: SharedService,
 
   ){}
 
@@ -40,81 +40,116 @@ export class AppComponent implements OnInit{
       StatusBar.setOverlaysWebView({ overlay: false });
     }
 
-    this.getAllRegions().subscribe({
-      next: (resp) => {
-        this.regions = resp
+    this.getAllRegions().pipe(
 
-        this.storageService.saveData("regions", JSON.stringify(this.regions)).subscribe({
-          next: () => {
-            console.log('Regiones guardadas en el almacenamiento local');
-          },
-          error: (error) => {
-            console.error('Error al guardar regiones:', error);
-          }
-        })
+      tap(resp => this.regions = resp),
+      switchMap(regions => this.storageService.saveData('regions', JSON.stringify(regions))),
+      tap(() => console.log('Regiones guardadas en el almacenamiento local')),
 
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
+      // Llama a la función que retorna un Observable de la ubicación
+      switchMap(() => this.getUserLocationANDROID()),
+      tap(() => console.log('Ubicación obtenida y guardada')),
 
-    this.storageService.getData("user_ubication").subscribe(value => {
-      if(!value){
-        this.getUserLocationANDROID();
-      }
-    })
 
-    this.authService.checkAuthentication()
-    .subscribe( ()=>{
-      console.log('CheckAuthentication finished');
-      }
-    )
+      switchMap(() => this.authService.checkAuthentication()),
+      tap(() => console.log('CheckAuthentication finished')),
+
+      catchError(err => {
+        console.error('Error en la inicialización:', err);
+        return of(null); // Evita que el Observable se rompa
+      })
+    ).subscribe();
+
+    // this.storageService.getData("user_ubication").subscribe(value => {
+    //   if(!value){
+    //     this.getUserLocationANDROID();
+    //   }
+    // })
+
+    // this.authService.checkAuthentication()
+    // .subscribe( ()=>{
+    //   console.log('CheckAuthentication finished');
+    //   }
+    // )
 
   }
 
-  ngOnDestroy(): void {
-
-    if (this.ptrInstance) {
-      this.ptrInstance.destroy();
-    }
-  }
-
-  async getUserLocationANDROID() {
-    try {
-      // 1) Verifica permisos (opcional pero recomendado)
-      const permissions = await Geolocation.checkPermissions();
-      if (permissions.location === 'denied') {
-        // Solicita permiso si está denegado
-        await Geolocation.requestPermissions();
+  getUserLocationANDROID() {
+    return from(Geolocation.checkPermissions()).pipe(
+      switchMap(permissions => {
+        if (permissions.location === 'denied') {
+          return from(Geolocation.requestPermissions());
+        }
+        return of(null);
+      }),
+      switchMap(() => from(Geolocation.getCurrentPosition())),
+      switchMap((position) => {
+        const { latitude: lat, longitude: lng } = position.coords;
+        // Llamada a la API
+        return this.getUbicationByGeoCode(lat, lng);
+      }),
+      switchMap(response => {
+        // Guardar ubicación en storage
+        return this.storageService.saveData('user_ubication', response.address.state).pipe(
+          // Encadena y retorna la ubicación guardada
+          switchMap(() => this.storageService.getData('user_ubication'))
+        );
+      }),
+      tap(saved =>{
+        console.log('Ubicación guardada en el almacenamiento local:', saved);
+        // A la vez, actualizamos el BehaviorSubject:
+        this.sharedService.setRegion(saved!);
       }
 
-      // 2) Obtén la posición actual
-      const position = await Geolocation.getCurrentPosition();
-
-      // 3) Extrae lat/lng
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      // 4) Llamas a tu API (exactamente como antes)
-      this.getUbicationByGeoCode(lat, lng).subscribe(response => {
-
-        // Guarda la ubicación en el almacenamiento local o en la sesión según sea necesario
-        this.storageService.saveData("user_ubication", response.address.state).subscribe({
-          next: () => {
-            console.log('Ubicación guardada en el almacenamiento local', response.address.state);
-          },
-          error: (error) => {
-            console.error('Error al guardar ubicación:', error);
-          }
-        })
-
-      });
-
-    } catch (error) {
-      console.error('Error al obtener ubicación:', error);
-    }
+      ),
+      catchError(err => {
+        console.error('Error al obtener ubicación:', err);
+        return of(null);
+      })
+    );
   }
+
+
+  // async getUserLocationANDROID() {
+  //   try {
+  //     // 1) Verifica permisos (opcional pero recomendado)
+  //     const permissions = await Geolocation.checkPermissions();
+  //     if (permissions.location === 'denied') {
+  //       // Solicita permiso si está denegado
+  //       await Geolocation.requestPermissions();
+  //     }
+
+  //     // 2) Obtén la posición actual
+  //     const position = await Geolocation.getCurrentPosition();
+
+  //     // 3) Extrae lat/lng
+  //     const lat = position.coords.latitude;
+  //     const lng = position.coords.longitude;
+
+  //     // 4) Llamas a tu API (exactamente como antes)
+  //     this.getUbicationByGeoCode(lat, lng).subscribe(response => {
+
+  //       // Guarda la ubicación en el almacenamiento local o en la sesión según sea necesario
+  //       this.storageService.saveData("user_ubication", response.address.state).pipe(
+  //         switchMap(() => {
+  //           // Una vez guardado, obtén la ubicación
+  //           return this.storageService.getData('user_ubication');
+  //         })
+  //       ).subscribe({
+  //         next: (resp) => {
+  //           console.log('Ubicación guardada en el almacenamiento local', response.address.state);
+  //         },
+  //         error: (error) => {
+  //           console.error('Error al guardar ubicación:', error);
+  //         }
+  //       })
+
+  //     });
+
+  //   } catch (error) {
+  //     console.error('Error al obtener ubicación:', error);
+  //   }
+  // }
 
   async getUserLocationWEB(){
 
@@ -137,5 +172,13 @@ export class AppComponent implements OnInit{
   getAllRegions(): Observable<Region[]>{
     return this.http.get<Region[]>(`${environments.baseUrl}/region`)
   }
+
+  ngOnDestroy(): void {
+
+    if (this.ptrInstance) {
+      this.ptrInstance.destroy();
+    }
+  }
+
 
 }

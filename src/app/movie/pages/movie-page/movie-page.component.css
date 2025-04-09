@@ -3,7 +3,12 @@ h6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: white;
+
+  color: whitesmoke;
+  font-size: clamp(12px, 5vw, 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 .header-toolbar {
@@ -72,7 +77,9 @@ mat-toolbar {
   /* Opcionales para partir palabras largas */
   word-wrap: break-word;
   overflow-wrap: break-word;
-  color: white;
+  color: whitesmoke;
+  text-overflow: ellipsis;
+
 }
 
 .poster-container {

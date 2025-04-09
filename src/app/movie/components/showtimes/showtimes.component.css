@@ -5,6 +5,9 @@
 .enabled-button {
   color: whitesmoke
 }
+.button-showtime {
+  font-size: clamp(10px, 4vw, 12px);
+}
 
 /* Fuerza que el contenedor del toast se posicione en el centro */
 ::ng-deep .center-toast {

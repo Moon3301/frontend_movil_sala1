@@ -9,7 +9,7 @@ import { StorageService } from '../../../storage/storage.service';
 import { MenuItem } from 'primeng/api';
 import PullToRefresh from 'pulltorefreshjs';
 import { pullToRefreshCss } from './pull-to-refresh-css';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-main-layout',
@@ -86,29 +86,39 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
     })
 
     // Se obtiene y actualiza la ubicacion actual del usuario
-    this.storageService.getData("user_ubication").subscribe({
-      next: (resp)=> {
-        this.userCurrentRegion = resp!
+    // this.storageService.getData("user_ubication").subscribe({
+    //   next: (resp)=> {
+    //     this.userCurrentRegion = resp!
 
-        if (!this.userCurrentRegion){
+    //     if (!this.userCurrentRegion){
 
-          this.sharedService.getUserLocation().subscribe({
-            next: (resp) => {
-              console.log(resp)
-              this.userCurrentRegion = resp
-              this.cdr.detectChanges();
-              sessionStorage.setItem("user_ubication", resp)
-            },
-            error: (error) => {
-              console.log(error);
-            }
-          })
-        }
-      },
-      error: (error)=> {
-        console.log(error);
-      }
-    })
+    //       this.sharedService.getUserLocation().subscribe({
+    //         next: (resp) => {
+    //           console.log(resp)
+    //           this.userCurrentRegion = resp
+    //           this.cdr.detectChanges();
+
+    //           this.storageService.saveData("user_ubication", resp).subscribe({
+    //             next: () => {
+    //               console.log('Ubicación guardada en el almacenamiento local');
+    //             },
+    //             error: (error) => {
+    //               console.error('Error al guardar ubicación:', error);
+    //             }
+    //           })
+
+    //           // sessionStorage.setItem("user_ubication", resp)
+    //         },
+    //         error: (error) => {
+    //           console.log(error);
+    //         }
+    //       })
+    //     }
+    //   },
+    //   error: (error)=> {
+    //     console.log(error);
+    //   }
+    // })
 
     this.cdr.detectChanges();
 
@@ -119,39 +129,26 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
   }
 
   onChangeUbication(newUbication: string): void {
+    const regionsNames = this.regions.map(region => region.name);
 
-    this.storageService.saveData("user_ubication", newUbication).subscribe({
-      next: ()=> {
-        // console.log('Ubicacion actualizada correctamente');
-      },
-      error: ()=> {
-        console.log('La ubicacion no pudo actualizarse correctamente');
-      }
-    })
+    this.storageService.saveData('user_ubication', newUbication).pipe(
+      switchMap(() => {
+        // Una vez guardado, obtén la ubicación
+        return this.storageService.getData('user_ubication');
+      })
+    ).subscribe({
+      next: (resp) => {
+        // Utiliza stringSimilarity con la ubicación recuperada
+        const result = stringSimilarity.findBestMatch(resp!, regionsNames);
+        this.userCurrentRegion = result.bestMatch.target;
 
-    window.location.reload();
-
-    const regionsName = this.regions.map( region => region.name);
-
-    this.storageService.getData("user_ubication").subscribe({
-      next: (resp)=> {
-
-        const currentRegionSession = resp
-
-        const result = stringSimilarity.findBestMatch(currentRegionSession!, regionsName);
-        const bestMatch = result.bestMatch;
-
-        console.log(this.userCurrentRegion)
-        console.log(bestMatch.target)
-        this.userCurrentRegion = bestMatch.target;
-
+        // Forzar la detección de cambios si es necesario
         this.cdr.detectChanges();
       },
-      error: (error)=> {
-        console.log(error);
-      }
-    })
-
+      error: (err) => {
+        console.error('Error al guardar o recuperar la ubicación:', err);
+      },
+    });
   }
 
   logout(){

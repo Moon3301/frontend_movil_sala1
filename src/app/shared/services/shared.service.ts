@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import { from, map, Observable, of, pipe, switchMap } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, of, pipe, switchMap } from 'rxjs';
 import { environments } from '../../../environments/environments';
 import { IUbication } from "../../common/interfaces";
 import stringSimilarity from "string-similarity";
@@ -17,6 +17,9 @@ export interface Region {
   providedIn: 'root'
 })
 export class SharedService{
+
+  private _currentRegion = new BehaviorSubject<string | null>(null);
+  public currentRegion$: Observable<string | null> = this._currentRegion.asObservable();
 
   regions: Region[] = []
   currentRegion!: string;
@@ -87,6 +90,14 @@ export class SharedService{
 
   toggleDrawer(): void {
     this.toggleDrawerSubject.next();
+  }
+
+  setRegion(region: string) {
+    this._currentRegion.next(region);
+  }
+
+  getRegionValue(): string | null {
+    return this._currentRegion.value;
   }
 
 }

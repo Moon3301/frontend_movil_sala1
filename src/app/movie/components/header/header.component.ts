@@ -24,6 +24,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.sharedService.currentRegion$.subscribe(region => {
+      this.userCurrentRegion = region!;
+      this.cdr.detectChanges();  // Si usas OnPush, forzar actualización
+    });
+
     // Se obtiene y actualiza la ubicacion actual del usuario
     this.storageService.getData("user_ubication").subscribe({
       next: (resp)=> {
@@ -36,7 +41,7 @@ export class HeaderComponent implements OnInit {
               console.log(resp)
               this.userCurrentRegion = resp
               this.cdr.detectChanges();
-              sessionStorage.setItem("user_ubication", resp)
+              //sessionStorage.setItem("user_ubication", resp)
             },
             error: (error) => {
               console.log(error);
@@ -67,6 +72,8 @@ export class HeaderComponent implements OnInit {
 
     this.storageService.saveData("user_ubication", newUbication).subscribe({
       next: ()=> {
+        this.userCurrentRegion = newUbication!
+        this.sharedService.setRegion(newUbication);
         // console.log('Ubicacion actualizada correctamente');
       },
       error: ()=> {
@@ -74,7 +81,7 @@ export class HeaderComponent implements OnInit {
       }
     })
 
-    window.location.reload();
+    this.cdr.detectChanges();
 
     const regionsName = this.regions.map( region => region.name);
 
