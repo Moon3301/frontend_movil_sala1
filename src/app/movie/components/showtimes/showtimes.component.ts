@@ -153,7 +153,11 @@ export class ShowtimesComponent implements OnInit {
   isButtonDisabled(showtime: string, showdate: string, cinemaType: string): boolean {
     /* ───── Normalizar fechas ───── */
     // 1) Fecha del show sin hora (forzamos hora 00:00 local)
-    const dShow = new Date(`${showdate}T00:00:00`);
+    console.log('showtime: ',showtime);
+
+    console.log('showdate: ',showdate)
+
+    const dShow = new Date(`${showdate}`);
     // 2) Hoy sin hora
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());

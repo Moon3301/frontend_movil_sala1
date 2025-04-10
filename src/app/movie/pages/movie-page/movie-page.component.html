@@ -61,7 +61,7 @@
     @if(funciones && funciones!.length > 0){
       <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
         <mat-label>Funciones disponibles</mat-label>
-        <mat-select [value]="dates[0]">
+        <mat-select [value]="selectedDate">
           @for (date of dates; track date) {
             <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
           }

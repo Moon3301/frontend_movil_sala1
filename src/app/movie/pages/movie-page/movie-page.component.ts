@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -36,6 +36,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   funciones?: ICines[]
   dates: string[] = []
   isLoading: boolean = false;
+  selectedDate: any
 
   trailerSafeUrl!: SafeResourceUrl;
 
@@ -59,14 +60,9 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
       this.detailContainerRef.nativeElement.classList.add('ios-device');
     }
 
-    // const videoHeight = this.videoContainerRef.nativeElement.clientHeight;
-    // // Ajusta el margen superior al alto real del contenedor del video + un extra si lo requieres
-    // this.detailContainerRef.nativeElement.style.marginTop = `${videoHeight + 250}px`;
   }
 
   ngOnInit(): void {
-
-
 
     window.scrollTo(0, 0);
 
@@ -110,6 +106,10 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
       (dataBillboard) => {
         this.funciones = dataBillboard.data;
         this.dates = dataBillboard.dates;
+
+        const today = this.getTodayString();
+        this.selectedDate = this.dates.includes(today) ? today : this.dates[0]
+
       },
       error => console.error(error)
     );
@@ -117,98 +117,79 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   private getRegionName(): Observable<string> {
     return this.storageService.getData('user_ubication').pipe(
-      switchMap(storedRegion => {
-        if (storedRegion) {
-          // Si ya hay una región guardada en Storage, la devolvemos enseguida
-          return of(storedRegion);
-        } else {
-          // Si no hay región, usamos Geolocation y luego llamamos a la API
-          return from(Geolocation.getCurrentPosition()).pipe(
-            switchMap(position =>
+      switchMap(storedRegion => storedRegion
+        ? of(storedRegion)                             // ya estaba guardada
+        : from(Geolocation.getCurrentPosition()).pipe( // hay que calcularla
+            switchMap(pos =>
               this.movieService.getUbicationByGeoCode(
-                position.coords.latitude,
-                position.coords.longitude
+                pos.coords.latitude,
+                pos.coords.longitude
               )
             ),
-            map(response => {
-              const region = response.address.state;
-
-              this.storageService.saveData('user_ubication', region).subscribe({
-                next: () => {
-                  // console.log('Ubicación guardada en el almacenamiento local');
-                },
-                error: (error) => {
-                  console.error('Error al guardar ubicación:', error);
-                }
-              })
-
-              return region;
-            })
-          );
-        }
-      })
+            map(resp => resp.address.state),
+            tap(region =>
+              this.storageService.saveData('user_ubication', region).subscribe()
+            )
+          )
+      )
     );
   }
 
-  // Extrae el ID de un URL de YouTube y genera un embed URL
-  getYouTubeEmbedUrl(originalUrl: string | undefined): string {
-  if (!originalUrl) return '';
+  onSelectDate(fecha: string, event?: MatOptionSelectionChange): void {
+    if (!event?.isUserInput) { return; }          // ignorar cambios programáticos
 
-  let videoId = '';
-
-  // 1. Si incluye "youtu.be/" => corta a partir de esa ruta
-  if (originalUrl.includes('youtu.be/')) {
-    // https://youtu.be/VIDEO_ID
-    const parts = originalUrl.split('youtu.be/');
-    videoId = parts[1]?.split('?')[0]; // en caso haya parámetros
-  }
-  // 2. Si incluye "watch?v=" => parsea el valor del v=...
-  else if (originalUrl.includes('watch?v=')) {
-    const params = new URL(originalUrl).searchParams;
-    videoId = params.get('v') || '';
-  }
-  // 3. Si ya incluye "embed/" (caso raro) => extrae todo lo que esté después de /embed/
-  else if (originalUrl.includes('/embed/')) {
-    const parts = originalUrl.split('/embed/');
-    videoId = parts[1]?.split('?')[0];
-  }
-
-  // 4. Si por alguna razón videoId sigue vacío, puedes dejarlo tal cual
-  // o manejar un fallback. Pero asumiendo que sí sacaste el ID correctamente:
-  if (!videoId) {
-    return ''; // O un fallback
-  }
-
-  // 5. Retorna el link de embed final
-  return `https://www.youtube.com/embed/${videoId}`;
+    this.getRegionName()                          // ← ya devuelve la región (de storage o geo)
+      .pipe(
+        switchMap(region =>
+          this.movieService
+              .getCinemasByUbicationAndMovie(this.movie!.id, region, fecha)
+              .pipe(
+                tap(() => this.isLoading = true)  // spinner ON
+              )
+        ),
+        tap(response => {
+          this.funciones = response.data;
+          this.dates     = response.dates;
+          this.isLoading = false;                 // spinner OFF
+          this.cdr.detectChanges();
+        }),
+        catchError(err => {
+          console.error(err);
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
-  getYouTubeThumbnailUrl(originalUrl: string | undefined): string {
-    if (!originalUrl) return '';
+  getShowtimes(movieId: number, regionName: string, fecha: string){
 
-    let videoId = '';
+    this.isLoading = true;
+    this.cdr.detectChanges();
 
-    // 1. Si incluye "youtu.be/"
-    if (originalUrl.includes('youtu.be/')) {
-      const parts = originalUrl.split('youtu.be/');
-      videoId = parts[1]?.split('?')[0]; // en caso tenga parámetros
-    }
-    // 2. Si incluye "watch?v="
-    else if (originalUrl.includes('watch?v=')) {
-      const params = new URL(originalUrl).searchParams;
-      videoId = params.get('v') || '';
-    }
-    // 3. Si incluye "embed/"
-    else if (originalUrl.includes('/embed/')) {
-      const parts = originalUrl.split('/embed/');
-      videoId = parts[1]?.split('?')[0];
-    }
+    this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
+      next: (response) => {
 
-    if (!videoId) return ''; // o algún valor por defecto
+        this.funciones = response.data;
 
-    // Retorna la URL del thumbnail, en este caso "hqdefault" es de alta calidad
-    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        this.dates = response.dates
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+
+        console.log(error);
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+
   }
+
+
 
   openShowtimes(showtimes: ICinema[], cinemaType: string){
 
@@ -251,44 +232,71 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     });
   }
 
-  onSelectDate(fecha: string, event?: MatOptionSelectionChange) {
-    if(event?.isUserInput){
+  // Extrae el ID de un URL de YouTube y genera un embed URL
+  getYouTubeEmbedUrl(originalUrl: string | undefined): string {
+    if (!originalUrl) return '';
 
-      this.storageService.getData("user_ubication").subscribe( value => {
-        if(!value){
-          this.getRegionName().subscribe(region => {
-            sessionStorage.setItem("user_ubication", region);
-            this.getShowtimes(this.movie!.id, region, fecha)
-          })
-        }
-      })
+    let videoId = '';
+
+    // 1. Si incluye "youtu.be/" => corta a partir de esa ruta
+    if (originalUrl.includes('youtu.be/')) {
+      // https://youtu.be/VIDEO_ID
+      const parts = originalUrl.split('youtu.be/');
+      videoId = parts[1]?.split('?')[0]; // en caso haya parámetros
     }
+    // 2. Si incluye "watch?v=" => parsea el valor del v=...
+    else if (originalUrl.includes('watch?v=')) {
+      const params = new URL(originalUrl).searchParams;
+      videoId = params.get('v') || '';
+    }
+    // 3. Si ya incluye "embed/" (caso raro) => extrae todo lo que esté después de /embed/
+    else if (originalUrl.includes('/embed/')) {
+      const parts = originalUrl.split('/embed/');
+      videoId = parts[1]?.split('?')[0];
+    }
+
+    // 4. Si por alguna razón videoId sigue vacío, puedes dejarlo tal cual
+    // o manejar un fallback. Pero asumiendo que sí sacaste el ID correctamente:
+    if (!videoId) {
+      return ''; // O un fallback
+    }
+
+    // 5. Retorna el link de embed final
+    return `https://www.youtube.com/embed/${videoId}`;
   }
 
-  getShowtimes(movieId: number, regionName: string, fecha: string){
+  getYouTubeThumbnailUrl(originalUrl: string | undefined): string {
+    if (!originalUrl) return '';
 
-    this.isLoading = true;
-    this.cdr.detectChanges();
+    let videoId = '';
 
-    this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
-      next: (response) => {
+    // 1. Si incluye "youtu.be/"
+    if (originalUrl.includes('youtu.be/')) {
+      const parts = originalUrl.split('youtu.be/');
+      videoId = parts[1]?.split('?')[0]; // en caso tenga parámetros
+    }
+    // 2. Si incluye "watch?v="
+    else if (originalUrl.includes('watch?v=')) {
+      const params = new URL(originalUrl).searchParams;
+      videoId = params.get('v') || '';
+    }
+    // 3. Si incluye "embed/"
+    else if (originalUrl.includes('/embed/')) {
+      const parts = originalUrl.split('/embed/');
+      videoId = parts[1]?.split('?')[0];
+    }
 
-        this.funciones = response.data;
+    if (!videoId) return ''; // o algún valor por defecto
 
-        this.dates = response.dates
+    // Retorna la URL del thumbnail, en este caso "hqdefault" es de alta calidad
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
 
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-
-        console.log(error);
-
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
-
+  private getTodayString(): string {
+    const d = new Date();
+    const mm = (d.getMonth() + 1).toString().padStart(2, '0');
+    const dd = d.getDate().toString().padStart(2, '0');
+    return `${d.getFullYear()}-${mm}-${dd}`;
   }
 
 }
