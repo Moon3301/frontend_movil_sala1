@@ -151,38 +151,35 @@ export class ShowtimesComponent implements OnInit {
   }
 
   isButtonDisabled(showtime: string, showdate: string, cinemaType: string): boolean {
-    const dShow = new Date(showdate);
-    const dNow = new Date();
+    /* ───── Normalizar fechas ───── */
+    // 1) Fecha del show sin hora (forzamos hora 00:00 local)
+    const dShow = new Date(`${showdate}T00:00:00`);
+    // 2) Hoy sin hora
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    const sameDay =
-      dShow.getMonth() === dNow.getMonth() &&
-      dShow.getDate() === dNow.getDate();
-
-    if (sameDay) {
-      // Extraemos [hora, minuto] de showtime (por ejemplo, "17:40")
-      const [hours, minutes] = showtime.split(':').map(val => parseInt(val, 10));
-
-      // Creamos la fecha con el día de hoy y la hora indicada
-      const showtimeDate = new Date();
-      showtimeDate.setHours(hours, minutes, 0, 0);
-
-      // Calculamos la diferencia en milisegundos entre ahora y la hora del show
-      const diffMs = dNow.getTime() - showtimeDate.getTime();
-
-      // Definimos el umbral. Por defecto son 20 minutos en milisegundos
-      let threshold = 20 * 60 * 1000;
-
-      // Si el cine es cinemark, queremos deshabilitar justo cuando termine el showtime
-      if (cinemaType.toLowerCase() === 'cinemark') {
-        threshold = 0;
-      }
-
-      // Si han pasado al menos 'threshold' milisegundos desde el showtime, deshabilitamos el botón
-      return diffMs >= threshold;
-    } else {
-      // Si no es el mismo día, se deshabilita el botón si la fecha del show es anterior al día actual.
-      return dShow < dNow;
+    /* ───── Filtro por día ───── */
+    if (dShow.getTime() > today.getTime()) {
+      // Mañana o después ⇒ botón habilitado
+      return false;
     }
+    if (dShow.getTime() < today.getTime()) {
+      // Ayer o antes ⇒ botón deshabilitado
+      return true;
+    }
+
+    /* ───── Aquí sabemos que es HOY ───── */
+    // Hora del show
+    const [hours, minutes] = showtime.split(':').map(Number);
+    const showtimeDate = new Date(today);          // mismo día
+    showtimeDate.setHours(hours, minutes, 0, 0);   // hora del show
+
+    // Umbral: 20 min o 0 min para Cinemark
+    const threshold =
+      cinemaType.toLowerCase() === 'cinemark' ? 0 : 20 * 60 * 1000;
+
+    // Si ya pasaron ≥ threshold ms desde la hora del show ⇒ deshabilitar
+    return now.getTime() - showtimeDate.getTime() >= threshold;
   }
 
   showMessage(cinema:string){

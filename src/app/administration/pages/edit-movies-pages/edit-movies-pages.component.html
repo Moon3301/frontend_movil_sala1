@@ -75,7 +75,7 @@
 
 }
 
-<p-dialog header="Editar Pelicula" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
+<p-dialog header="Editar Pelicula" appendTo="body" [blockScroll]="true" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
 
   <div class="container">
     <div class="row">
@@ -84,12 +84,12 @@
   </div>
 
 
-  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()">
+  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()" class="p-fluid">
 
     <div>
       <span class="p-text-secondary block mb-8">Titulo</span>
       <div class="flex items-center gap-4 mb-4">
-        <input pInputText class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.title" formControlName="title"/>
+        <input styleClass="edit-movie-dialog" pInputText class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.title" formControlName="title"/>
       </div>
     </div>
 
@@ -118,7 +118,7 @@
       <span class="p-text-secondary block mb-8">Sinopsis</span>
       <div class="flex items-center gap-4 mb-4">
         <!-- <input pInputText id="img_url" class="flex-auto w-100" autocomplete="off" [value]="Editmovie?.title" formControlName="img_url"/> -->
-        <textarea rows="5" cols="30" class="flex-auto w-100" pTextarea  [value]="Editmovie?.synopsis" formControlName="synopsis"></textarea>
+        <textarea autoResize rows="5" cols="30" class="flex-auto w-100" pTextarea  [value]="Editmovie?.synopsis" formControlName="synopsis"></textarea>
       </div>
     </div>
 

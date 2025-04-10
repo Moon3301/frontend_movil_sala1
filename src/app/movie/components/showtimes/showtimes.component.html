@@ -19,13 +19,14 @@
         <!-- <mat-card-subtitle>Funciones: </mat-card-subtitle> -->
         <div class="row">
           @for (schedule of showtime.showtimes; track schedule) {
+            @let disabled = isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType);
 
             <div class="col-6 col-md-2" style="text-align: center;">
               @if(cinemaType === 'Cinepolis'){
                 <button mat-button
 
-                  [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                  [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : { 'color': 'grey' }"
+                  [disabled]="disabled"
+                  [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
                   (click)="buildUrlPaymentCinepolis(
                   showtime.vistaId,
                   schedule.showtimeExternalId)"
@@ -34,13 +35,13 @@
                   >
 
                 {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider></mat-divider>
+                <mat-divider class="p-1"></mat-divider>
 
               }@else if
               (cinemaType === 'Cinemark'){
                 <button mat-button
-                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
+                [disabled]="disabled"
+                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
                 (click)="buildUrlPaymentCinemark(
                   showtime.cinemaExternalId,
                   schedule.showtimeExternalId,
@@ -53,12 +54,12 @@
                   >
 
                 {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider></mat-divider>
+                <mat-divider class="p-1"></mat-divider>
               }@else if
               (cinemaType === 'Cineplanet'){
                 <button mat-button
-                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
+                [disabled]="disabled"
+                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
                 (click)="buildUrlPaymentCineplanet(
                     showtime.version.title,
                     showtime.cinemaExternalId,
@@ -68,12 +69,12 @@
                   >
 
                 {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider></mat-divider>
+                <mat-divider class="p-1"></mat-divider>
               }@else if
               (cinemaType === 'Muvix'){
                 <button mat-button
-                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
+                [disabled]="disabled"
+                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
                   (click)="buildUrlPaymentMuvix(
                     showtime.cinemaExternalId,
                     schedule.sessionId
@@ -82,12 +83,12 @@
                   >
 
                 {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider></mat-divider>
+                <mat-divider class="p-1"></mat-divider>
               }@else if
               (cinemaType === 'Cinestar'){
                 <button mat-button
-                [disabled]="isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType)"
-                [ngStyle]="!isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType) ? {'color': 'whitesmoke'} : {'color': 'grey'}"
+                [disabled]="disabled"
+                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
                   (click)="buildUrlPaymentCinestar(
                     showtime.cinemaExternalId,
                     schedule.sessionId
@@ -95,7 +96,7 @@
                   class="notranslate button-showtime" translate="no"
                   >
                 {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider></mat-divider>
+                <mat-divider class="p-1"></mat-divider>
               }
 
             </div>
