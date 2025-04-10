@@ -45,7 +45,15 @@
       >
       @for(movie of moviesCarrusel; track $index){
         <swiper-slide class="text-center p-2">
-          <img (click)="selectMovie(movie)" [src]="movie.img_url" width="100%" style="border-radius: 12px;" class="movie-posters">
+          @if(moviesCarrusel.length){
+            <img (click)="selectMovie(movie)" [src]="movie.img_url" width="100%" style="border-radius: 12px;" class="movie-posters">
+          }@else {
+            <p-skeleton width="6rem" height="8rem"></p-skeleton>
+            <p-skeleton width="6rem" height="8rem"></p-skeleton>
+            <p-skeleton width="6rem" height="8rem"></p-skeleton>
+            <p-skeleton width="6rem" height="8rem"></p-skeleton>
+          }
+
         </swiper-slide>
       }
 
