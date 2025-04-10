@@ -62,10 +62,8 @@
   background-color: rgba(245, 245, 245, 0.3);
   border-radius: 20px;
   --swiper-navigation-color: whitesmoke;
-  
+
 }
-
-
 
 .trending-movies-container h2 {
 
@@ -73,43 +71,6 @@
   margin-bottom: 1rem;
 }
 
-.trending-carousel {
-  display: flex;
-  gap: 1rem;
-  background-color: rgba(245, 245, 245, 0.3);
-  border-radius: 20px;
-  overflow-x: auto; /* hace que el contenedor scrollee horizontalmente */
-  padding: 0.5rem 0;
-  scroll-behavior: smooth; /* scroll suave */
-}
-
-.trending-carousel .movie-posters {
-  flex: 0 0 auto;
-}
-
-/** Ocultar scrollbars en algunos navegadores (opcional) **/
-.trending-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.movie-posters {
-  padding-left: 10px;
-  padding-right: 10px;
-  flex: 0 0 auto;
-  width: 200px; /* ajusta tamaño del poster */
-  transition: transform 0.3s;
-}
-
-.movie-posters img {
-  width: 100%;
-  border-radius: 8px;
-  display: block;
-}
-
-.movie-posters:hover {
-  transform: scale(1.05);
-  cursor: pointer;
-}
 
 .carousel-wrapper {
   position: relative;
