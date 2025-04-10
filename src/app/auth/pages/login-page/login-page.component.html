@@ -2,7 +2,14 @@
 
   <mat-card class="w-100">
 
-    <mat-card-title class="text-center mt-3" style="color: black;">INICIAR SESION</mat-card-title>
+    <mat-card-actions>
+      <button [routerLink]="['/movies', 'list']" mat-button class="right-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <mat-card-title class="centered-title">INICIAR SESION</mat-card-title>
+
+    </mat-card-actions>
     <hr>
 
     <form [formGroup]="loginForm" (ngSubmit)="login()">

@@ -1,5 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+/* --------------------------------------------- */
+/*                   SWIPPER                     */
+/* --------------------------------------------- */
+@import "swiper/css";             /* núcleo */
+@import "swiper/css/navigation";  /* flechas */
+@import "swiper/css/pagination";  /* puntitos, opcional */
 
+/* --------------------------------------------- */
+/*                   OTHERS                      */
+/* --------------------------------------------- */
 html, body { height: 100%; }
 body {
   margin: 0;
@@ -25,6 +34,18 @@ body {
 :root {
   --p-dock-background: #000000; /* Negro total */
 }
+
+swiper-container::part(button-next),
+swiper-container::part(button-prev) {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);   /* círculo semitransparente   */
+  box-shadow: 0 0 4px rgba(0,0,0,.4);
+  color: whitesmoke; /* color del ícono */
+}
+
+
 
 
 

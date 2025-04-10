@@ -37,6 +37,7 @@
     "pulltorefreshjs": "^0.1.22",
     "rxjs": "~7.8.0",
     "string-similarity": "^4.0.4",
+    "swiper": "^11.2.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

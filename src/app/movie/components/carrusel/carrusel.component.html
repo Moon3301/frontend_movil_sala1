@@ -1,5 +1,6 @@
 <!-- Contenedor principal del carrusel/hero -->
- <div style="position: absolute; width: 100%; top: 40px;">
+<div style="position: absolute; width: 100%; top: 40px;">
+
   <div class="hero-container">
     <!-- Imagen de fondo -->
     @if(moviePoster){
@@ -29,16 +30,33 @@
 
   </div>
 
+
+
   <!-- Sección de películas "trending" -->
+
   <div class="trending-movies-container">
     <h2 style="color: rgba(255, 255, 255, 0.9);">Mas Destacadas</h2>
+    <swiper-container
+      class="swiper-carrousel"
+      navigation="true"
+      slides-per-view="2"
+      loop="true"
+      css-mode="true"
+      >
+      @for(movie of moviesCarrusel; track $index){
+        <swiper-slide class="text-center p-2">
+          <img [src]="movie.img_url" width="100%" style="border-radius: 12px;">
+        </swiper-slide>
+      }
+
+    </swiper-container>
+    <!-- <h2 style="color: rgba(255, 255, 255, 0.9);">Mas Destacadas</h2>
 
     <div class="carousel-wrapper">
       <button class="carousel-button left" (click)="scrollCarousel('left')">
         &#10094;
       </button>
 
-      <!-- Contenedor para el carrusel/scroll horizontal de posters -->
       <div class="trending-carousel" #carouselContainer>
 
         @if(moviesCarrusel.length){
@@ -62,10 +80,15 @@
         &#10095;
       </button>
 
-    </div>
+    </div> -->
 
   </div>
+
+
+
  </div>
+
+
 
 
 

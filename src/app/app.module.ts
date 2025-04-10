@@ -40,5 +40,6 @@ import { MessageService } from 'primeng/api';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
+  
 })
 export class AppModule { }

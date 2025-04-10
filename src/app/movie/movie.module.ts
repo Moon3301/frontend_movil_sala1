@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './components/card/card.component';
 import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
@@ -12,8 +12,8 @@ import { SearchBoxComponent } from './components/search-box/search-box.component
 import { CarruselComponent } from './components/carrusel/carrusel.component';
 import { ListPremiereComponent } from './components/list-premiere/list-premiere.component';
 import { PrimengModule } from '../primeng/primeng.module';
-import { ShowtimesComponent } from './components/showtimes/showtimes.component';
 import { HeaderComponent } from './components/header/header.component';
+import Swiper from 'swiper/core'
 
 @NgModule({
   declarations: [
@@ -33,7 +33,9 @@ import { HeaderComponent } from './components/header/header.component';
     MaterialModule,
     PrimengModule,
     SharedModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MovieModule { }

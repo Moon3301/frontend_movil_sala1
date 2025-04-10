@@ -12,7 +12,6 @@
 
 .list-movies-container {
   margin-top: 100vh; /* Por ejemplo, la altura completa del viewport */
-
 }
 
 /* Ajuste para pantallas grandes o para mayor precisión */
@@ -30,12 +29,24 @@
 
 @media (min-width: 1200px) {
   .list-movies-container {
-    margin-top: 900px; /* un valor mayor para pantallas más grandes */
+    margin-top: 910px; /* un valor mayor para pantallas más grandes */
   }
 }
 
 /* Ajuste para móviles */
 @media (max-width: 768px) {
+  .list-movies-container {
+    margin-top: 820px; /* un valor menor para pantallas pequeñas */
+  }
+}
+
+@media (max-width: 400px) {
+  .list-movies-container {
+    margin-top: 790px; /* un valor menor para pantallas pequeñas */
+  }
+}
+
+@media (max-width: 380px) {
   .list-movies-container {
     margin-top: 780px; /* un valor menor para pantallas pequeñas */
   }
@@ -43,6 +54,8 @@
 
 @media (max-width: 350px) {
   .list-movies-container {
-    margin-top: 780px; /* un valor menor para pantallas pequeñas */
+    margin-top: 740px; /* un valor menor para pantallas pequeñas */
   }
 }
+
+

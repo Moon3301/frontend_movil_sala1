@@ -56,6 +56,17 @@
   /* Para que visualmente se note cambio de sección */
 }
 
+.swiper-carrousel {
+  z-index: 1000;
+  color: white;
+  background-color: rgba(245, 245, 245, 0.3);
+  border-radius: 20px;
+  --swiper-navigation-color: whitesmoke;
+  
+}
+
+
+
 .trending-movies-container h2 {
 
   font-size: 1.8rem;
@@ -70,6 +81,10 @@
   overflow-x: auto; /* hace que el contenedor scrollee horizontalmente */
   padding: 0.5rem 0;
   scroll-behavior: smooth; /* scroll suave */
+}
+
+.trending-carousel .movie-posters {
+  flex: 0 0 auto;
 }
 
 /** Ocultar scrollbars en algunos navegadores (opcional) **/
