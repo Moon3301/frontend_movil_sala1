@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
 import { forkJoin } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from '../../../shared/services/shared.service';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'movie-list-movie-page',
@@ -14,6 +15,8 @@ import { SharedService } from '../../../shared/services/shared.service';
   styleUrl: './list-movie-page.component.css'
 })
 export class ListMoviePageComponent implements OnInit{
+
+  @ViewChild('listMoviesContainer') listMoviesContainerRef!: ElementRef;
 
   movies: Movie[] = []
   moviesSkeleton = Array.from({ length : 6})
@@ -32,6 +35,10 @@ export class ListMoviePageComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
+
+    if (Capacitor.getPlatform() === 'ios') {
+      this.listMoviesContainerRef.nativeElement.classList.add('ios-device');
+    }
 
     forkJoin([
       this.movieService.getMovies(),
