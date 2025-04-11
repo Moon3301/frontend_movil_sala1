@@ -36,10 +36,6 @@ export class ListMoviePageComponent implements OnInit{
 
   ngOnInit(): void {
 
-    if (Capacitor.getPlatform() === 'ios') {
-      this.listMoviesContainerRef.nativeElement.classList.add('ios-device');
-    }
-
     forkJoin([
       this.movieService.getMovies(),
       this.movieService.getCarrusel()
@@ -84,8 +80,9 @@ export class ListMoviePageComponent implements OnInit{
       this.selectedTabIndex = tabIndex;
     });
 
-
-
+    if (Capacitor.getPlatform() === 'ios') {
+      this.listMoviesContainerRef.nativeElement.classList.add('ios-device');
+    }
   }
 
   onTabChange(event: any) {

@@ -14,14 +14,16 @@
   margin-top: 100vh; /* Por ejemplo, la altura completa del viewport */
 }
 
-.movie-detail-container.ios-device {
-  margin-top: 850px;
-}
+
 
 /* Ajuste para pantallas grandes o para mayor precisión */
 @media (min-width: 992px) {
   .list-movies-container {
     margin-top: 850px; /* igual a la altura del .hero-container en escritorio */
+  }
+
+  .movie-detail-container.ios-device {
+    margin-top: 850px;
   }
 }
 
@@ -29,11 +31,19 @@
   .list-movies-container {
     margin-top: 850px; /* un valor menor para pantallas pequeñas */
   }
+
+  .movie-detail-container.ios-device {
+    margin-top: 850px;
+  }
 }
 
 @media (min-width: 1200px) {
   .list-movies-container {
     margin-top: 910px; /* un valor mayor para pantallas más grandes */
+  }
+
+  .movie-detail-container.ios-device {
+    margin-top: 850px;
   }
 }
 
@@ -43,6 +53,9 @@
     margin-top: 820px; /* un valor menor para pantallas pequeñas */
   }
 
+  .movie-detail-container.ios-device {
+    margin-top: 850px;
+  }
 
 }
 
