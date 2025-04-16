@@ -109,6 +109,15 @@
                   >
                 {{ schedule.showtime }} {{schedule.language}}</button>
                 <mat-divider class="p-1"></mat-divider>
+              }@else if(cinemaType === "Paseo del valle"){
+                <button mat-button
+                [disabled]="disabled"
+                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
+                  (click)="buildPaymentPDV()"
+                  class="notranslate button-showtime" translate="no"
+                  >
+                {{ schedule.showtime }} {{schedule.language}}</button>
+                <mat-divider class="p-1"></mat-divider>
               }
 
             </div>

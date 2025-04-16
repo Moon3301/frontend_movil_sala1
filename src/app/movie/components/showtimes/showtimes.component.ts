@@ -156,6 +156,14 @@ export class ShowtimesComponent implements OnInit {
 
   }
 
+  buildPaymentPDV(){
+    const cinema = 'Paseo del valle'
+    this.showMessage(cinema);
+    setTimeout(() => {
+      Browser.open({url: 'https://sertex.stonline.cl/CinePaseodelValle/VentaTickets/cpvFrontOffice/Cliente/Acceso'})
+    }, this.timeRedirect)
+  }
+
   onClose(): void{
     this.dialogRef.close(true);
   }
@@ -197,11 +205,17 @@ export class ShowtimesComponent implements OnInit {
   }
 
   showMessage(cinema:string){
+
+    let message = 'Redireccionando a la pagina de compra ...';
+    if(cinema === 'Paseo del valle'){
+      message = 'Deberá iniciar sesion en la web para continuar con la compra..'
+    }
+
     this.messageService.add(
       {
         severity: 'contrast',
         summary: `Redireccionando a ${cinema}`,
-        detail: 'Redireccionando a la pagina de compra ...',
+        detail: message,
         life: this.timeRedirect + 100 }
     );
   }
