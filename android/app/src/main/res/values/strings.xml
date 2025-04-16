@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">app-sala1</string>
-    <string name="title_activity_main">app-sala1</string>
-    <string name="package_name">com.moon3301.sala1</string>
-    <string name="custom_url_scheme">com.moon3301.sala1</string>
+    <string name="app_name">Sala 1</string>
+    <string name="title_activity_main">Sala 1</string>
+    <string name="package_name">com.acdata.sala1</string>
+    <string name="custom_url_scheme">com.acdata.sala1</string>
 </resources>

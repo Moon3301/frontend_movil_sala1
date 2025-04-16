@@ -1,4 +1,4 @@
-package com.moon3301.sala1;
+package com.acdata.sala1;
 
 import com.getcapacitor.BridgeActivity;
 

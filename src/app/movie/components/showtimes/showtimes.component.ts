@@ -146,6 +146,16 @@ export class ShowtimesComponent implements OnInit {
 
   }
 
+  buildUrlPaymentLido(url: string){
+
+    const cinema = 'Lido Osorno'
+    this.showMessage(cinema);
+    setTimeout(() => {
+      Browser.open({ url: url})
+    }, this.timeRedirect)
+
+  }
+
   onClose(): void{
     this.dialogRef.close(true);
   }

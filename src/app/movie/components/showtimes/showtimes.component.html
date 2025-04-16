@@ -22,6 +22,7 @@
             @let disabled = isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType);
 
             <div class="col-6 col-md-2" style="text-align: center;">
+
               @if(cinemaType === 'Cinepolis'){
                 <button mat-button
 
@@ -91,6 +92,17 @@
                 [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
                   (click)="buildUrlPaymentCinestar(
                     showtime.cinemaExternalId,
+                    schedule.sessionId
+                  )"
+                  class="notranslate button-showtime" translate="no"
+                  >
+                {{ schedule.showtime }} {{schedule.language}}</button>
+                <mat-divider class="p-1"></mat-divider>
+              }@else if(cinemaType === 'Lido'){
+                <button mat-button
+                [disabled]="disabled"
+                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
+                  (click)="buildUrlPaymentLido(
                     schedule.sessionId
                   )"
                   class="notranslate button-showtime" translate="no"
