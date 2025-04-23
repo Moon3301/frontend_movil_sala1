@@ -14,8 +14,12 @@ import { ListPremiereComponent } from './components/list-premiere/list-premiere.
 import { PrimengModule } from '../primeng/primeng.module';
 import { HeaderComponent } from './components/header/header.component';
 import Swiper from 'swiper/core'
+import { MovieService } from './services/movie.service';
 
 @NgModule({
+  providers: [
+    MovieService
+  ],
   declarations: [
     CardComponent,
     LayoutPageComponent,

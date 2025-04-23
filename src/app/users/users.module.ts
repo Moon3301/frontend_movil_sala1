@@ -14,6 +14,7 @@ import { MaterialModule } from '../material/material.module';
     CommonModule,
     UsersRoutingModule,
     MaterialModule
-  ]
+  ],
+  providers: [],
 })
 export class UsersModule { }
