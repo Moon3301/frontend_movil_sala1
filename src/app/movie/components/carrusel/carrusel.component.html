@@ -6,10 +6,13 @@
     @if(moviePoster){
       <img
         class="hero-background"
-        rel="preconnect"
         ngSrc="{{ moviePoster.poster_url }}"
+        width="100%"
+        height="100%"
         priority
         fill
+        (load)="loaded=true"
+        [class.loaded]="loaded"
         alt="Póster de {{ moviePoster.title_snapshoot }}"
       />
 
@@ -45,10 +48,20 @@
       loop="true"
       [lazy]="{ loadPrevNext: true, loadPrevNextAmount: 2 }"
       >
-      @for(movie of moviesCarrusel; track $index){
+      @for(movie of moviesCarrusel; track movie.externalMovieId){
         <swiper-slide class="text-center p-2">
           @if(moviesCarrusel.length){
-            <img (click)="selectMovie(movie)" rel="preconnect" [ngSrc]="movie.img_url" width="150" height="200" priority style="border-radius: 12px;" class="movie-posters">
+            <img
+              (load)="loaded=true"
+              [class.loaded]="loaded"
+              (click)="selectMovie(movie)"
+              [ngSrc]="movie.img_url"
+              width="150"
+              height="200"
+              priority
+              style="border-radius: 12px;"
+              class="movie-posters"
+            >
           }@else {
             <p-skeleton width="6rem" height="8rem"></p-skeleton>
             <p-skeleton width="6rem" height="8rem"></p-skeleton>
@@ -63,4 +76,4 @@
 
   </div>
 
- </div>
+</div>

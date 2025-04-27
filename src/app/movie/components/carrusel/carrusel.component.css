@@ -18,6 +18,8 @@
   background-size: cover;
   background-position: center;
   filter: brightness(0.5); /* Oscurece un poco para resaltar el texto */
+  filter: blur(20px);
+  transition: filter .4s
 }
 
 .hero-content {
@@ -43,6 +45,13 @@
 .hero-buttons button:first-child {
   margin-right: 1rem;
 }
+
+.movie-posters { filter: blur(20px);  transition: filter .4s }
+.hero-background { filter: brightness(.5) blur(20px);
+  transition: filter .4s ease; }
+
+.movie-posters.loaded { filter: blur(0) }
+.hero-background.loaded { filter: brightness(.5) blur(0); }
 
 /****************************************
  * Sección de Trending Movies

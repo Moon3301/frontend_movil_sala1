@@ -6,13 +6,13 @@ import { environments } from '../../../../environments/environments';
 @Component({
   selector: 'movie-carrusel',
   standalone: false,
-
   templateUrl: './carrusel.component.html',
   styleUrl: './carrusel.component.css',
 
 })
 export class CarruselComponent implements OnInit{
 
+  loaded: boolean = false;
   baseUrl = environments.baseUrl;
 
   poster_url: string = '';
