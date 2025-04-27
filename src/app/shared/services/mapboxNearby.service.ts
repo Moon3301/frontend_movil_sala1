@@ -69,16 +69,42 @@ export class mapBoxNearbyService{
 
 
   getNearby(lon: number, lat: number) {
+
     const url = `https://api.mapbox.com/v4/${this.tileset}/tilequery/${lon},${lat}.json`;
+
     const params = new HttpParams({fromObject:{
-      access_token: environments.mapbox.accessToken,   // pk recomendado
-      radius: '100000',
-
-
-      layers: 'cinemas'
+      access_token: environments.mapbox.accessToken,
+      radius: '55000',
+      limit: '50',
     }});
-    return this.http.get<{features:any[]}>(url,{params}).pipe(
-      map(r=>r.features.map(f=>f.properties.name))
+
+    return this.http.get<{ features: any[] }>(url, { params }).pipe(
+      map(r => {
+        // 1️⃣ ordenar por distancia
+        const ordered = r.features.sort(
+          (a, b) => a.properties.tilequery.distance -
+                    b.properties.tilequery.distance
+        );
+
+        // 2️⃣ eliminar duplicados por id
+        const seen = new Set<number>();
+        const uniques = ordered.filter(f => {
+          const id = f.properties.id;
+          if (seen.has(id)) { return false; }
+          seen.add(id);
+          return true;
+        });
+
+        // 3️⃣ mapear al modelo
+        return uniques.map(f => ({
+          id:        f.properties.id,
+          nombre:    f.properties.name,
+          empresa:   f.properties.empresa,
+          distancia: f.properties.tilequery.distance,
+          lon:       f.geometry.coordinates[0],
+          lat:       f.geometry.coordinates[1],
+        }) as CineFeature);
+      })
     );
   }
 

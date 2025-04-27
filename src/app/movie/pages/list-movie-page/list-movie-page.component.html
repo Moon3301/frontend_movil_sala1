@@ -1,71 +1,79 @@
 <movie-header></movie-header>
 
-<movie-carrusel></movie-carrusel>
-
-<div class="container" style="position: absolute;">
-
-  <div #listMoviesContainer class="list-movies-container">
-    <movie-search-box [movies]="movies"></movie-search-box>
-
-    <mat-tab-group
-      style="min-height: 400px;"
-      [dynamicHeight]="true"
-      [selectedIndex]="selectedTabIndex"
-      (selectedTabChange)="onTabChange($event)"
-      >
-
-      <mat-tab label="En cartelera">
-        <div class="row mt-4">
-
-          <ng-container *ngIf="moviesPremiere?.length; else loadingMovies">
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let movie of moviesPremiere">
-              <movie-card [movie]="movie"></movie-card>
-              <br>
-            </div>
-          </ng-container>
-
-          <ng-template #loadingMovies>
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let item of moviesSkeleton">
-              <br>
-              <p-skeleton height="15rem"></p-skeleton>
-            </div>
-          </ng-template>
-
-        </div>
-
-      </mat-tab>
-
-      <mat-tab label="Preventas">
-
-        <div class="row mt-4">
-          @for (movie of moviesPresale; track movie) {
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-              <movie-card [movie]="movie"></movie-card>
-              <br>
-            </div>
-          }
-        </div>
-      </mat-tab>
-
-      <mat-tab label="Proximamente">
-        <div class="row mt-4">
-          @for (movie of moviesComingSoon; track movie) {
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-              <movie-card [movie]="movie"></movie-card>
-              <br>
-            </div>
-          }
-        </div>
-      </mat-tab>
-
-
-    </mat-tab-group>
-
+@if(isLoading){
+  <div class="container text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <mat-spinner style="margin: 0 auto; z-index: 1000000;" diameter="100"></mat-spinner>
   </div>
-</div>
+
+}@else {
+  <movie-carrusel></movie-carrusel>
+
+  <div class="container" style="position: absolute;">
+
+    <div #listMoviesContainer class="list-movies-container">
+      <movie-search-box [movies]="movies"></movie-search-box>
+
+      <mat-tab-group
+        style="min-height: 400px;"
+        [dynamicHeight]="true"
+        [selectedIndex]="selectedTabIndex"
+        (selectedTabChange)="onTabChange($event)"
+        >
+
+        <mat-tab label="En cartelera">
+          <div class="row mt-4">
+
+            <ng-container *ngIf="moviesPremiere?.length; else loadingMovies">
+              <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let movie of moviesPremiere">
+                <movie-card [movie]="movie"></movie-card>
+                <br>
+              </div>
+            </ng-container>
+
+            <ng-template #loadingMovies>
+              <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let item of moviesSkeleton">
+                <br>
+                <p-skeleton height="15rem"></p-skeleton>
+              </div>
+            </ng-template>
+
+          </div>
+
+        </mat-tab>
+
+        <mat-tab label="Preventas">
+
+          <div class="row mt-4">
+            @for (movie of moviesPresale; track movie) {
+              <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <movie-card [movie]="movie"></movie-card>
+                <br>
+              </div>
+            }
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Proximamente">
+          <div class="row mt-4">
+            @for (movie of moviesComingSoon; track movie) {
+              <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <movie-card [movie]="movie"></movie-card>
+                <br>
+              </div>
+            }
+          </div>
+        </mat-tab>
 
 
-<br class="mb-5">
+      </mat-tab-group>
 
-<router-outlet></router-outlet>
+    </div>
+  </div>
+
+
+  <br class="mb-5">
+
+  <router-outlet></router-outlet>
+}
+
 

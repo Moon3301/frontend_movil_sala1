@@ -11,6 +11,7 @@ import PullToRefresh from 'pulltorefreshjs';
 import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +41,20 @@ export class AppComponent implements OnInit{
       StatusBar.setOverlaysWebView({ overlay: false });
     }
 
+    if (Capacitor.getPlatform() === 'android') {
+      EdgeToEdge.setBackgroundColor({ color: '#000000' });
+    }
 
+    Geolocation.getCurrentPosition().then((position) => {
+      position.coords.latitude;
+      position.coords.longitude;
+
+      this.storageService.saveData('coordinates', JSON.stringify(position.coords)).subscribe({
+        next: () => console.log('Coordenadas guardadas en el almacenamiento local'),
+        error: (error) => console.error('Error al guardar coordenadas:', error)
+      })
+
+    })
 
     this.getAllRegions().pipe(
 

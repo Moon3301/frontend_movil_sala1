@@ -14,7 +14,7 @@ export interface MovieCarrusel {
   position:        number;
   title_snapshoot: string;
   movieId:         number;
-  img_url?:        string;
+  img_url:        string;
   poster_url:      string;
   externalMovieId: number;
 }

@@ -4,8 +4,11 @@
 
 .responsive-logo {
   /* Ejemplo usando clamp(): */
-  width: clamp(50px, 10vw, 100px);
-  height: auto;
+  width: clamp(50, 10vw, 100);
+  height: clamp(50, 10vw, 100);
+  border: 1px solid black;
+  object-fit: contain;
+  cursor: pointer;
   /* Para que la imagen mantenga su proporción. */
 }
 
@@ -13,17 +16,29 @@
 
   position: fixed;
   top: 0;
-  padding-top: max(env(safe-area-inset-top), 20px); /* Soporte para iOS y Android */
+  padding-top: max(env(safe-area-inset-top)); /* Soporte para iOS y Android */
   z-index: 100;
   background-color: whitesmoke;
-  height: 64px; /* Altura base + padding */
+  height: 72px; /* Altura base + padding */
   display: flex;
   align-items: center; /* Alinea elementos verticalmente */
 }
 
+.location-btn {
+  display: flex;              /* alinea icono y texto en la misma fila */
+  align-items: center;
+  gap: 4px;                   /* separa icono y texto */
+  padding: 0 8px;             /* un poco de aire lateral */
+  text-transform: none;       /* evita MAYÚSCULAS automáticas de mat-button */
+  min-width: auto;            /* botón tan ancho como su contenido */
+}
+
+.android-header-toolbar {
+  padding-top: 25px;
+}
+
 /* Asegura que el contenido no quede bajo el notch */
 .safe-area-container {
-
   width: 100%;
   display: flex;
   align-items: center;
@@ -45,7 +60,7 @@
 }
 
 .icon-location {
-  font-size: clamp(10px, 10vw, 20px); /* Ajusta min, punto medio y max a tus necesidades */
+  font-size: clamp(10px, 12vw, 20px); /* Ajusta min, punto medio y max a tus necesidades */
 }
 
 .current-region {

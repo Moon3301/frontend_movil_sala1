@@ -59,7 +59,7 @@
 .swiper-carrousel {
   z-index: 1000;
   color: white;
-  background-color: rgba(245, 245, 245, 0.3);
+  background-color: rgba(245, 245, 245, 0.2);
   border-radius: 20px;
   --swiper-navigation-color: whitesmoke;
 
@@ -139,7 +139,9 @@
     padding: 0.5rem; /* Ajuste para menor espacio */
   }
   .movie-posters {
-    width: 150px; /* Posters más pequeños en móvil */
+    width: 150px;
+    height: 200px;
+
   }
   /* Si el contenedor de la lista de movies tiene un margin-top fijo, se puede ajustar */
   .container {

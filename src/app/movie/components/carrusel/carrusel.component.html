@@ -1,13 +1,17 @@
 <!-- Contenedor principal del carrusel/hero -->
-<div style="position: absolute; width: 100%; top: 40px;">
+<div style="position: absolute; width: 100%; top: 60px;">
 
   <div class="hero-container">
     <!-- Imagen de fondo -->
     @if(moviePoster){
-      <div
+      <img
         class="hero-background"
-        [ngStyle]="{'background-image': 'url('+ moviePoster.poster_url +')'}">
-      </div>
+        rel="preconnect"
+        ngSrc="{{ moviePoster.poster_url }}"
+        priority
+        fill
+        alt="Póster de {{ moviePoster.title_snapshoot }}"
+      />
 
       <!-- Contenido superpuesto -->
       <div class="hero-content">
@@ -34,16 +38,17 @@
   <div class="trending-movies-container">
     <h2 style="color: rgba(255, 255, 255, 0.9);">Mas Destacadas</h2>
     <swiper-container
+      [breakpoints]="swiperBreakpoints"
       class="swiper-carrousel"
       navigation="true"
       slides-per-view="2"
       loop="true"
-      css-mode="true"
+      [lazy]="{ loadPrevNext: true, loadPrevNextAmount: 2 }"
       >
       @for(movie of moviesCarrusel; track $index){
         <swiper-slide class="text-center p-2">
           @if(moviesCarrusel.length){
-            <img (click)="selectMovie(movie)" [src]="movie.img_url" width="100%" style="border-radius: 12px;" class="movie-posters">
+            <img (click)="selectMovie(movie)" rel="preconnect" [ngSrc]="movie.img_url" width="150" height="200" priority style="border-radius: 12px;" class="movie-posters">
           }@else {
             <p-skeleton width="6rem" height="8rem"></p-skeleton>
             <p-skeleton width="6rem" height="8rem"></p-skeleton>

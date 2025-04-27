@@ -6,7 +6,7 @@ export const environments = {
   apiTmbd: 'https://api.themoviedb.org/3',
   mapbox: {
     accessToken: 'sk.eyJ1IjoiY2FjZXZlZG8yMDI1IiwiYSI6ImNtOXRmamtvZTBheWwycG90MXdqYzNmNGQifQ.l4e1bW-B5naVCDetnCY9IA',
-    tilesetId: 'cacevedo2025.cines'
+    tilesetId: 'cacevedo2025.dg05gwba'
   }
 
 }

@@ -6,7 +6,8 @@
   color: whitesmoke
 }
 .button-showtime {
-  font-size: clamp(10px, 4vw, 12px);
+  font-size: clamp(6px, 3vw, 12px);
+  white-space: normal;          /* permite saltos */
 }
 
 /* Fuerza que el contenedor del toast se posicione en el centro */

@@ -19,10 +19,14 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1001;
   top: 0;
   width: 100%;
-  padding-top: max(env(safe-area-inset-top), 20px); /* Seguridad para ambos sistemas */
-  height: 56px; /* Altura base + padding */
+  padding-top: max(env(safe-area-inset-top)); /* Seguridad para ambos sistemas */
+  height: 64px; /* Altura base + padding */
   display: flex;
   align-items: center; /* Alinea elementos verticalmente */
+}
+
+.android-header-toolbar {
+  padding-top: 25px;
 }
 
 /* Contenedor del video */
@@ -35,12 +39,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 mat-toolbar {
-
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 56px; /* Altura estándar material */
+  height: 64px; /* Altura estándar material */
   background-color: whitesmoke !important;
 }
 
@@ -55,6 +58,8 @@ mat-toolbar {
   padding: 0 16px;
 }
 
+
+
 .video-title {
   margin: 0 auto;
   width: 80%;
@@ -63,6 +68,18 @@ mat-toolbar {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.movie-header-title {
+  margin: 0 auto;
+  width: 80%;
+  text-align: center;
+  font-size: clamp(8px, 4vw, 16px);
+  font-weight: bold;
+  /* 🔄  Cambios clave  */
+  white-space: normal;          /* permite saltos */
+  overflow-wrap: break-word;    /* rompe palabras largas si es necesario */
+
 }
 
 /* Fallback para Android */

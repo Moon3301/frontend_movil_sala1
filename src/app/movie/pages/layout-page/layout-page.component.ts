@@ -15,20 +15,9 @@ export class LayoutPageComponent implements OnInit {
   constructor(private mapboxService: mapBoxNearbyService) { }
 
   ngOnInit(): void {
-    // Initialize any necessary data or services here
-
-    this.getUserPosition().subscribe()
-
+    
   }
 
-  getUserPosition(): Observable<CineFeature[]> {
-    return from(Geolocation.getCurrentPosition()).pipe(
-      switchMap(pos =>
-        this.mapboxService.getNearby( pos.coords.longitude, pos.coords.latitude
-        )
-      ),
-      tap(cines => console.table(cines))   // un único log con el array
-    );
-  }
+
 
 }

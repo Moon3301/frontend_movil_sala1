@@ -85,41 +85,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
       }
     })
 
-    // Se obtiene y actualiza la ubicacion actual del usuario
-    // this.storageService.getData("user_ubication").subscribe({
-    //   next: (resp)=> {
-    //     this.userCurrentRegion = resp!
-
-    //     if (!this.userCurrentRegion){
-
-    //       this.sharedService.getUserLocation().subscribe({
-    //         next: (resp) => {
-    //           console.log(resp)
-    //           this.userCurrentRegion = resp
-    //           this.cdr.detectChanges();
-
-    //           this.storageService.saveData("user_ubication", resp).subscribe({
-    //             next: () => {
-    //               console.log('Ubicación guardada en el almacenamiento local');
-    //             },
-    //             error: (error) => {
-    //               console.error('Error al guardar ubicación:', error);
-    //             }
-    //           })
-
-    //           // sessionStorage.setItem("user_ubication", resp)
-    //         },
-    //         error: (error) => {
-    //           console.log(error);
-    //         }
-    //       })
-    //     }
-    //   },
-    //   error: (error)=> {
-    //     console.log(error);
-    //   }
-    // })
-
     this.cdr.detectChanges();
 
   }

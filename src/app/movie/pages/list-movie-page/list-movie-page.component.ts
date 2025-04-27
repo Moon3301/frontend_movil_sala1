@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from '../../../shared/services/shared.service';
 import { Capacitor } from '@capacitor/core';
@@ -18,6 +18,7 @@ export class ListMoviePageComponent implements OnInit{
 
   @ViewChild('listMoviesContainer') listMoviesContainerRef!: ElementRef;
 
+  isLoading = false;
   movies: Movie[] = []
   moviesSkeleton = Array.from({ length : 6})
 
@@ -36,10 +37,15 @@ export class ListMoviePageComponent implements OnInit{
 
   ngOnInit(): void {
 
+    this.isLoading = true;
+
     forkJoin([
       this.movieService.getMovies(),
       this.movieService.getCarrusel()
-    ]).subscribe({
+    ]).pipe(
+      finalize(() => this.isLoading = false),
+      
+      ).subscribe({
       next: ([allMovies, moviesCarrusel]) => {
 
         const finalList = this.combineAndSort(allMovies, moviesCarrusel);
@@ -47,7 +53,9 @@ export class ListMoviePageComponent implements OnInit{
 
         this.movieService.saveAllMoviesT(this.movies).subscribe({
           next: (resp)=> {
+
             // console.log('Peliculas guardadas en localStorage');
+
           },
           error: (error)=> {
             console.log('Error al guardar las peliculas', error);
@@ -69,6 +77,8 @@ export class ListMoviePageComponent implements OnInit{
           }
 
         })
+
+
 
       },
       error: (err) => console.error('Error combinando:', err)

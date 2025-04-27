@@ -1,12 +1,33 @@
-
-<mat-toolbar #headerElement class="header-toolbar">
+<!-- Agregar padding en android -->
+<!-- [class.android-header-toolbar]="isAndroid" -->
+<mat-toolbar class="header-toolbar">
   <div class="safe-area-container">
-    <button mat-icon-button (click)="onToggleDrawer()"><mat-icon>menu</mat-icon></button>
-    <img src="img/LOGO_SALA1-removeng.png" class="responsive-logo">
-    <span class="spacer"></span>
 
-    <h3 class="current-region">{{userCurrentRegion}}</h3>
-    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon class="icon-location">location_on</mat-icon></button>
+    <!-- Menú lateral -->
+    <button mat-icon-button (click)="onToggleDrawer()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <!-- Logo -->
+    <img
+      ngSrc="img/_logo_sala1.png"
+      priority
+      width="60"
+      height="60"
+      alt="Logo Sala 1"
+      [routerLink]="['/movies']" />
+      
+      <span class="spacer"></span>
+    <!-- Botón ubicación + región -->
+    <button
+      mat-button
+      class="location-btn"
+      [matMenuTriggerFor]="menu">
+
+      <mat-icon class="icon-location" aria-hidden="true">location_on</mat-icon>
+      <span class="current-region">{{ userCurrentRegion }}</span>
+    </button>
+
   </div>
 </mat-toolbar>
 

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../storage/storage.service';
 import { Region, SharedService } from '../../../shared/services/shared.service';
 import * as stringSimilarity from 'string-similarity';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'movie-header',
@@ -10,6 +11,8 @@ import * as stringSimilarity from 'string-similarity';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
+
+  readonly isAndroid = Capacitor.getPlatform() === 'android';
 
   regions: Region[] = []
 

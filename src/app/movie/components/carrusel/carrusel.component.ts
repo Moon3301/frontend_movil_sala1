@@ -23,6 +23,19 @@ export class CarruselComponent implements OnInit{
 
   originalWidth = 0;
 
+  swiperBreakpoints = {
+    0:    { slidesPerView: 1.5 },
+    300:  { slidesPerView: 1.5 },
+    350:  { slidesPerView: 1.7 },
+    370:  { slidesPerView: 2 },
+    500:  { slidesPerView: 2.5 },
+    600:  { slidesPerView: 3 },
+    700:  { slidesPerView: 3.5 },
+    800:  { slidesPerView: 4 },
+    960:  { slidesPerView: 5 },
+    1280: { slidesPerView: 7 }
+  };
+
   constructor(private movieService: MovieService){}
 
 

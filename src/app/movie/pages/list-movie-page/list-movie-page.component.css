@@ -81,7 +81,17 @@
 
 @media (max-width: 350px) {
   .list-movies-container {
-    margin-top: 780px; /* un valor menor para pantallas pequeñas */
+    margin-top: 800px; /* un valor menor para pantallas pequeñas */
+  }
+
+  .movie-detail-container.ios-device {
+    margin-top: 840px;
+  }
+}
+
+@media (max-width: 330px) {
+  .list-movies-container {
+    margin-top: 820px; /* un valor menor para pantallas pequeñas */
   }
 
   .movie-detail-container.ios-device {

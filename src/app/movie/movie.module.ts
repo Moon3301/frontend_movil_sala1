@@ -15,10 +15,12 @@ import { PrimengModule } from '../primeng/primeng.module';
 import { HeaderComponent } from './components/header/header.component';
 import Swiper from 'swiper/core'
 import { MovieService } from './services/movie.service';
+import { SharedService } from '../shared/services/shared.service';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   providers: [
-    MovieService
+    MovieService,
   ],
   declarations: [
     CardComponent,
@@ -34,10 +36,11 @@ import { MovieService } from './services/movie.service';
   imports: [
     CommonModule,
     MovieRoutingModule,
+    SharedModule,
     MaterialModule,
     PrimengModule,
-    SharedModule,
     ReactiveFormsModule,
+    NgOptimizedImage
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

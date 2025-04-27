@@ -27,6 +27,8 @@ import { Capacitor } from '@capacitor/core';
 })
 export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
+  readonly isAndroid = Capacitor.getPlatform() === 'android';
+  
   @ViewChild('topFocus') topFocus!: ElementRef;
 
   @ViewChild('videoContainer') videoContainerRef!: ElementRef;
@@ -34,6 +36,8 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   movie?: Movie
   funciones?: ICines[]
+  isLoadingFunciones: boolean = false
+
   dates: string[] = []
   isLoading: boolean = false;
   selectedDate: any
@@ -63,6 +67,20 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   }
 
   ngOnInit(): void {
+
+    this.isLoadingFunciones = true;
+
+
+    let coordinates: any = null;
+    this.storageService.getData('coordinates').subscribe({
+      next: (data) => {
+        coordinates = JSON.parse(data!);
+        console.log('Coordenadas desde el almacenamiento local:', coordinates);
+      },
+      error: (error) => {
+        console.error('Error al obtener coordenadas:', error);
+      }
+    })
 
     window.scrollTo(0, 0);
 
@@ -97,21 +115,45 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
         this.trailerSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
       }),
       // Obtener la región (ya sea del localStorage o mediante geolocalización).
-      switchMap(() => this.getRegionName()),
+      switchMap(() => this.getCoordinates()),
       // Una vez se tiene la región, se solicitan los cines.
-      switchMap(regionName =>
-        this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, regionName, currentDate)
+      switchMap(resp =>
+        this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, resp.latitude, resp.longitude, currentDate)
       )
     ).subscribe(
       (dataBillboard) => {
+
         this.funciones = dataBillboard.data;
         this.dates = dataBillboard.dates;
 
         const today = this.getTodayString();
         this.selectedDate = this.dates.includes(today) ? today : this.dates[0]
 
+        this.isLoadingFunciones = false; // Desactivar el spinner
+        this.cdr.detectChanges(); // Forzar la detección de cambios
       },
       error => console.error(error)
+    );
+  }
+
+  private getCoordinates(): Observable<any> {
+
+    // obtener la data de coordinates
+    return this.storageService.getData('coordinates').pipe(
+      switchMap(storedCoordinates => storedCoordinates
+        ? of(JSON.parse(storedCoordinates)) // ya estaba guardada
+        : from(Geolocation.getCurrentPosition()).pipe( // hay que calcularla
+            switchMap(pos => {
+              const coordinates = {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude
+              };
+              return this.storageService.saveData('coordinates', JSON.stringify(coordinates)).pipe(
+                map(() => coordinates) // Retorna las coordenadas guardadas
+              );
+            })
+          )
+      )
     );
   }
 
@@ -129,6 +171,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
             map(resp => resp.address.state),
             tap(region =>
               this.storageService.saveData('user_ubication', region).subscribe()
+
             )
           )
       )
@@ -138,24 +181,29 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   onSelectDate(fecha: string, event?: MatOptionSelectionChange): void {
     if (!event?.isUserInput) { return; }          // ignorar cambios programáticos
 
-    this.getRegionName()                          // ← ya devuelve la región (de storage o geo)
+    this.getCoordinates()                          // ← ya devuelve la región (de storage o geo)
       .pipe(
-        switchMap(region =>
+        switchMap(resp =>
           this.movieService
-              .getCinemasByUbicationAndMovie(this.movie!.id, region, fecha)
-              .pipe(
-                tap(() => this.isLoading = true)  // spinner ON
-              )
+            .getCinemasByUbicationAndMovie(this.movie!.id, resp.latitude, resp.longitude, fecha)
+            .pipe(
+              tap(() => this.isLoading = true),  // spinner ON
+              tap(() => this.isLoadingFunciones = true)
+              // tap(() => this.cdr.detectChanges()),
+            )
         ),
         tap(response => {
+
           this.funciones = response.data;
           this.dates     = response.dates;
           this.isLoading = false;                 // spinner OFF
+          this.isLoadingFunciones = false;        // spinner OFF
           this.cdr.detectChanges();
         }),
         catchError(err => {
           console.error(err);
           this.isLoading = false;
+          this.isLoadingFunciones = false;        // spinner OFF
           this.cdr.detectChanges();
           return EMPTY;
         })
@@ -163,12 +211,12 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
       .subscribe();
   }
 
-  getShowtimes(movieId: number, regionName: string, fecha: string){
+  getShowtimes(movieId: number, latitude: string, longitude: string, fecha: string){
 
     this.isLoading = true;
     this.cdr.detectChanges();
 
-    this.movieService.getCinemasByUbicationAndMovie(movieId, regionName!, fecha).subscribe({
+    this.movieService.getCinemasByUbicationAndMovie(movieId, latitude, longitude, fecha).subscribe({
       next: (response) => {
 
         this.funciones = response.data;
@@ -188,8 +236,6 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     });
 
   }
-
-
 
   openShowtimes(showtimes: ICinema[], cinemaType: string){
 

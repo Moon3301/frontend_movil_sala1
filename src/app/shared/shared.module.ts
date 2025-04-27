@@ -12,7 +12,6 @@ import { mapBoxNearbyService } from './services/mapboxNearby.service';
 
 @NgModule({
   providers:[
-    SharedService,
     mapBoxNearbyService
 
   ],
@@ -29,7 +28,8 @@ import { mapBoxNearbyService } from './services/mapboxNearby.service';
   ],
   exports:[
     MenuComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+
   ]
 })
 export class SharedModule { }

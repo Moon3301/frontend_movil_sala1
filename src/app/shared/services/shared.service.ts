@@ -89,6 +89,8 @@ export class SharedService{
   }
 
   toggleDrawer(): void {
+    console.log('toggleDrawer');
+
     this.toggleDrawerSubject.next();
   }
 

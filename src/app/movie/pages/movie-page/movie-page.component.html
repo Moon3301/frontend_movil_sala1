@@ -1,93 +1,109 @@
 <div tabindex="-1" #topFocus style="position: absolute; top: 0;"></div>
 
+<!-- [class.android-header-toolbar]="isAndroid" -->
 <mat-toolbar class="header-toolbar">
-  <div class="safe-area-content"> <!-- Nuevo contenedor -->
-    <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
-      arrow_back_ios_new
-    </mat-icon>
-    <p class="video-title">{{movie?.title}}</p>
+  <div class="safe-area-content">
+    <button mat-icon-button [routerLink]="['/movies']" >
+      <mat-icon style="font-size: 25px; font-weight: bold; margin: 0 auto; padding-right: 10px;" >
+        arrow_back_ios_new
+      </mat-icon>
+    </button>
+
+    <p class="movie-header-title">{{movie?.title}}</p>
   </div>
 </mat-toolbar>
 
-<div #videoContainer class="video-container">
+@if(movie){
+  <div #videoContainer class="video-container">
 
-  <img
-    class="img-video"
-    [src]="getYouTubeThumbnailUrl(movie?.trailer_url)"
-    alt="Video thumbnail"
-    (click)="openVideoDialog()"
-  />
-</div>
+    <img
+      class="img-video"
+      [ngSrc]="getYouTubeThumbnailUrl(movie.trailer_url)"
+      priority
+      fill
+      alt="Video thumbnail"
+      (click)="openVideoDialog()"
+    />
+  </div>
 
-<div #detailContainer class="movie-detail-container container">
-  <mat-card style="background-color: rgb(31, 31, 31);">
-    <mat-card-content>
+  <div #detailContainer class="movie-detail-container container">
+    <mat-card style="background-color: rgb(31, 31, 31);">
+      <mat-card-content>
 
         <div class="row">
           <div class="col-3 col-md-3 movie-detail">
-            <img [src]="movie?.img_url" width="100%">
+            <img [src]="movie.img_url" width="100%">
             <hr>
             <h5>
               Titulo
               <mat-divider class="mb-2"></mat-divider>
-              <p class="movie-title">{{ movie?.title }}</p>
+              <p class="movie-title">{{ movie.title }}</p>
             </h5>
 
             <h5>
               Rating
               <mat-divider class="mb-2"></mat-divider>
-              <h6 class="movie-rating">{{ movie?.rating }}</h6>
+              <h6 class="movie-rating">{{ movie.rating }}</h6>
             </h5>
 
           </div>
 
           <div class="col-9 col-md-9">
-            <h4 class="synopsis-title">{{ movie?.synopsis_alt }}</h4>
+            <h4 class="synopsis-title text-center">{{ movie.synopsis_alt }}</h4>
 
             <h5>Sinopsis</h5>
-            <p class="movie-synopsis" style="color: white;">{{ movie?.synopsis }}</p>
+            <p class="movie-synopsis" style="color: white;">{{ movie.synopsis }}</p>
           </div>
         </div>
 
+      </mat-card-content>
+    </mat-card>
 
-    </mat-card-content>
-  </mat-card>
-
-</div>
+  </div>
+}@else{
+  <mat-spinner style="margin: 0 auto;"></mat-spinner>
+}
 
 <p class="text-center mt-2 mb-2;" style="font-size: 30px; color: black;">Funciones</p>
 
   <div class="container">
-    @if(funciones && funciones!.length > 0){
-      <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
-        <mat-label>Funciones disponibles</mat-label>
-        <mat-select [value]="selectedDate">
-          @for (date of dates; track date) {
-            <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
+
+    @if(funciones){
+      @if(funciones!.length > 0){
+
+        <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
+          <mat-label>Funciones disponibles</mat-label>
+          <mat-select [value]="selectedDate">
+            @for (date of dates; track date) {
+              <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-list>
+          @for(cinema of funciones; track cinema){
+
+            <mat-list-item
+              (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
+              matRipple
+              style="background-color: rgb(31, 31, 31);">
+
+              <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
+
+            </mat-list-item>
+            <mat-divider></mat-divider>
+
           }
-        </mat-select>
-      </mat-form-field>
+        </mat-list>
 
-      <mat-list>
-
-        @for(cinema of funciones; track cinema){
-
-          <mat-list-item
-            (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
-            matRipple
-            style="background-color: rgb(31, 31, 31);">
-
-            <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
-
-          </mat-list-item>
-          <mat-divider></mat-divider>
-
-        }
-
-      </mat-list>
+      }@else {
+        <div class="alert alert-dark" style="display: flex; justify-content: center; align-items: center; background-color: rgb(31, 31, 31); color: whitesmoke;">No existen funciones disponibles aun.</div>
+      }
     }@else {
-      <div class="alert alert-dark" style="display: flex; justify-content: center; align-items: center; background-color: rgb(31, 31, 31); color: whitesmoke;">No existen funciones disponibles aun.</div>
+
+      <mat-spinner style="margin: 0 auto;"></mat-spinner>
     }
+
   </div>
 
 
