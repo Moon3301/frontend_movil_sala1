@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import { BehaviorSubject, from, map, Observable, of, pipe, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, from, map, Observable, of, pipe, switchMap, tap } from 'rxjs';
 import { environments } from '../../../environments/environments';
-import { IUbication } from "../../common/interfaces";
+import { IRegion, IUbication } from "../../common/interfaces";
 import stringSimilarity from "string-similarity";
 import { StorageService } from "../../storage/storage.service";
 import { Geolocation } from '@capacitor/geolocation';
@@ -21,7 +21,7 @@ export class SharedService{
   private _currentRegion = new BehaviorSubject<string | null>(null);
   public currentRegion$: Observable<string | null> = this._currentRegion.asObservable();
 
-  regions: Region[] = []
+  regions: IRegion[] = []
   currentRegion!: string;
   currentRegionSession!: string;
   userCurrentRegion!: string;
@@ -33,8 +33,8 @@ export class SharedService{
 
   constructor(private http: HttpClient, private storageService: StorageService) {}
 
-  public getAllRegions(): Observable<Region[]>{
-    return this.http.get<Region[]>(`${this.baseUrl}/region`)
+  public getAllRegions(): Observable<IRegion[]>{
+    return this.http.get<IRegion[]>(`${this.baseUrl}/region`)
   }
 
   public get currentUserRegion(){
@@ -45,11 +45,11 @@ export class SharedService{
     return localStorage.getItem("regions") ? JSON.parse(localStorage.getItem("regions")!) : []
   }
 
-  public get allRegions(): Observable<Region[]>{
+  public get allRegions(): Observable<IRegion[]>{
     return this.storageService.getData('regions').pipe(
 
       map(value => {
-        return value ? JSON.parse(value) as Region[]: []
+        return value ? JSON.parse(value) as IRegion[]: []
       })
     )
   }
@@ -58,25 +58,77 @@ export class SharedService{
     return this.http.get<IUbication>(`${environments.urlGeoCode}reverse?lat=${lat}&lon=${lng}&api_key=${environments.apiKeyGeoCode}`)
   }
 
+  getUbicationByServer(lat: string, lng: string): Observable<IRegion>{
+    return this.http.get<IRegion>(`${environments.baseUrl}/ubication/coordenates?latitude=${lat}&longitude=${lng}`)
+  }
+
+
   getUserLocation(): Observable<string> {
     // Convertir geolocalización a Observable
     return from(Geolocation.getCurrentPosition()).pipe(
       // Con el resultado, obtener la dirección invertida
       switchMap(position =>
-        this.getUbicationByGeoCode(position.coords.latitude, position.coords.longitude)
+        this.getUbicationByServer(position.coords.latitude.toString(), position.coords.longitude.toString())
       ),
       // Con la dirección, ahora obtener la lista de regiones y transformarla
       switchMap(response => {
         return this.allRegions.pipe(
           map(regions => {
             const allRegionsName = regions.map(r => r.name);
-            return this.findSimilarityRegion(allRegionsName, response.address.state);
+            return this.findSimilarityRegion(allRegionsName, response.name);
           })
         );
       }),
       // Al final, ya tenemos el `similarRegion` como string que se emite a quien se suscriba
     );
   }
+
+  getUserLocationANDROID() {
+      const DEFAULT_LOCATION = 'Metropolitana de Santiago'; // El valor por defecto que desees
+
+      return from(Geolocation.checkPermissions()).pipe(
+        switchMap(permissions => {
+          if (permissions.location === 'denied') {
+            // El usuario no otorgó permiso aún: se solicita
+            return from(Geolocation.requestPermissions());
+          }
+          return of(null);
+        }),
+        switchMap(() => from(Geolocation.getCurrentPosition())),
+        switchMap((position) => {
+          const { latitude: lat, longitude: lng } = position.coords;
+          // Llamada a la API que, dado lat/lng, devuelve un Observable con la ubicación
+
+          return this.getUbicationByServer(lat.toString(), lng.toString());
+        }),
+        switchMap(response => {
+          // Guardar la ubicación real en storage
+          return this.storageService.saveData('user_ubication', response.name).pipe(
+            // Encadena y retorna la ubicación guardada
+            switchMap(() => this.storageService.getData('user_ubication'))
+          );
+        }),
+        tap(saved => {
+          console.log('Ubicación guardada en el almacenamiento local:', saved);
+          // A la vez, actualizamos BehaviorSubject o tu service
+          this.setRegion(saved!);
+        }),
+        catchError(err => {
+          console.error('Error al obtener ubicación:', err);
+
+          // === AQUÍ asignamos el valor por defecto ===
+          return this.storageService.saveData('user_ubication', DEFAULT_LOCATION).pipe(
+            tap(() => {
+              console.log('Ubicación guardada por defecto:', DEFAULT_LOCATION);
+              this.setRegion(DEFAULT_LOCATION);
+            }),
+            // Devolvemos algo para que el flujo continúe y no rompa
+            // Por ejemplo, devolvemos un string con la ubicación por defecto
+            map(() => DEFAULT_LOCATION)
+          );
+        })
+      );
+    }
 
 
   findSimilarityRegion(array: string[], value: string): string {

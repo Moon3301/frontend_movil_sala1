@@ -15,7 +15,9 @@ export class RegisterPageComponent implements OnInit{
 
   public registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private readonly authService: AuthService, private router: Router){
+  constructor(private fb: FormBuilder, private readonly authService: AuthService, private router: Router){}
+
+  ngOnInit(): void {
 
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
@@ -24,8 +26,6 @@ export class RegisterPageComponent implements OnInit{
     })
 
   }
-
-  ngOnInit(): void {}
 
   register(){
 

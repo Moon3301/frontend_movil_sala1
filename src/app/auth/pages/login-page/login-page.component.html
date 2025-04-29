@@ -34,11 +34,11 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <div class="row mx-auto">
+        <div class="row mx-auto w-75">
           <button class="mb-2" mat-flat-button type="submit">Ingresar</button>
-          <button class="mb-2" mat-stroked-button [routerLink]="['/auth', 'new-account']">Registrarse</button>
-          <mat-divider></mat-divider>
-          <button class="mt-2" mat-button>Olvido su contraseña?</button>
+          <button type="button" class="mt-2" mat-stroked-button [routerLink]="['/auth/new-account']">Registrarse</button>
+          <!-- <mat-divider></mat-divider>
+          <button type="button" class="mt-2" mat-button>Olvido su contraseña?</button> -->
         </div>
       </mat-card-actions>
     </form>

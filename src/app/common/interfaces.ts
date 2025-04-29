@@ -23,3 +23,11 @@ export interface IAddress {
   country:          string;
   country_code:     string;
 }
+
+export interface IRegion {
+  id: number,
+  name: string
+  external_id: string
+  latitude: string
+  longitude: string
+}

@@ -28,7 +28,7 @@ import { Capacitor } from '@capacitor/core';
 export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   readonly isAndroid = Capacitor.getPlatform() === 'android';
-  
+
   @ViewChild('topFocus') topFocus!: ElementRef;
 
   @ViewChild('videoContainer') videoContainerRef!: ElementRef;
@@ -70,9 +70,8 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
     this.isLoadingFunciones = true;
 
-
     let coordinates: any = null;
-    this.storageService.getData('coordinates').subscribe({
+    this.storageService.getData('coordenates').subscribe({
       next: (data) => {
         coordinates = JSON.parse(data!);
         console.log('Coordenadas desde el almacenamiento local:', coordinates);
@@ -115,7 +114,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
         this.trailerSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
       }),
       // Obtener la región (ya sea del localStorage o mediante geolocalización).
-      switchMap(() => this.getCoordinates()),
+      switchMap(() => this.getCoordenates()),
       // Una vez se tiene la región, se solicitan los cines.
       switchMap(resp =>
         this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, resp.latitude, resp.longitude, currentDate)
@@ -136,10 +135,10 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     );
   }
 
-  private getCoordinates(): Observable<any> {
+  private getCoordenates(): Observable<any> {
 
     // obtener la data de coordinates
-    return this.storageService.getData('coordinates').pipe(
+    return this.storageService.getData('coordenates').pipe(
       switchMap(storedCoordinates => storedCoordinates
         ? of(JSON.parse(storedCoordinates)) // ya estaba guardada
         : from(Geolocation.getCurrentPosition()).pipe( // hay que calcularla
@@ -148,7 +147,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
                 latitude: pos.coords.latitude,
                 longitude: pos.coords.longitude
               };
-              return this.storageService.saveData('coordinates', JSON.stringify(coordinates)).pipe(
+              return this.storageService.saveData('coordenates', JSON.stringify(coordinates)).pipe(
                 map(() => coordinates) // Retorna las coordenadas guardadas
               );
             })
@@ -181,7 +180,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   onSelectDate(fecha: string, event?: MatOptionSelectionChange): void {
     if (!event?.isUserInput) { return; }          // ignorar cambios programáticos
 
-    this.getCoordinates()                          // ← ya devuelve la región (de storage o geo)
+    this.getCoordenates()                          // ← ya devuelve la región (de storage o geo)
       .pipe(
         switchMap(resp =>
           this.movieService

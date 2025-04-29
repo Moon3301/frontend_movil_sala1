@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environments } from '../environments/environments';
-import { IUbication } from './common/interfaces';
+import { IRegion, IUbication } from './common/interfaces';
 import { catchError, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
@@ -46,10 +46,13 @@ export class AppComponent implements OnInit{
     }
 
     Geolocation.getCurrentPosition().then((position) => {
-      position.coords.latitude;
-      position.coords.longitude;
 
-      this.storageService.saveData('coordinates', JSON.stringify(position.coords)).subscribe({
+      const coordenates = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }
+
+      this.storageService.saveData('coordenates', JSON.stringify(coordenates)).subscribe({
         next: () => console.log('Coordenadas guardadas en el almacenamiento local'),
         error: (error) => console.error('Error al guardar coordenadas:', error)
       })
@@ -67,8 +70,6 @@ export class AppComponent implements OnInit{
       tap(() => {
         console.log('Ubicación obtenida y guardada')
         // Neesito almacenar un valor por defecto si el usuario no permite el acceso a la ubicacion
-
-
       }
 
     ),
@@ -81,18 +82,6 @@ export class AppComponent implements OnInit{
         return of(null); // Evita que el Observable se rompa
       })
     ).subscribe();
-
-    // this.storageService.getData("user_ubication").subscribe(value => {
-    //   if(!value){
-    //     this.getUserLocationANDROID();
-    //   }
-    // })
-
-    // this.authService.checkAuthentication()
-    // .subscribe( ()=>{
-    //   console.log('CheckAuthentication finished');
-    //   }
-    // )
 
   }
 
@@ -111,11 +100,12 @@ export class AppComponent implements OnInit{
       switchMap((position) => {
         const { latitude: lat, longitude: lng } = position.coords;
         // Llamada a la API que, dado lat/lng, devuelve un Observable con la ubicación
-        return this.getUbicationByGeoCode(lat, lng);
+
+        return this.sharedService.getUbicationByServer(lat.toString(), lng.toString());
       }),
       switchMap(response => {
         // Guardar la ubicación real en storage
-        return this.storageService.saveData('user_ubication', response.address.state).pipe(
+        return this.storageService.saveData('user_ubication', response.name).pipe(
           // Encadena y retorna la ubicación guardada
           switchMap(() => this.storageService.getData('user_ubication'))
         );
@@ -142,48 +132,6 @@ export class AppComponent implements OnInit{
     );
   }
 
-
-  // async getUserLocationANDROID() {
-  //   try {
-  //     // 1) Verifica permisos (opcional pero recomendado)
-  //     const permissions = await Geolocation.checkPermissions();
-  //     if (permissions.location === 'denied') {
-  //       // Solicita permiso si está denegado
-  //       await Geolocation.requestPermissions();
-  //     }
-
-  //     // 2) Obtén la posición actual
-  //     const position = await Geolocation.getCurrentPosition();
-
-  //     // 3) Extrae lat/lng
-  //     const lat = position.coords.latitude;
-  //     const lng = position.coords.longitude;
-
-  //     // 4) Llamas a tu API (exactamente como antes)
-  //     this.getUbicationByGeoCode(lat, lng).subscribe(response => {
-
-  //       // Guarda la ubicación en el almacenamiento local o en la sesión según sea necesario
-  //       this.storageService.saveData("user_ubication", response.address.state).pipe(
-  //         switchMap(() => {
-  //           // Una vez guardado, obtén la ubicación
-  //           return this.storageService.getData('user_ubication');
-  //         })
-  //       ).subscribe({
-  //         next: (resp) => {
-  //           console.log('Ubicación guardada en el almacenamiento local', response.address.state);
-  //         },
-  //         error: (error) => {
-  //           console.error('Error al guardar ubicación:', error);
-  //         }
-  //       })
-
-  //     });
-
-  //   } catch (error) {
-  //     console.error('Error al obtener ubicación:', error);
-  //   }
-  // }
-
   async getUserLocationWEB(){
 
     navigator.geolocation.getCurrentPosition(
@@ -191,19 +139,23 @@ export class AppComponent implements OnInit{
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
-        this.getUbicationByGeoCode(lat, lng).subscribe(response => {
-          sessionStorage.setItem("user_ubication",response.address.state)
+        this.sharedService.getUbicationByServer(lat.toString(), lng.toString()).subscribe(response => {
+          sessionStorage.setItem("user_ubication",response.name)
         })
       }
     )
   }
 
-  getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{
-    return this.http.get<IUbication>(`${environments.urlGeoCode}reverse?lat=${lat}&lon=${lng}&api_key=${environments.apiKeyGeoCode}`)
-  }
+  // getUbicationByServer(lat: string, lng: string): Observable<IRegion>{
+  //   return this.http.get<IRegion>(`${environments.baseUrl}/ubication/coordenates?latitude=${lat}&longitude=${lng}`)
+  // }
 
-  getAllRegions(): Observable<Region[]>{
-    return this.http.get<Region[]>(`${environments.baseUrl}/region`)
+  // getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{
+  //   return this.http.get<IUbication>(`${environments.urlGeoCode}reverse?lat=${lat}&lon=${lng}&api_key=${environments.apiKeyGeoCode}`)
+  // }
+
+  getAllRegions(): Observable<IRegion[]>{
+    return this.http.get<IRegion[]>(`${environments.baseUrl}/region`)
   }
 
   ngOnDestroy(): void {
