@@ -32,4 +32,18 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+  <!-- ② Ubicación -->
+  <!-- Precisa para Mapbox / cálculo de cines cercanos -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <!-- Opcional: si sólo necesitas aproximada -->
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+  <!-- ③ Notificaciones (Android 13 / API 33+) -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+  <!-- ④ Push (el plugin @capacitor/push-notifications la inserta,
+              pero la dejo aquí para claridad) -->
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
 </manifest>

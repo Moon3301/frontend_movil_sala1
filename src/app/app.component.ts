@@ -12,6 +12,7 @@ import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+import { AppVersionService } from './core/appVersion.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit{
     private readonly authService: AuthService,
     private storageService: StorageService,
     private sharedService: SharedService,
+    private appVersionService: AppVersionService
 
   ){}
 

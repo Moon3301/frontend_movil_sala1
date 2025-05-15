@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, OnInit, ChangeDetectorRef  } from '@angular/core';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { ICinema, ICines } from '../../interfaces/funciones.interface';
 import { Movie } from '../../interfaces/movie.interface';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {MatSelectModule} from '@angular/material/select';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MovieService } from '../../services/movie.service';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { MatOptionSelectionChange } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -216,7 +215,8 @@ export class ShowtimesComponent implements OnInit {
         severity: 'contrast',
         summary: `Redireccionando a ${cinema}`,
         detail: message,
-        life: this.timeRedirect + 100 }
+        life: this.timeRedirect + 100
+      }
     );
   }
 

@@ -9,16 +9,17 @@ import { AuthService } from '../auth/services/auth.service';
 import { PrimengModule } from '../primeng/primeng.module';
 import { SharedService } from './services/shared.service';
 import { mapBoxNearbyService } from './services/mapboxNearby.service';
+import { UpdateAppComponent } from './pages/update-app/update-app.component';
 
 @NgModule({
   providers:[
     mapBoxNearbyService
-
   ],
   declarations: [
     MenuComponent,
     Error404PageComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    UpdateAppComponent
   ],
   imports: [
     CommonModule,

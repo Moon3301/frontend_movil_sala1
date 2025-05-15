@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainLayoutComponent } from './shared/pages/main-layout/main-layout.component';
 import { authGuard } from './auth/guards/auth.guard';
 import { Error404PageComponent } from './shared/pages/error404-page/error404-page.component';
+import { UpdateAppComponent } from './shared/pages/update-app/update-app.component';
 
 const routes: Routes = [
 
@@ -27,14 +28,18 @@ const routes: Routes = [
         path: '', redirectTo: 'movies', pathMatch: 'full',
       },
     ]
-
   },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule)
   },
   {
-    path: 'error404', component: Error404PageComponent,
+    path: 'error404',
+    component: Error404PageComponent,
+  },
+  {
+    path: 'updateApp',
+    component: UpdateAppComponent
   },
   {
     path: '**', redirectTo: 'error404',

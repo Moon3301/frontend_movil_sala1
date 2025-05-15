@@ -14,6 +14,7 @@ import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MessageService } from 'primeng/api';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    SharedModule
+    SharedModule,
+    CoreModule
   ],
   providers: [
     MessageService,
@@ -40,6 +42,6 @@ import { MessageService } from 'primeng/api';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  
+
 })
 export class AppModule { }
