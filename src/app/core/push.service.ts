@@ -74,8 +74,6 @@ export class PushService {
     );
     });
 
-
-
     /* 4️⃣ notificación en foreground */
     PushNotifications.addListener(
       'pushNotificationReceived',
