@@ -16,7 +16,6 @@ import { Router } from '@angular/router';
 import { catchError, firstValueFrom, of } from 'rxjs';
 import { environments } from '../../environments/environments';
 
-
 interface DeviceDto {
   token: string;
   platform: 'ios' | 'android';
@@ -50,6 +49,10 @@ export class PushService {
     /* 2️⃣ registro */
     await PushNotifications.register();
 
+    PushNotifications.addListener('registrationError', err =>
+      console.error('[Push] registrationError', JSON.stringify(err, null, 2))
+    );
+
     /* 3️⃣ token → backend */
     PushNotifications.addListener('registration', async ({ value }: Token) => {
       console.info('[Push] token recibido', value);
@@ -70,6 +73,8 @@ export class PushService {
       ),
     );
     });
+
+
 
     /* 4️⃣ notificación en foreground */
     PushNotifications.addListener(
