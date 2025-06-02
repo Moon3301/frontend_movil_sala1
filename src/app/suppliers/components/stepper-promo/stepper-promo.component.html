@@ -1,0 +1,116 @@
+<mat-stepper [linear]="isLinear" #stepper class="mt-2">
+
+  <mat-step [stepControl]="firstStepperForm" label="Cines">
+    <hr>
+    <h4>Seleccione los cines que estaran en la promocion</h4>
+
+    <form [formGroup]="firstStepperForm">
+
+      <mat-selection-list #companies>
+        @for(company of supplier?.companies; track company){
+          <mat-list-option matRipple><span> {{company.name}}</span></mat-list-option>
+        }
+      </mat-selection-list>
+
+      <div class="d-flex justify-content-end mt-3">
+        <button mat-flat-button matStepperNext class="w-50">Next</button>
+      </div>
+    </form>
+
+  </mat-step>
+
+  <mat-step [stepControl]="secondStepperForm" label="Promo">
+    <hr>
+    <h4 class="text-center">Crear promocion</h4>
+
+    <form [formGroup]="secondStepperForm" class="mt-3" style="margin: 0 auto; text-align: center;">
+
+      <mat-form-field class="w-100">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Titulo</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Descripcion</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Cantidad promociones</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Descuento</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Codigo promocional</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Valido desde</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Valido hasta</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Peliculas en la promocion</mat-label>
+        <mat-select formControlName="secondCtrl" multiple>
+          @for (movie of movies; track movie.id) {
+            <mat-option [value]="movie.id">{{ movie.title }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="d-flex justify-content-between">
+        <button mat-stroked-button matStepperPrevious>Back</button>
+        <button mat-flat-button matStepperNext>Next</button>
+      </div>
+    </form>
+
+  </mat-step>
+
+  <mat-step [stepControl]="secondStepperForm" label="Enviar">
+    <hr>
+    <h4 class="text-center">Crear promocion</h4>
+
+    <form [formGroup]="secondStepperForm" class="mt-3" style="margin: 0 auto; text-align: center;">
+
+      <mat-form-field class="w-100">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Titulo</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Descripcion</mat-label>
+        <input matInput formControlName="secondCtrl" required>
+      </mat-form-field>
+
+      <div class="d-flex justify-content-between">
+        <button mat-stroked-button matStepperPrevious>Back</button>
+        <button mat-flat-button matStepperNext>Next</button>
+      </div>
+    </form>
+
+  </mat-step>
+
+
+
+</mat-stepper>

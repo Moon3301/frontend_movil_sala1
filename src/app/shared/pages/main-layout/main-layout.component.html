@@ -23,6 +23,11 @@
               Cuenta
             </mat-list-item>
 
+            <mat-list-item matRipple [routerLink]="['/suppliers']" (click)="drawer.toggle()">
+              <mat-icon matListItemIcon>badge</mat-icon>
+              Proveedores
+            </mat-list-item>
+
             @if(currentUser.role === 'Administrador'){
               <mat-list-item matRipple [routerLink]="['/administration']" (click)="drawer.toggle()">
                 <mat-icon matListItemIcon>shield_person</mat-icon>

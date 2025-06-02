@@ -21,6 +21,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
 
@@ -45,7 +46,8 @@ import {MatMenuModule} from '@angular/material/menu';
     MatTableModule,
     MatChipsModule,
     MatTabsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatStepperModule
 
   ]
 })

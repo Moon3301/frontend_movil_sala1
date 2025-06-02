@@ -1,0 +1,29 @@
+<mat-toolbar style="border: 1px solid black;">
+  <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
+    arrow_back_ios_new
+  </mat-icon>
+  <span class="ml-2">Cuenta de proveedor</span>
+</mat-toolbar>
+
+<div class="container mt-2">
+  <mat-list>
+    <mat-divider></mat-divider>
+    <mat-list-item matRipple [routerLink]="['/suppliers/account']">
+      <mat-icon matListItemIcon>manage_accounts</mat-icon>
+      <span matListItemTitle >Cuenta</span>
+      <span matListItemLine>Edita tu cuenta</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item matRipple [routerLink]="['/suppliers/promotions']">
+      <mat-icon matListItemIcon>campaign</mat-icon>
+      <span matListItemTitle >Promociones</span>
+      <span matListItemLine>Crea una nueva promocion para los usuarios</span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </mat-list>
+
+</div>
+
+<router-outlet/>
+
+

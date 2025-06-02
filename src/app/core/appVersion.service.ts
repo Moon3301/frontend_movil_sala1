@@ -35,6 +35,8 @@ export class AppVersionService {
 
   // app-version.service.ts
   check(): Promise<boolean | undefined> {
+    if(Capacitor.getPlatform() === 'web') { return Promise.resolve(true); } // no check in web
+
     return this.getInfo()                                       // Observable<{ current, platform }>
       .pipe(
         switchMap(({ current, platform }) =>

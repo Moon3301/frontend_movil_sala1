@@ -22,7 +22,12 @@ const routes: Routes = [
       },
       {
         path: 'account',
+        
         loadChildren: () => import('./users/users.module').then( m => m.UsersModule)
+      },
+      {
+        path: 'suppliers',
+        loadChildren:() => import('./suppliers/suppliers.module').then( m => m.SuppliersModule)
       },
       {
         path: '', redirectTo: 'movies', pathMatch: 'full',
