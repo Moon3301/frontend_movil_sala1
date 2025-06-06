@@ -6,7 +6,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
-import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -22,9 +21,11 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatTimepickerModule} from '@angular/material/timepicker';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
-
   exports: [
     CommonModule,
     MatCardModule,
@@ -47,8 +48,10 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatChipsModule,
     MatTabsModule,
     MatMenuModule,
-    MatStepperModule
-
+    MatStepperModule,
+    MatTimepickerModule,
+    MatDatepickerModule,
+    NgxMatSelectSearchModule
   ]
 })
 export class MaterialModule { }

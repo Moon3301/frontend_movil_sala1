@@ -9,7 +9,6 @@ import { Movie } from '../../interfaces/movie.interface';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MovieService } from '../../services/movie.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -55,8 +54,6 @@ export class ShowtimesComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ShowtimesComponent>,
-    private movieService: MovieService,
-    private cdr: ChangeDetectorRef,
     private messageService: MessageService,
     @Inject(MAT_DIALOG_DATA) public data: { showtimes: ICinema[], movie: Movie, dates: string[], cinema: string },
   ){}

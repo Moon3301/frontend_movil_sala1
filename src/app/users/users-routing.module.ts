@@ -2,19 +2,31 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { AccountPageComponent } from './pages/account-page/account-page.component';
+import { PreferencesComponent } from './pages/preferences/preferences.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutPageComponent,
-    children: [
+  },
+  {
+    path: 'account',
+    component: AccountPageComponent,
+  },
+  {
+    path: 'preferences',
+    component: PreferencesComponent,
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
+  {
+    path: '',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
 
-      { path: 'account-page', component: AccountPageComponent },
-
-      { path: '**', redirectTo: 'account-page' }
-
-    ]
-  }
 ];
 
 @NgModule({

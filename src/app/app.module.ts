@@ -15,6 +15,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
 import { CoreModule } from './core/core.module';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -25,10 +26,12 @@ import { CoreModule } from './core/core.module';
     AppRoutingModule,
     NgbModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    
   ],
   providers: [
     MessageService,
+    provideNativeDateAdapter(),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
     providePrimeNG({

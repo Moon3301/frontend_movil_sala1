@@ -1,4 +1,33 @@
-<div>
-  <router-outlet/>
+<mat-toolbar style="border: 1px solid black;">
+  <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
+    arrow_back_ios_new
+  </mat-icon>
+  <span class="ml-2">Cuenta de Usuario</span>
+</mat-toolbar>
+
+
+<div class="container mt-2">
+
+  <mat-list>
+    <mat-divider></mat-divider>
+
+    <mat-list-item matRipple [routerLink]="['/users/preferences']">
+      <mat-icon matListItemIcon>manage_accounts</mat-icon>
+      <span matListItemTitle >Preferencias</span>
+      <span matListItemLine>Configura tus preferencias</span>
+    </mat-list-item>
+
+    <mat-list-item matRipple [routerLink]="['/users/promotions']">
+      <mat-icon matListItemIcon>manage_accounts</mat-icon>
+      <span matListItemTitle >Promociones</span>
+      <span matListItemLine>Configura tus preferencias</span>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+  </mat-list>
 </div>
 
+
+
+
+<router-outlet></router-outlet>

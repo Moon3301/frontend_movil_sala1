@@ -8,21 +8,20 @@ import { StepperPromoComponent } from './components/stepper-promo/stepper-promo.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PromotionsPageComponent } from './pages/promotions-page/promotions-page.component';
 
-
-
 @NgModule({
   declarations: [
     LayoutPageComponent,
     AccountSupplierComponent,
     StepperPromoComponent,
-    PromotionsPageComponent
+    PromotionsPageComponent,
   ],
   imports: [
     CommonModule,
     SuppliersRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    
   ]
 })
 export class SuppliersModule { }

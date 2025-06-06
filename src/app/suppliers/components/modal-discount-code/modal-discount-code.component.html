@@ -1,0 +1,48 @@
+<mat-dialog-actions style="border: 1px solid grey;">
+  <button mat-icon-button (click)="onClose()"><mat-icon>close</mat-icon></button>
+</mat-dialog-actions>
+
+<mat-dialog-content>
+  <h2 class="text-center mb-4">Agregar codigo promocional</h2>
+  <form [formGroup]="formCode">
+
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Cantidad de usos por codigo</mat-label>
+      <input type="number" min="0"  matInput formControlName="uses" required>
+    </mat-form-field>
+
+    <p style="font-weight: bold;">Cantidad de codigos agregados: {{codes.length}}</p>
+    <div class="d-flex justify-content-between">
+      <mat-form-field appearance="outline" class="w-75">
+        <mat-label>Codigo</mat-label>
+        <textarea matInput formControlName="code"></textarea>
+      </mat-form-field>
+      <button style="height: 75px; width: 23%;" mat-fab (click)="addBulkCodes()"><mat-icon>add</mat-icon></button>
+    </div>
+
+    @if(codes.length > 0){
+      <mat-card>
+        <mat-list style="overflow-y: scroll; max-height: 60%;">
+          <div mat-subheader>Lista de codigos agregados</div>
+          <mat-divider></mat-divider>
+          @for(code of codes; track code){
+            <mat-list-item>
+              <b>{{code}}</b>
+              <mat-icon matListItemIcon (click)="removeCode(code)">delete</mat-icon>
+            </mat-list-item>
+          }
+        </mat-list>
+      </mat-card>
+    }
+
+    <br>
+
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button mat-button (click)="onClose()">Cancelar</button>
+  <button mat-button (click)="onSave()">Guardar</button>
+</mat-dialog-actions>

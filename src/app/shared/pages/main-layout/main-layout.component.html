@@ -18,15 +18,17 @@
           <mat-divider class="mt-2 w-100"></mat-divider>
 
           <mat-list>
-            <mat-list-item matRipple [routerLink]="['/account']" (click)="drawer.toggle()">
+            <mat-list-item matRipple [routerLink]="['/users']" (click)="drawer.toggle()">
               <mat-icon matListItemIcon>settings</mat-icon>
               Cuenta
             </mat-list-item>
 
-            <mat-list-item matRipple [routerLink]="['/suppliers']" (click)="drawer.toggle()">
-              <mat-icon matListItemIcon>badge</mat-icon>
-              Proveedores
-            </mat-list-item>
+            @if(currentUser.role === 'Proveedor' || currentUser.role === 'Administrador'){
+              <mat-list-item matRipple [routerLink]="['/suppliers']" (click)="drawer.toggle()">
+                <mat-icon matListItemIcon>badge</mat-icon>
+                Proveedores
+              </mat-list-item>
+            }
 
             @if(currentUser.role === 'Administrador'){
               <mat-list-item matRipple [routerLink]="['/administration']" (click)="drawer.toggle()">

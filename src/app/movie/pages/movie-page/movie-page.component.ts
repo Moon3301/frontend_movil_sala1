@@ -53,7 +53,6 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     private storageService: StorageService,
     private cdr: ChangeDetectorRef,
     private location: Location,
-    private viewportScroller: ViewportScroller,
 
   ){}
   ngAfterViewInit() {

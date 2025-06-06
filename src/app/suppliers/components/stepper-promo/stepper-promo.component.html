@@ -1,111 +1,181 @@
-<mat-stepper [linear]="isLinear" #stepper class="mt-2">
+<mat-stepper [linear]="isLinear" #stepper class="mt-2" >
 
-  <mat-step [stepControl]="firstStepperForm" label="Cines">
+  <mat-step [stepControl]="firstStepperForm" label="Cines" errorMessage="Seleccione al menos un cine">
+
     <hr>
     <h4>Seleccione los cines que estaran en la promocion</h4>
 
     <form [formGroup]="firstStepperForm">
 
-      <mat-selection-list #companies>
+      <mat-selection-list #companies formControlName="firstCtrl" required>
         @for(company of supplier?.companies; track company){
-          <mat-list-option matRipple><span> {{company.name}}</span></mat-list-option>
+          <mat-list-option [value]="company.name" matRipple> <span> {{company.name}}</span></mat-list-option>
         }
       </mat-selection-list>
 
       <div class="d-flex justify-content-end mt-3">
-        <button mat-flat-button matStepperNext class="w-50">Next</button>
+        <button (click)="step2()" [disabled]="firstStepperForm.invalid" mat-flat-button matStepperNext class="w-50">Next</button>
       </div>
+
     </form>
 
   </mat-step>
 
   <mat-step [stepControl]="secondStepperForm" label="Promo">
+
     <hr>
     <h4 class="text-center">Crear promocion</h4>
 
-    <form [formGroup]="secondStepperForm" class="mt-3" style="margin: 0 auto; text-align: center;">
+    <form [formGroup]="secondStepperForm" class="mt-3" style="margin: 0 auto;">
 
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100" appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput formControlName="secondCtrl" required>
+        <input type="text" matInput formControlName="nombre" required>
       </mat-form-field>
 
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100" appearance="outline">
         <mat-label>Titulo</mat-label>
-        <input matInput formControlName="secondCtrl" required>
+        <input type="text" matInput formControlName="titulo" required>
       </mat-form-field>
 
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100" appearance="outline">
         <mat-label>Descripcion</mat-label>
-        <input matInput formControlName="secondCtrl" required>
+        <input type="text"  matInput formControlName="descripcion" required>
       </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <mat-label>Cantidad promociones</mat-label>
-        <input matInput formControlName="secondCtrl" required>
-      </mat-form-field>
-
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100" appearance="outline">
         <mat-label>Descuento</mat-label>
-        <input matInput formControlName="secondCtrl" required>
+
+        <input type="number" matInput formControlName="descuento" required>
+        <mat-icon matSuffix>percent</mat-icon>
       </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <mat-label>Codigo promocional</mat-label>
-        <input matInput formControlName="secondCtrl" required>
-      </mat-form-field>
+      <div class="d-flex justify-content-center mb-3">
 
-      <mat-form-field class="w-100">
-        <mat-label>Valido desde</mat-label>
-        <input matInput formControlName="secondCtrl" required>
-      </mat-form-field>
+        <button mat-flat-button  (click)="openModalDiscount()">Agregar codigo promocional</button>
 
-      <mat-form-field class="w-100">
-        <mat-label>Valido hasta</mat-label>
-        <input matInput formControlName="secondCtrl" required>
-      </mat-form-field>
+      </div>
 
-      <mat-form-field class="w-100">
-        <mat-label>Peliculas en la promocion</mat-label>
-        <mat-select formControlName="secondCtrl" multiple>
-          @for (movie of movies; track movie.id) {
-            <mat-option [value]="movie.id">{{ movie.title }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      @if(codesPromotion().length > 0){
+        <div class="mb-3 mt-3">
+          <mat-card style="overflow-y: scroll; max-height: 15em;">
+            <mat-list>
+              <div mat-subheader>Lista de codigos agregados</div>
+              <mat-divider></mat-divider>
+              <mat-list-item *ngFor="let code of codesPromotion()">
+                <b>{{code}}</b>
+              </mat-list-item>
+            </mat-list>
+          </mat-card>
+        </div>
+      }
+
+      <div class="d-flex justify-content-between align-items-center">
+
+        <mat-form-field appearance="outline" style="width: 48%">
+          <mat-label>Valido desde</mat-label>
+          <input formControlName="validoDesde" [min]="minDate" matInput (click)="pickerDateFrom.open()" [matDatepicker]="pickerDateFrom">
+          <mat-datepicker-toggle matIconSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #pickerDateFrom></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 48%">
+          <mat-label>Valido hasta</mat-label>
+          <input formControlName="validoHasta" [min]="minDate" matInput (click)="pickerDateTo.open()" [matDatepicker]="pickerDateTo">
+          <mat-datepicker-toggle matIconSuffix [for]="pickerDateTo"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #pickerDateTo></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!-- un bloque por compañía -->
+      <div formArrayName="companias" *ngFor="let group of companiasFA.controls; let i = index">
+
+        <!-- ② UN solo formGroupName por fila -->
+        <ng-container [formGroupName]="i">
+
+          <mat-divider class="mb-2"></mat-divider>
+          <h4>{{ group.value.company }}</h4>
+
+          <!-- ③ NO vuelvas a poner [formGroupName]="i" aquí -->
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Cines disponibles</mat-label>
+
+            <mat-select formControlName="cines" multiple>
+
+              <!-- opción «todos» -->
+              <mat-option value="__todos__"
+                          (onSelectionChange)="selectAllCinemas($event, i)">
+                Todos los cines
+              </mat-option>
+
+              <mat-option *ngFor="let c of cinemas_list[i].cines"
+                          [value]="c.id">
+                {{ c.name }}
+              </mat-option>
+
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Películas en la promoción</mat-label>
+            <mat-select formControlName="movies" multiple>
+              <mat-option value="__todos__"
+                          (onSelectionChange)="selectAllMovies($event, i)">
+                Todas las películas
+              </mat-option>
+              <mat-option *ngFor="let m of cinemas_list[i].movies"
+                          [value]="m.id">
+                {{ m.title }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </ng-container>
+      </div>
 
       <div class="d-flex justify-content-between">
         <button mat-stroked-button matStepperPrevious>Back</button>
-        <button mat-flat-button matStepperNext>Next</button>
+        <button mat-flat-button matStepperNext [disabled]="secondStepperForm.invalid">Next</button>
       </div>
     </form>
 
   </mat-step>
 
-  <mat-step [stepControl]="secondStepperForm" label="Enviar">
+  <mat-step [stepControl]="threeStepperForm" label="Enviar">
     <hr>
-    <h4 class="text-center">Crear promocion</h4>
+    <h4 class="text-center">Enviar a traves de </h4>
 
-    <form [formGroup]="secondStepperForm" class="mt-3" style="margin: 0 auto; text-align: center;">
+    <form [formGroup]="threeStepperForm" class="mt-3">
 
-      <mat-form-field class="w-100">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="secondCtrl" required>
+      <mat-selection-list #companies formControlName="sendType">
+        @for(option of optionsSend; track option){
+          <mat-list-option  [value]="option" matRipple> <span> {{option}}</span></mat-list-option>
+        }
+      </mat-selection-list>
+
+      <mat-divider class="mb-3"></mat-divider>
+      <h6 class="mb-2">Programe una fecha para enviar la promocion</h6>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Fecha</mat-label>
+        <input [matDatepickerFilter]="dateFilter" formControlName="dateSend" matInput (click)="pickerDate.open()" [matDatepicker]="pickerDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerDate"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDate></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <mat-label>Titulo</mat-label>
-        <input matInput formControlName="secondCtrl" required>
-      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Hora</mat-label>
 
-      <mat-form-field class="w-100">
-        <mat-label>Descripcion</mat-label>
-        <input matInput formControlName="secondCtrl" required>
+        <input  formControlName="timeSend" [min]="secondStepperForm.value.validoDesde"
+        [max]="secondStepperForm.value.validoHasta" matInput [matTimepicker]="pickerTime">
+
+        <mat-timepicker-toggle matIconSuffix [for]="pickerTime"/>
+        <mat-timepicker #pickerTime/>
+
       </mat-form-field>
 
       <div class="d-flex justify-content-between">
         <button mat-stroked-button matStepperPrevious>Back</button>
-        <button mat-flat-button matStepperNext>Next</button>
+        <button mat-flat-button matStepperNext [disabled]="threeStepperForm.invalid" (click)="onSubmit()">Next</button>
       </div>
     </form>
 
@@ -114,3 +184,6 @@
 
 
 </mat-stepper>
+
+
+
