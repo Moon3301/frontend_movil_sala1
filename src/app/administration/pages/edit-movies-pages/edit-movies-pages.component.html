@@ -1,90 +1,94 @@
-@for(movie of dataSource; track movie){
+<mat-toolbar style="border: 1px solid gray; background-color: black; position: sticky; top: 0; z-index: 100;">
+  <mat-icon style="font-size: 20px; font-weight: bold; color: white;" [routerLink]="['/administration']">
+    arrow_back_ios_new
+  </mat-icon>
+</mat-toolbar>
 
-  <mat-card matRipple style="background-color: whitesmoke; width: 100%;" (click)="showDialog(movie)">
-    <mat-card-content>
-      <div class="row">
-        <div class="col-4">
-          <img [src]="movie.img_url" width="100px">
-        </div>
+<div class="container mt-3">
+  <h3 class="text-center mb-4">Cartelera de películas</h3>
+  @for(movie of dataSource; track movie){
 
-        <div class="col-8">
-
-          <div class="row">
-            <div class="col-3">
-              No.
-            </div>
-            <div class="col-9">
-              {{movie.id}}
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-3">
-              Titulo:
-            </div>
-            <div class="col-9">
-              {{movie.title}}
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-3">
-              Rating:
-            </div>
-            <div class="col-9">
-              {{movie.rating}}
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-3">
-              Tipo:
-            </div>
-            <div class="col-9">
-              {{movie.screen_type}}
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <br>
-      <div style="border: 1px solid black; border-radius: 20px; padding: 15px;">
+    <mat-card matRipple style="background-color: whitesmoke; width: 100%;" (click)="showDialog(movie)">
+      <mat-card-content>
         <div class="row">
-          <div class="col-5">
-            <h6>Titulo Sinopsis:</h6>
+          <div class="col-4">
+            <img [src]="movie.img_url" width="100px">
           </div>
-
-          <div class="col-7">
-            {{movie.synopsis_alt}}
+  
+          <div class="col-8">
+  
+            <div class="row">
+              <div class="col-3">
+                ID:
+              </div>
+              <div class="col-9">
+                {{movie.id}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-3">
+                Titulo:
+              </div>
+              <div class="col-9">
+                {{movie.title}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-3">
+                Rating:
+              </div>
+              <div class="col-9">
+                {{movie.rating}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-3">
+                Tipo:
+              </div>
+              <div class="col-9">
+                {{movie.screen_type}}
+              </div>
+            </div>
+  
           </div>
-
         </div>
-
-        <div class="row">
-          <h6>Sinopsis</h6>
-          <div class="col-12">
-            {{movie.synopsis}}
+  
+        <br>
+        <div style="border: 1px solid black; border-radius: 20px; padding: 15px;">
+          <div class="row">
+            <div class="col-5">
+              <h6>Titulo:</h6>
+            </div>
+  
+            <div class="col-7">
+              {{movie.synopsis_alt}}
+            </div>
+  
+          </div>
+  
+          <div class="row">
+            <h6>Sinopsis</h6>
+            <div class="col-12" style="height: 100px; overflow-y: auto;">
+              {{movie.synopsis}}
+            </div>
           </div>
         </div>
-      </div>
+  
+      </mat-card-content>
+    </mat-card>
+    <br>
+  
+  }
 
-    </mat-card-content>
-  </mat-card>
-  <br>
-
-}
-
-<p-dialog header="Editar Pelicula" appendTo="body" [blockScroll]="true" [modal]="true" [(visible)]="visible" [style]="{ width: '40rem' }">
-
-  <div class="container">
-    <div class="row">
-
-    </div>
-  </div>
+</div>
 
 
-  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()" class="p-fluid">
+<p-dialog header="Editar Pelicula" appendTo="body" [draggable]="false" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [resizable]="false" [modal]="true" [(visible)]="visible" [style]="{ width: '90vw' }" [contentStyle]="{ 'max-height': '80vh', 'overflow-y': 'auto' }">
+
+  <form [formGroup]="editForm" (ngSubmit)="onChangesInput()" style="overflow-y: auto; height: 100%;">
 
     <div>
       <span class="p-text-secondary block mb-8">Titulo</span>
@@ -122,12 +126,9 @@
       </div>
     </div>
 
-
-
-
     <div class="flex justify-end gap-2">
       <p-button type="button" label="Cancelar" severity="secondary" (click)="visible = false" />
-      <p-button (click)="onChangesInput()" type="submit" label="Actualizar" (click)="visible = false" />
+      <p-button (click)="onChangesInput()" type="submit" label="Actualizar" />
     </div>
   </form>
 

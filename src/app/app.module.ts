@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +17,8 @@ import { MessageService } from 'primeng/api';
 import { CoreModule } from './core/core.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
+// import { Appsflyer } from '@awesome-cordova-plugins/appsflyer/ngx';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,21 +29,23 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     NgbModule,
     SharedModule,
     CoreModule,
-    
+
   ],
   providers: [
     MessageService,
+    //Appsflyer,
     provideNativeDateAdapter(),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
     providePrimeNG({
       theme: {
         preset: Aura,
-
+        options: {
+          darkModeSelector: false || 'none'
+        }
       },
 
     }),
-
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

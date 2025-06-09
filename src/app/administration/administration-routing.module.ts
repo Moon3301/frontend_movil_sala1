@@ -13,15 +13,32 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutPageComponent,
-    children: [
-      { path: 'edit-carrusel', component: EditCarruselPageComponent},
-      { path: 'edit-movies', component: EditMoviesPagesComponent},
-      { path: 'update-records', component: UpdateRecordsPageComponent},
-      { path: 'adm', component: AdministrationPageComponent },
-      { path: '**', redirectTo: 'edit-carrusel'},
-
-    ]
-  }
+  },
+  {
+    path: 'adm',
+    component: AdministrationPageComponent, 
+  },
+  {
+    path: 'edit-carrusel',
+    component: EditCarruselPageComponent,
+  },
+  {
+    path: 'edit-movies',
+    component: EditMoviesPagesComponent,
+  },
+  {
+    path: 'update-records',
+    component: UpdateRecordsPageComponent,
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
+  {
+    path: '',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
 
 ];
 

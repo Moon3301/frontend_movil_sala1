@@ -135,7 +135,7 @@ export class EditMoviesPagesComponent implements OnInit{
     //     console.log('Ocurrio un error al actualizar la img.', error);
     //   }
     // })
-
+    this.visible = false;
   }
 
   getAllMovies(){

@@ -1,42 +1,46 @@
-<p-card header="Editar carrusel de películas" class="mt-5 mb-5">
+<mat-toolbar style="border: 1px solid gray; background-color: black; position: sticky; top: 0; z-index: 100;">
+  <mat-icon style="font-size: 20px; font-weight: bold; color: white;" [routerLink]="['/administration']">
+    arrow_back_ios_new
+  </mat-icon>
+</mat-toolbar>
 
-  <div class="container">
+<div class="container mt-3">
+  <h4 class="text-center">Lista de películas en carrusel</h4>
+  <div class="row mt-4">
+    <!-- Columna PickList -->
+    <div class="col-12 col-md-12 mb-3">
+      <p-pickList
+        [source]="listMovies"
+        [target]="listUpdates"
+        [dragdrop]="true"
+        [responsive]="true"
+        [disabled]="loading"
+        breakpoint="500px"
+        (onMoveToTarget)="onMoveToTarget($event)"
+        (onMoveToSource)="onMoveToSource($event)"
+        (onTargetReorder)="upPositionPoster($event)"
 
-    <div class="row">
-      <!-- Columna PickList -->
-      <div class="col-12 col-md-12 mb-3">
-        <p-pickList
-          [source]="listMovies"
-          [target]="listUpdates"
-          [dragdrop]="true"
-          [responsive]="true"
-          [disabled]="loading"
-          breakpoint="500px"
-          (onMoveToTarget)="onMoveToTarget($event)"
-          (onMoveToSource)="onMoveToSource($event)"
-          (onTargetReorder)="upPositionPoster($event)"
-
-        >
-          <ng-template let-item pTemplate="item">
-            <div
-              class="item-container"
-              [ngClass]="{ 'existing-item': existingIds.has(item.externalMovieId) }"
-            >
-              <p>{{ item.title_snapshoot }}</p>
-              <i
-                *ngIf="existingIds.has(item.externalMovieId)"
-                class="pi pi-exclamation-circle"
-                title="Ya existe en el carrusel"
-              ></i>
-            </div>
-          </ng-template>
-        </p-pickList>
-      </div>
-
+      >
+        <ng-template let-item pTemplate="item">
+          <div
+            class="item-container"
+            [ngClass]="{ 'existing-item': existingIds.has(item.externalMovieId) }"
+          >
+            <p>{{ item.title_snapshoot }}</p>
+            <i
+              *ngIf="existingIds.has(item.externalMovieId)"
+              class="pi pi-exclamation-circle"
+              title="Ya existe en el carrusel"
+            ></i>
+          </div>
+        </ng-template>
+      </p-pickList>
     </div>
 
   </div>
-</p-card>
+
+</div>
+
 <hr>
 <p-card header="Editar carrusel de películas" class="mt-5 mb-5">
   <div class="container">

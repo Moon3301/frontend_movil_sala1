@@ -1,18 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { environments } from '../environments/environments';
-import { IRegion, IUbication } from './common/interfaces';
+import { IRegion } from './common/interfaces';
 import { catchError, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { StorageService } from './storage/storage.service';
-import PullToRefresh from 'pulltorefreshjs';
-import { pullToRefreshCss } from './shared/pages/main-layout/pull-to-refresh-css';
-import { StatusBar, Style } from '@capacitor/status-bar';
+import { StatusBar } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
-import { AppVersionService } from './core/appVersion.service';
+import { AdvertisingId } from '@capacitor-community/advertising-id';
 
 @Component({
   selector: 'app-root',
@@ -27,19 +25,21 @@ export class AppComponent implements OnInit{
 
   ptrInstance: any;
 
+  window: any;
+
   constructor(
     private readonly http: HttpClient,
     private readonly authService: AuthService,
     private storageService: StorageService,
     private sharedService: SharedService,
-    private appVersionService: AppVersionService
+    
+  ){
+    
+  }
 
-  ){}
-
-  ngOnInit(): void {
+  async ngOnInit(){
 
     if(Capacitor.getPlatform() === 'ios'){
-      // document.body.classList.add('ios-device');
       StatusBar.setOverlaysWebView({ overlay: false });
     }
 
@@ -84,6 +84,26 @@ export class AppComponent implements OnInit{
         return of(null); // Evita que el Observable se rompa
       })
     ).subscribe();
+    
+    if(Capacitor.getPlatform() !== 'web'){
+
+      if(Capacitor.getPlatform() === 'ios'){
+
+        document.addEventListener('deviceready', async () => {
+  
+          // 1. Pide permiso al usuario
+          const { value: status } = await AdvertisingId.requestTracking();
+          console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
+        
+          // 2. Lee el identificador (IDFA) — devuelve '00000000-…' si no está autorizado
+          const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
+          console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
+        });  
+      }
+      
+      console.log('Iniciando SDK AppsFlyer')
+      this.initSdkAppsFlyer(); 
+    }
 
   }
 
@@ -165,6 +185,27 @@ export class AppComponent implements OnInit{
     if (this.ptrInstance) {
       this.ptrInstance.destroy();
     }
+  }
+
+  async initSdkAppsFlyer(){
+
+    await AdvertisingId.requestTracking();
+
+    const opts: any = {
+      devKey:   environments.appsFlyerDevKey,   
+      appId:    environments.appleAppId,        
+      isDebug: environments.isDebug,
+      onInstallConversionDataListener: environments.onInstallConversionDataListener
+    };
+
+    const { Appsflyer } = await import('@awesome-cordova-plugins/appsflyer/ngx');
+
+    const af = new Appsflyer()
+    
+    af.initSdk(opts)
+      .then((res: any) => console.log('[AF] OK', res))
+      .catch((err: any) => console.error('[AF] ERROR', err));
+
   }
 
 

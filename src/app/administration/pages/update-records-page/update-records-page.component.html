@@ -1,29 +1,35 @@
+<mat-toolbar style="border: 1px solid gray; background-color: black; position: sticky; top: 0; z-index: 100;">
+  <mat-icon style="font-size: 20px; font-weight: bold; color: white;" [routerLink]="['/administration']">
+    arrow_back_ios_new
+  </mat-icon>
+</mat-toolbar>
+
 <div style="margin-bottom: 100%;">
   <p-card header="Actualizacion de registros">
     <hr>
     <div class="row mb-3">
-      <div class="col" style="align-items: center; display: flex; font-size: 1.2rem;">
-        Actualizar registros Cinemark
+      <div class="col-8" style="align-items: center; display: flex; font-size: 1.2rem; ">
+        Actualizar Cinemark
       </div>
-      <div class="col">
+      <div class="col-4">
         <p-button (click)="updateRecordsCinemark()" label="UPDATE" [disabled]="isUpdating" />
       </div>
     </div>
 
     <div class="row mt-3" >
-      <div class="col" style="align-items: center; display: flex; font-size: 1.2rem;">
-        Actualizar registros Cinepolis
+      <div class="col-8" style="align-items: center; display: flex; font-size: 1.2rem;">
+        Actualizar Cinepolis
       </div>
-      <div class="col">
+      <div class="col-4">
         <p-button (click)="updateRecordsCinepolis()" label="UPDATE" [disabled]="isUpdating" />
       </div>
     </div>
 
     <div class="row mt-3" >
-      <div class="col" style="align-items: center; display: flex; font-size: 1.2rem;">
-        Actualizar registros Cineplanet
+      <div class="col-8" style="align-items: center; display: flex; font-size: 1.2rem;">
+        Actualizar Cineplanet
       </div>
-      <div class="col">
+      <div class="col-4">
         <p-button (click)="updateRecordsCineplanet()" label="UPDATE" [disabled]="isUpdating" />
       </div>
     </div>

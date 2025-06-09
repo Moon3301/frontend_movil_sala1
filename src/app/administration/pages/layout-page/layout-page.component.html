@@ -1,18 +1,33 @@
-<mat-toolbar style="border: 1px solid black;">
-  <mat-icon style="font-size: 20px; font-weight: bold;" [routerLink]="['/movies']">
+<mat-toolbar style="border: 1px solid gray; background-color: black; position: sticky; top: 0; z-index: 100;">
+  <mat-icon style="font-size: 20px; font-weight: bold; color: white;" [routerLink]="['/movies']">
     arrow_back_ios_new
   </mat-icon>
 </mat-toolbar>
 
-<div class="container">
+<div class="container mt-2">
+
   <mat-list>
-    <mat-list-item matRipple role="listitem" [routerLink]="['edit-carrusel']">Editar Carrusuel</mat-list-item>
-    <mat-list-item matRipple role="listitem" [routerLink]="['edit-movies']">Editar peliculas</mat-list-item>
-    <mat-list-item matRipple role="listitem" [routerLink]="['update-records']">Actualizar registros</mat-list-item>
-    
+
+    <mat-list-item matRipple [routerLink]="['/administration/edit-carrusel']">
+      <mat-icon matListItemIcon>fact_check</mat-icon>
+      <span matListItemTitle >Editar Carrusel</span>
+      <span matListItemLine>Configura el carrusel</span>
+    </mat-list-item>
+
+    <mat-list-item matRipple [routerLink]="['/administration/edit-movies']">
+      <mat-icon matListItemIcon>theaters</mat-icon>
+      <span matListItemTitle >Editar Películas</span>
+      <span matListItemLine>Edita las propiedades de las películas</span>
+    </mat-list-item>
+
+    <mat-list-item matRipple [routerLink]="['/administration/update-records']">
+      <mat-icon matListItemIcon>sync</mat-icon>
+      <span matListItemTitle >Actualizar Registros</span>
+      <span matListItemLine>Actualiza los registros de la cartelera</span>
+    </mat-list-item>
+
   </mat-list>
-  <hr>
-  <router-outlet/>
 </div>
 
 
+<router-outlet></router-outlet>

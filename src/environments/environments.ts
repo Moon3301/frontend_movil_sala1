@@ -7,6 +7,10 @@ export const environments = {
   mapbox: {
     accessToken: 'sk.eyJ1IjoiY2FjZXZlZG8yMDI1IiwiYSI6ImNtOXRmamtvZTBheWwycG90MXdqYzNmNGQifQ.l4e1bW-B5naVCDetnCY9IA',
     tilesetId: 'cacevedo2025.dg05gwba'
-  }
+  },
+  appsFlyerDevKey: 'EsNNyjFo8bgdosw4c2iHbf',
+  appleAppId: '6743873715',
+  isDebug: true,
+  onInstallConversionDataListener: true,
 
 }
