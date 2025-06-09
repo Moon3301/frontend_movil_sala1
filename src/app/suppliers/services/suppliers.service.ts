@@ -42,7 +42,7 @@ export class SuppliersService {
   }
 
   createPromotion(promotion: Promotion){
-    return this.http.post<Promotion>(`${environments.baseUrl}/suppliers/promotion`, promotion)
+    return this.http.post<Promotion>(`${environments.baseUrl}/promotions`, promotion)
   }
 
 
