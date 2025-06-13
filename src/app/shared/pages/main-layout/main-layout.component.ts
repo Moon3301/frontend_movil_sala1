@@ -7,8 +7,6 @@ import { Region, SharedService } from '../../services/shared.service';
 import * as stringSimilarity from 'string-similarity';
 import { StorageService } from '../../../storage/storage.service';
 import { MenuItem } from 'primeng/api';
-import PullToRefresh from 'pulltorefreshjs';
-import { pullToRefreshCss } from './pull-to-refresh-css';
 import { Subscription, switchMap } from 'rxjs';
 
 @Component({
@@ -41,7 +39,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
 
   constructor(
     private readonly authService: AuthService,
-    private router: Router,
+    // private router: Router,
     private sharedService: SharedService,
     private cdr: ChangeDetectorRef,
     private storageService: StorageService

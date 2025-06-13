@@ -41,14 +41,6 @@ export class AuthService implements OnInit{
       }
     })
 
-    // const storedUser = localStorage.getItem("userLogged");
-    // if (storedUser) {
-    //   try {
-    //     this.user = JSON.parse(storedUser);
-    //   } catch (error) {
-    //     console.error("Error al obtener el usuario de localStorage:", error);
-    //   }
-    // }
   }
 
   public login(email: string, password: string): Observable<any> {
@@ -142,9 +134,6 @@ export class AuthService implements OnInit{
         console.log(allMovies, moviesCarrusel);
       }
     })
-
-    // localStorage.removeItem("userLogged");
-    // localStorage.removeItem("access_token");
 
   }
 }

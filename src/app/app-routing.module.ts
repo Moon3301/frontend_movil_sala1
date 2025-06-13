@@ -29,6 +29,10 @@ const routes: Routes = [
         loadChildren:() => import('./suppliers/suppliers.module').then( m => m.SuppliersModule)
       },
       {
+        path: 'testing',
+        loadChildren:() => import('./testing/testing.module').then( m => m.TestingModule)
+      },
+      {
         path: '', redirectTo: 'movies', pathMatch: 'full',
       },
     ]

@@ -32,10 +32,8 @@ export class AppComponent implements OnInit{
     private readonly authService: AuthService,
     private storageService: StorageService,
     private sharedService: SharedService,
-    
-  ){
-    
-  }
+
+  ){}
 
   async ngOnInit(){
 
@@ -84,26 +82,26 @@ export class AppComponent implements OnInit{
         return of(null); // Evita que el Observable se rompa
       })
     ).subscribe();
-    
-    if(Capacitor.getPlatform() !== 'web'){
 
-      if(Capacitor.getPlatform() === 'ios'){
+    // if(Capacitor.getPlatform() !== 'web'){
 
-        document.addEventListener('deviceready', async () => {
-  
-          // 1. Pide permiso al usuario
-          const { value: status } = await AdvertisingId.requestTracking();
-          console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
-        
-          // 2. Lee el identificador (IDFA) — devuelve '00000000-…' si no está autorizado
-          const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
-          console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
-        });  
-      }
-      
-      console.log('Iniciando SDK AppsFlyer')
-      this.initSdkAppsFlyer(); 
-    }
+    //   if(Capacitor.getPlatform() === 'ios'){
+
+    //     document.addEventListener('deviceready', async () => {
+
+    //       // 1. Pide permiso al usuario
+    //       const { value: status } = await AdvertisingId.requestTracking();
+    //       console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
+
+    //       // 2. Lee el identificador (IDFA) — devuelve '00000000-…' si no está autorizado
+    //       const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
+    //       console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
+    //     });
+    //   }
+
+    //   console.log('Iniciando SDK AppsFlyer')
+    //   this.initSdkAppsFlyer();
+    // }
 
   }
 
@@ -168,14 +166,6 @@ export class AppComponent implements OnInit{
     )
   }
 
-  // getUbicationByServer(lat: string, lng: string): Observable<IRegion>{
-  //   return this.http.get<IRegion>(`${environments.baseUrl}/ubication/coordenates?latitude=${lat}&longitude=${lng}`)
-  // }
-
-  // getUbicationByGeoCode(lat: number, lng: number): Observable<IUbication>{
-  //   return this.http.get<IUbication>(`${environments.urlGeoCode}reverse?lat=${lat}&lon=${lng}&api_key=${environments.apiKeyGeoCode}`)
-  // }
-
   getAllRegions(): Observable<IRegion[]>{
     return this.http.get<IRegion[]>(`${environments.baseUrl}/region`)
   }
@@ -192,8 +182,8 @@ export class AppComponent implements OnInit{
     await AdvertisingId.requestTracking();
 
     const opts: any = {
-      devKey:   environments.appsFlyerDevKey,   
-      appId:    environments.appleAppId,        
+      devKey:   environments.appsFlyerDevKey,
+      appId:    environments.appleAppId,
       isDebug: environments.isDebug,
       onInstallConversionDataListener: environments.onInstallConversionDataListener
     };
@@ -201,12 +191,11 @@ export class AppComponent implements OnInit{
     const { Appsflyer } = await import('@awesome-cordova-plugins/appsflyer/ngx');
 
     const af = new Appsflyer()
-    
+
     af.initSdk(opts)
       .then((res: any) => console.log('[AF] OK', res))
       .catch((err: any) => console.error('[AF] ERROR', err));
 
   }
-
 
 }

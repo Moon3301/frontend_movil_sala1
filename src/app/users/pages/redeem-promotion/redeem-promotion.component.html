@@ -1,0 +1,95 @@
+<mat-toolbar style="border: 1px solid gray; background-color: black; position: sticky; top: 0; z-index: 100;">
+  <mat-icon style="font-size: 20px; font-weight: bold; color: white;" [routerLink]="['/users']">
+    arrow_back_ios_new
+  </mat-icon>
+</mat-toolbar>
+
+<div class="promo-container">
+  <ng-container *ngIf="coupon$ | async as coupon">
+
+    <h2 class="promo-title">{{ coupon.title }}</h2>
+    <p class="promo-description">{{ coupon.description }}</p>
+
+    <div class="promo-details">
+      <div class="detail-item"><span class="detail-label">Válido desde:</span> {{ coupon.validFrom | date:'dd/MM/yyyy' }}</div>
+      <div class="detail-item"><span class="detail-label">Válido hasta:</span> {{ coupon.validTo | date:'dd/MM/yyyy' }}</div>
+      <div class="detail-item"><span class="detail-label">Cines:</span> {{ coupon.cinemas.join(', ') }}</div>
+      <div class="detail-item"><span class="detail-label">Películas:</span> {{ coupon.movies.join(', ') }}</div>
+      <div class="detail-item"><span class="detail-label">Descuento:</span> {{ coupon.discountValue }}%</div>
+    </div>
+
+    <button *ngIf="!showCode" class="claim-btn" (click)="claim()">Reclamar</button>
+
+    <div *ngIf="showCode" class="code-container" (click)="copyCode()">
+      <span class="code-label">Código:</span>
+      <span class="code-value">{{ coupon.code }}</span>
+      <small class="tap-copy">(Toca para copiar)</small>
+    </div>
+
+
+    <mat-expansion-panel class="bases-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-description>
+          <mat-panel-title> Términos y condiciones </mat-panel-title>
+          <mat-icon>info</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <section class="bases-section">
+        <h4 class="mt-4">1. Vigencia</h4>
+        <p>
+          Válido <strong>del 01 al 30 junio 2025</strong> o hasta agotar stock.
+          El cupón reclamado podrá usarse hasta la fecha de vencimiento
+          mostrada en “Mis promociones”.
+        </p>
+
+        <h4 class="mt-4">2. Cobertura de cines</h4>
+        <table class="bases-table">
+          <tr><th>Compañía</th><th>Cines incluidos</th></tr>
+          <tr><td>Cinemark</td><td>Mallplaza Oeste, Plaza Vespucio, Portal Ñuñoa</td></tr>
+          <tr><td>Cinepolis</td><td>Ovalle, La Reina</td></tr>
+          <tr><td>Lido</td><td>Lido Osorno</td></tr>
+          <!-- oculta/borra filas que no aplican -->
+        </table>
+
+        <h4 class="mt-4">3. Aplicación del descuento</h4>
+        <ul>
+          <li><strong>20 % de descuento</strong> sobre entrada adulto 2D.</li>
+          <li>Máximo <strong>1 cupón por usuario</strong> y compra (no acumulable).</li>
+        </ul>
+
+        <h4 class="mt-4">4. Películas excluidas</h4>
+        <p>Quedan fuera de la promoción las funciones marcadas como <em>Estreno</em> o <em>Pre-venta</em>.</p>
+
+        <h4 class="mt-4">5. Cómo usar tu cupón</h4>
+        <ol>
+          <li>Reclámalo y encuéntralo en <strong>Mis promociones</strong>.</li>
+          <li>Al comprar tu entrada:<br>
+              • En línea → ingresa el código en “Cupón de descuento”.<br>
+              • En boletería → muestra el código al operador.
+          </li>
+          <li>El sistema aplicará el 20 % al subtotal.</li>
+        </ol>
+
+        <h4 class="mt-4">6. Condiciones generales</h4>
+        <ul>
+          <li>No acumulable con otras promociones ni convenios.</li>
+          <li>No canjeable por dinero en efectivo.</li>
+          <li>
+            La empresa emisora se reserva el derecho de modificar
+            o terminar la promoción sin aviso, respetando los cupones ya reclamados.
+          </li>
+          <li>Soporte: <a href="mailto:soporte@sala1.cl">soporte&#64;sala1.cl</a></li>
+        </ul>
+      </section>
+    </mat-expansion-panel>
+
+  </ng-container>
+
+
+</div>
+
+
+
+
+
