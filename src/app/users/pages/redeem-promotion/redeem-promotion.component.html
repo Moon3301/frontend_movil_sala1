@@ -10,12 +10,23 @@
     <h2 class="promo-title">{{ coupon.title }}</h2>
     <p class="promo-description">{{ coupon.description }}</p>
 
-    <div class="promo-details">
-      <div class="detail-item"><span class="detail-label">Válido desde:</span> {{ coupon.validFrom | date:'dd/MM/yyyy' }}</div>
-      <div class="detail-item"><span class="detail-label">Válido hasta:</span> {{ coupon.validTo | date:'dd/MM/yyyy' }}</div>
-      <div class="detail-item"><span class="detail-label">Cines:</span> {{ coupon.cinemas.join(', ') }}</div>
-      <div class="detail-item"><span class="detail-label">Películas:</span> {{ coupon.movies.join(', ') }}</div>
-      <div class="detail-item"><span class="detail-label">Descuento:</span> {{ coupon.discountValue }}%</div>
+    <!-- cupón horizontal -->
+    <div class="coupon">
+      <!-- talón perforado -->
+      <div class="coupon-stub">
+        <!-- (opcional) pon aquí un logo pequeño, un código de barras o texto -->
+        <span class="stub-text">SALA&nbsp;1</span>
+      </div>
+
+      <!-- cuerpo principal -->
+      <div class="coupon-body">
+        <div class="discount">{{ coupon.discountValue }}%</div>
+
+        <div class="dates">
+          <span>Desde: <b>{{ coupon.validFrom | date }}</b></span>
+          <span>Hasta: <b>{{ coupon.validTo | date }}</b></span>
+        </div>
+      </div>
     </div>
 
     <button *ngIf="!showCode" class="claim-btn" (click)="claim()">Reclamar</button>
@@ -25,7 +36,6 @@
       <span class="code-value">{{ coupon.code }}</span>
       <small class="tap-copy">(Toca para copiar)</small>
     </div>
-
 
     <mat-expansion-panel class="bases-panel">
       <mat-expansion-panel-header>
@@ -38,7 +48,7 @@
       <section class="bases-section">
         <h4 class="mt-4">1. Vigencia</h4>
         <p>
-          Válido <strong>del 01 al 30 junio 2025</strong> o hasta agotar stock.
+          Válido <strong>del {{ coupon.validFrom | date }} al {{ coupon.validTo | date }}</strong> o hasta agotar stock.
           El cupón reclamado podrá usarse hasta la fecha de vencimiento
           mostrada en “Mis promociones”.
         </p>
@@ -54,7 +64,7 @@
 
         <h4 class="mt-4">3. Aplicación del descuento</h4>
         <ul>
-          <li><strong>20 % de descuento</strong> sobre entrada adulto 2D.</li>
+          <li><strong>{{ coupon.discountValue }} % de descuento</strong> sobre entrada adulto 2D.</li>
           <li>Máximo <strong>1 cupón por usuario</strong> y compra (no acumulable).</li>
         </ul>
 
@@ -68,7 +78,7 @@
               • En línea → ingresa el código en “Cupón de descuento”.<br>
               • En boletería → muestra el código al operador.
           </li>
-          <li>El sistema aplicará el 20 % al subtotal.</li>
+          <li>El sistema aplicará el {{ coupon.discountValue }} % al subtotal.</li>
         </ol>
 
         <h4 class="mt-4">6. Condiciones generales</h4>

@@ -100,3 +100,92 @@
 .bases-table th { background: #f6f6f6; }
 
 
+/* --- estructura básica --- */
+.coupon {
+  display: flex;
+  max-width: 420px;                 /* ajusta según necesites */
+  margin: 1rem auto;
+  border: 2px solid #000;           /* contorno principal */
+  border-radius: 8px;
+  overflow: hidden;                 /* esconde los recortes circulares */
+  background: #fff;                 /* base neutra */
+  font-family: system-ui, sans-serif;
+}
+
+/* --- talón (lado izquierdo) --- */
+.coupon-stub {
+  width: 90px;
+  border-right: 2px dashed #000; /* línea de corte */
+  position: relative;
+
+  /* centra el interior */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ▸ TEXTO VERTICAL: de abajo → arriba, orientado a la izquierda */
+.stub-text {
+  writing-mode: vertical-rl; /* apila caracteres verticalmente */
+  direction: rtl;            /* orden de lectura: primero abajo */
+  transform: rotate(180deg); /* hace que los caracteres “miren” a la izquierda */
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 1.5rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+/* Fallback para navegadores sin soporte a writing-mode:vertical-rl */
+@supports not (writing-mode: vertical-rl) {
+  .coupon-stub {
+    writing-mode: horizontal-tb;
+  }
+  .coupon-stub > * {
+    transform: rotate(-90deg);
+  }
+}
+
+/* semicortes circulares (ticket) */
+.coupon-stub::before,
+.coupon-stub::after {
+  content: "";
+  position: absolute;
+  right: -11px;                      /* sobresale para “morder” el borde */
+  width: 25px;
+  height: 25px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #fff;                 /* mismo fondo que el cupón */
+}
+.coupon-stub::before { top: -11px; }
+.coupon-stub::after  { bottom: -11px; }
+
+/* --- cuerpo principal --- */
+.coupon-body {
+  flex: 1;
+  padding: 20px;
+  text-align: center;
+
+}
+
+/* descuento grande */
+.discount {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* fechas */
+.dates {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* --- responsive: ancho completo en móviles muy estrechos --- */
+@media (max-width: 360px) {
+  .coupon { max-width: 100%; }
+  .discount { font-size: 2.2rem; }
+}

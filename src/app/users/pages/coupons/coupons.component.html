@@ -5,14 +5,14 @@
 </mat-toolbar>
 
 <div class="redeem-container">
-  <h2 class="redeem-title">Reclama tus cupones</h2>
+  <h2 class="redeem-title">Historial de cupones</h2>
   <div *ngIf="coupons?.length; else noCoupons">
     <div *ngFor="let coupon of coupons" class="coupon-card">
       <div class="coupon-info">
-        <div class="coupon-title">{{ coupon.title }}</div>
-        <div class="coupon-desc">{{ coupon.description }}</div>
+        <div class="coupon-title">{{ coupon.promotion.title }}</div>
+        <div class="coupon-desc">{{ coupon.promotion.description }}</div>
       </div>
-      <button class="redeem-btn" (click)="redeemCoupon(coupon)">Ver</button>
+      <button class="redeem-btn" (click)="redirectToCoupon(coupon)">Ver</button>
     </div>
   </div>
   <ng-template #noCoupons>

@@ -25,7 +25,7 @@ export class TestingComponent implements OnInit{
       const { id, extra } = event.notification;
       console.log('🟢 Notificación abierta', id, extra);
       if (extra?.promotionId) {
-        this.router.navigate(['/users', extra.promotionId]);
+        this.router.navigate(['/users/coupons', extra.promotionId]);
       }
     });
 
@@ -71,9 +71,7 @@ export class TestingComponent implements OnInit{
   }
 
   redirectoToCoupon(){
-    this.router.navigate(['/users', '29']);
+    this.router.navigate(['/users/coupons', '29']);
   }
-
-
 
 }

@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { ISupplier, Supplier } from '../../interfaces/supplier.interface';
-import { Company } from '../../interfaces/company.interface';
+import { ISupplier } from '../../interfaces/supplier.interface';
 import { SuppliersService } from '../../services/suppliers.service';
 import { Movie } from '../../../movie/interfaces/movie.interface';
 import { StorageService } from '../../../storage/storage.service';
-import { from, mergeMap, forkJoin, map, toArray} from 'rxjs';
+import { from, mergeMap, forkJoin, map, toArray, finalize, take} from 'rxjs';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDiscountCodeComponent } from '../modal-discount-code/modal-discount-code.component';
 import { Promotion } from '../../interfaces/promotions.interface';
+import { Router } from '@angular/router';
 
 const optionsSend = [
   'Email',
@@ -49,6 +49,7 @@ export class StepperPromoComponent implements OnInit {
     private supplierService: SuppliersService,
     private storageService: StorageService,
     private dialog: MatDialog,
+    private readonly router: Router
   ){}
 
   ngOnInit(): void {
@@ -290,11 +291,23 @@ export class StepperPromoComponent implements OnInit {
 
     console.log(promotion);
 
-    this.supplierService.createPromotion(promotion).subscribe({
-      next: (promotion: Promotion) => {
-        console.log(promotion);
+    this.supplierService.createPromotion(promotion).pipe(
+      take(1),                           // cierra la subscripción tras la 1.ª emisión
+      finalize(() => {
+        // ← se ejecuta tanto en éxito como en error
+        this.firstStepperForm.reset();
+        this.secondStepperForm.reset();
+        this.threeStepperForm.reset();
+      })
+    ).subscribe({
+      next: () => {
+        // éxito: navega al listado
+        this.router.navigateByUrl('/suppliers');
       },
-      error: () => { console.log('Error al crear la promocion') }
+      error: err => {
+        console.error('Error al crear la promoción', err);
+        // aquí podrías mostrar un toast
+      }
     });
 
   }

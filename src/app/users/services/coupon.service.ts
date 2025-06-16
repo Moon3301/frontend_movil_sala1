@@ -1,15 +1,16 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map, switchMap, Observable } from "rxjs";
 import { environments as env } from "../../../environments/environments";
-import { Coupon, CouponView } from "../interfaces/coupon.interface";
+import { CouponView } from "../interfaces/coupon.interface";
+import { DeviceIdService } from "../../shared/services/deviceId.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CouponService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private deviceIdService: DeviceIdService) { }
 
   getCouponById(promotionId: string | number): Observable<CouponView> {
     return this.http.get<CouponView>(`${env.baseUrl}/promotions/${promotionId}`).pipe(
@@ -28,6 +29,29 @@ export class CouponService {
 
         code: p.code ?? ''          // puede venir vacío
       }))
+    );
+  }
+
+  getDeviceId(): Observable<string> {
+    return this.deviceIdService.getId();
+  }
+
+  assignCoupon(promotionId: number): Observable<any> {
+    return this.getDeviceId().pipe(
+      switchMap(deviceId =>
+        this.http.post(`${env.baseUrl}/promotions/assign-promocode`, {
+          promotionId,
+          deviceId
+        })
+      )
+    );
+  }
+
+  getCouponsByDeviceId(): Observable<any[]> {
+    return this.getDeviceId().pipe(
+      switchMap(deviceId =>
+        this.http.get<any[]>(`${env.baseUrl}/promotions/by-device-id?deviceId=${deviceId}`)
+      )
     );
   }
 }

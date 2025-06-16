@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CouponService } from '../../services/coupon.service';
+import { Router } from '@angular/router';
 
 interface Coupon {
   id: string;
@@ -13,14 +15,28 @@ interface Coupon {
   templateUrl: './coupons.component.html',
   styleUrl: './coupons.component.css'
 })
-export class CouponsComponent {
+export class CouponsComponent implements OnInit {
 
-  coupons: Coupon[] = [
-    { id: '1', title: '10% OFF', description: 'Descuento del 10% en tu próxima compra.', isRedeemed: false },
-    { id: '2', title: '2x1 Café', description: 'Lleva dos cafés y paga uno.', isRedeemed: false }
-  ];
+  coupons: any[] = [];
 
-  redeemCoupon(coupon: Coupon) {
+  constructor( private couponService: CouponService, private router: Router){}
+
+  ngOnInit(): void {
+
+    this.couponService.getCouponsByDeviceId().subscribe({
+      next: (coupons: any[]) => {
+        this.coupons = coupons;
+      },
+      error: () => { console.log('Error al obtener los cupones') }
+    });
+
+  }
+
+  redirectToCoupon(coupon: any) {
+    this.router.navigate(['/users/coupons', coupon.promotion.id]);
+  }
+
+  redeemCoupon(coupon: any) {
     // Aquí iría la lógica para reclamar el cupón
     alert(`Cupón reclamado: ${coupon.title}`);
     // Opcional: eliminar el cupón de la lista tras reclamar

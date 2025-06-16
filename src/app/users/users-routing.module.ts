@@ -24,7 +24,7 @@ const routes: Routes = [
     component: CouponsComponent,
   },
   {
-    path: ':promotionId',
+    path: 'coupons/:promotionId',
     component: RedeemPromotionComponent,
   },
   {
