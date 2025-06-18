@@ -43,14 +43,14 @@ export class TestingComponent implements OnInit{
     await LocalNotifications.schedule({
       notifications: [{
         id: 1,                       // cualquier entero único
-        title: '🎬 Función en 30 min',
-        body:  'Tu película comienza a las 21:00',
+        title: '🎬 Tienes una nueva promoción disponible',
+        body:  '¡No te pierdas la oportunidad de disfrutar de una película con un descuento especial!',
         schedule: { at: new Date(Date.now() + 10_000) }, // 10 s después
         channelId: 'cinema-reminders',   // usa tu propio canal
         // sound: 'beep.wav',           // opcional (colócalo en ios/App/App/assets y android/app/src/main/res/raw)
         // smallIcon: 'ic_stat_sala1',  // opcional (solo Android)
         actionTypeId: '',            // o define tipos para botones de acción
-        extra: { promotionId: '29' }      // datos que te servirán al abrirla
+        extra: { promotionId: '9' }      // datos que te servirán al abrirla
       }]
     })
   }

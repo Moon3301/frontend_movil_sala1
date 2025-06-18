@@ -22,17 +22,66 @@
     <button
       mat-button
       class="location-btn"
-      [matMenuTriggerFor]="menu">
+      (click)="onToggleFilter()"
 
-      <mat-icon class="icon-location" aria-hidden="true">location_on</mat-icon>
-      <span class="current-region">{{ userCurrentRegion }}</span>
+      >
+
+      <mat-icon class="icon-location" aria-hidden="true"> {{ userCurrentUbication.icon }}</mat-icon>
+      <span class="current-region">{{ userCurrentUbication.name }}</span>
     </button>
 
   </div>
+
+
 </mat-toolbar>
 
+<mat-card *ngIf="showFilter" style="position: fixed; top: 80px; z-index: 1000000; transform: translateX(6%); width: 90%;">
 
-<mat-menu #menu="matMenu">
+  <mat-card-header class="p-4">
+    <mat-card-title style="font-size: 16px; text-align: center;">Filtra por el cine al que quieres ir </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <button
+      style="margin: 0 auto; background-color: #313131; color: whitesmoke; width: 100%; margin-bottom: 15px;"
+      mat-fab extended
+      class="location-btn"
+      [matMenuTriggerFor]="menuRegion">
+      <mat-icon class="icon-location" aria-hidden="true">location_on</mat-icon>
+      <span class="current-region">{{ userCurrentRegion }}</span>
+
+    </button>
+
+    <button
+      style="margin: 0 auto; background-color: whitesmoke; color: #313131; width: 100%; margin-bottom: 15px;"
+      mat-fab extended
+      class="location-btn"
+      [matMenuTriggerFor]="menuCadena"
+      [disabled]="cadenas.length === 0"
+      >
+      <mat-icon class="icon-location" aria-hidden="true">local_activity</mat-icon>
+      <span class="current-region">{{ userCurrentCadena }}</span>
+
+    </button>
+
+    <button
+      style="margin: 0 auto; background-color: whitesmoke; color: #313131; width: 100%; margin-bottom: 15px;"
+      mat-fab extended
+      class="location-btn"
+      [matMenuTriggerFor]="menuCine"
+      [disabled]="cines.length === 0"
+      >
+      <mat-icon class="icon-location" aria-hidden="true">theaters</mat-icon>
+      <span class="current-region">{{ userCurrentCine }}</span>
+
+    </button>
+
+    <button mat-flat-button class="w-100" (click)="onFilterMovies()">Aceptar</button>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-menu #menuRegion="matMenu">
 
   <ng-container >
 
@@ -45,8 +94,44 @@
   <mat-divider></mat-divider>
 
   <ng-container *ngFor="let region of regions">
-    <button mat-menu-item (click)="onChangeUbication(region)">
+    <button mat-menu-item (click)="onSelectRegion(region)">
       {{ region.name }}
     </button>
   </ng-container>
 </mat-menu>
+
+<mat-menu #menuCadena="matMenu">
+  <ng-container>
+    <button mat-menu-item (click)="resetChain()">
+      Ninguna
+    </button>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngFor="let cadena of cadenas">
+    <button mat-menu-item (click)="onSelectChain(cadena)">
+      {{ cadena.ci_type }}
+    </button>
+  </ng-container>
+</mat-menu>
+
+<mat-menu #menuCine="matMenu">
+  <ng-container>
+    <button mat-menu-item (click)="resetCinema()">
+      Ninguno
+    </button>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngFor="let cine of cines">
+    <button mat-menu-item (click)="onSelectCinema(cine)">
+      {{ cine.name }}
+    </button>
+  </ng-container>
+</mat-menu>
+
+
+
+

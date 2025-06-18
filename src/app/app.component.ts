@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { environments } from '../environments/environments';
 import { IRegion } from './common/interfaces';
 import { catchError, from, map, Observable, of, switchMap, tap } from 'rxjs';
@@ -11,6 +11,7 @@ import { StatusBar } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { AdvertisingId } from '@capacitor-community/advertising-id';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,8 @@ export class AppComponent implements OnInit{
   regions: Region[] = []
 
   ptrInstance: any;
+
+  @ViewChild('drawer') drawer!: MatDrawer;
 
   window: any;
 
@@ -69,6 +72,7 @@ export class AppComponent implements OnInit{
       switchMap(() => this.getUserLocationANDROID()),
       tap(() => {
         console.log('Ubicación obtenida y guardada')
+
         // Neesito almacenar un valor por defecto si el usuario no permite el acceso a la ubicacion
       }
 
@@ -106,7 +110,7 @@ export class AppComponent implements OnInit{
   }
 
   getUserLocationANDROID() {
-    const DEFAULT_LOCATION = 'Metropolitana de Santiago'; // El valor por defecto que desees
+    const DEFAULT_LOCATION = ''; // El valor por defecto que desees
 
     return from(Geolocation.checkPermissions()).pipe(
       switchMap(permissions => {
@@ -119,16 +123,42 @@ export class AppComponent implements OnInit{
       switchMap(() => from(Geolocation.getCurrentPosition())),
       switchMap((position) => {
         const { latitude: lat, longitude: lng } = position.coords;
+
         // Llamada a la API que, dado lat/lng, devuelve un Observable con la ubicación
 
         return this.sharedService.getUbicationByServer(lat.toString(), lng.toString());
       }),
       switchMap(response => {
-        // Guardar la ubicación real en storage
-        return this.storageService.saveData('user_ubication', response.name).pipe(
-          // Encadena y retorna la ubicación guardada
-          switchMap(() => this.storageService.getData('user_ubication'))
-        );
+        console.log('Ubicación obtenida: 17-06',response)
+
+      this.storageService.getData("filterDataName").subscribe({
+        next: (resp) => {
+          console.log('Resp', resp)
+          if(resp!= null){
+            this.sharedService.setNameOptionFilter(resp)
+          }else{
+            this.storageService.saveData("filterDataName", response.name).subscribe()
+            this.sharedService.setNameOptionFilter(response.name)
+          }
+        }
+      })
+
+      this.storageService.getData("filterDataIcon").subscribe({
+        next: (resp) => {
+          if(resp!= null){
+            this.sharedService.setIconOptionFilter(resp)
+          }else{
+            this.storageService.saveData("filterDataIcon", 'location_on').subscribe()
+            this.sharedService.setIconOptionFilter('location_on')
+          }
+        }
+      })
+
+      // Guardar la ubicación real en storage
+      return this.storageService.saveData('user_ubication', response.name).pipe(
+        // Encadena y retorna la ubicación guardada
+        switchMap(() => this.storageService.getData('user_ubication'))
+      );
       }),
       tap(saved => {
         console.log('Ubicación guardada en el almacenamiento local:', saved);

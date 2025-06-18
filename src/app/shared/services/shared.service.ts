@@ -7,6 +7,7 @@ import stringSimilarity from "string-similarity";
 import { StorageService } from "../../storage/storage.service";
 import { Geolocation } from '@capacitor/geolocation';
 import { Subject } from 'rxjs';
+import { ICinema } from "../../movie/interfaces/funciones.interface";
 
 export interface Region {
   id: number,
@@ -29,6 +30,12 @@ export class SharedService{
   private toggleDrawerSubject = new Subject<void>();
   toggleDrawer$ = this.toggleDrawerSubject.asObservable();
 
+  private nameOptionFilter$ = new BehaviorSubject<string | null>(null);
+  selectedNameFilter$ = this.nameOptionFilter$.asObservable();
+
+  private iconOptionFilter$ = new BehaviorSubject<string | null>(null);
+  selectedIconFilter$ = this.iconOptionFilter$.asObservable();
+
   private baseUrl: string = environments.baseUrl;
 
   constructor(private http: HttpClient, private storageService: StorageService) {}
@@ -37,11 +44,40 @@ export class SharedService{
     return this.http.get<IRegion[]>(`${this.baseUrl}/region`)
   }
 
-  public get currentUserRegion(){
+  getChainsByRegion(regionId: number) {
+    return this.http.get<string[]>(`${this.baseUrl}/ubication/chains-by-region?regionId=${regionId}`);
+  }
+
+  getCinesByChainAndRegion(chain: string, regionId: number) {
+    return this.http.get<ICinema[]>(`${this.baseUrl}/ubication/cines-by-chain-and-region?chain=${chain}&regionId=${regionId}`);
+  }
+
+  setNameOptionFilter(region: string){
+    this.nameOptionFilter$.next(region);
+  }
+
+  setIconOptionFilter(icon: string){
+    this.iconOptionFilter$.next(icon);
+  }
+
+  setNameIconOptionFilter(name: string, icon: string){
+    this.nameOptionFilter$.next(name);
+    this.iconOptionFilter$.next(icon);
+  }
+
+  get getNameOptionFilter(){
+    return this.nameOptionFilter$.value;
+  }
+
+  get getIconOptionFilter(){
+    return this.iconOptionFilter$.value;
+  }
+
+  get currentUserRegion(){
     return this.userCurrentRegion;
   }
 
-  public get allRegionsDEPRECATED(): Region[]{
+  get allRegionsDEPRECATED(): Region[]{
     return localStorage.getItem("regions") ? JSON.parse(localStorage.getItem("regions")!) : []
   }
 
@@ -141,8 +177,6 @@ export class SharedService{
   }
 
   toggleDrawer(): void {
-    console.log('toggleDrawer');
-
     this.toggleDrawerSubject.next();
   }
 
@@ -154,6 +188,6 @@ export class SharedService{
     return this._currentRegion.value;
   }
 
-  
+
 
 }

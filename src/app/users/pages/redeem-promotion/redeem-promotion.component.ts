@@ -36,8 +36,14 @@ export class RedeemPromotionComponent implements OnInit {
 
     this.route.params.pipe(
       switchMap(({ promotionId }) => this.couponService.getCouponById(promotionId))
-    ).subscribe(promo => this.couponSubject.next(promo));
 
+    ).subscribe(promo => {
+        this.couponSubject.next(promo);
+        // Mostrar el código sólo si ya viene desde el servicio
+        this.showCode = !!promo.code;
+        console.log(promo)
+        this.cdr.markForCheck(); // OnPush: notificar cambio
+      });
 
   }
 

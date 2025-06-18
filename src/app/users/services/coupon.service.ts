@@ -54,4 +54,12 @@ export class CouponService {
       )
     );
   }
+
+  getStatus(promotionId: number): Observable<any> {
+    return this.getDeviceId().pipe(
+      switchMap(deviceId =>
+        this.http.get<any>(`${env.baseUrl}/promotions/status?deviceId=${deviceId}&promotionId=${promotionId}`)
+      )
+    );
+  }
 }

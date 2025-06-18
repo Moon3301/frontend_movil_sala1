@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Movie } from '../interfaces/movie.interface';
 import { map, Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
 import { DataBillboard, ICines } from '../interfaces/funciones.interface';
 import { getFormattedDate } from '../../common/helpers';
@@ -45,6 +45,39 @@ export class MovieService {
 
   public getMovies(): Observable<Movie[]>{
     return this.http.get<Movie[]>(`${this.baseUrl}/movies`)
+  }
+
+  getMoviesByFilters(
+    regionId?: number | null,
+    chain?: string | null,
+    cinemaId?: number | null
+  ): Observable<Movie[]> {
+
+    let params = new HttpParams();
+    if (regionId != null) params = params.set('regionId', regionId);
+    if (chain && chain.trim()) params = params.set('chain', chain);
+    if (cinemaId != null) params = params.set('cinemaId', cinemaId);
+
+    return this.http.get<Movie[]>(`${this.baseUrl}/movies/by-filters`, { params });
+  }
+
+
+  getFilterMovies(
+    regionId?: number | null,
+    chain?: string | null,
+    cinemaId?: number | null
+  ): Observable<Movie[]> {
+
+    let params = new HttpParams();
+
+    if (regionId != null) params = params.set('regionId', regionId);
+    if (chain && chain.trim().length) params = params.set('chain', chain);
+    if (cinemaId != null) params = params.set('cinemaId', cinemaId);
+
+    return this.http.get<Movie[]>(
+      `${this.baseUrl}/movies/by-filters`,
+      { params }
+    );
   }
 
   public getCarrusel(): Observable<MovieCarrusel[]>{

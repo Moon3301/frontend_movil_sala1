@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild  } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild  } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { User } from '../../../users/interfaces/user.interface';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -45,7 +45,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
     private storageService: StorageService
 
   ){}
-
 
   ngOnDestroy(): void {
 

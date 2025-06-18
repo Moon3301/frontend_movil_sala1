@@ -10,10 +10,14 @@ import { PrimengModule } from '../primeng/primeng.module';
 import { SharedService } from './services/shared.service';
 import { mapBoxNearbyService } from './services/mapboxNearby.service';
 import { UpdateAppComponent } from './pages/update-app/update-app.component';
+import { FilterService } from './services/filter.service';
+import { DeviceIdService } from './services/deviceId.service';
 
 @NgModule({
   providers:[
-    mapBoxNearbyService
+    mapBoxNearbyService,
+    FilterService,
+    DeviceIdService
   ],
   declarations: [
     MenuComponent,
@@ -30,7 +34,6 @@ import { UpdateAppComponent } from './pages/update-app/update-app.component';
   exports:[
     MenuComponent,
     MainLayoutComponent,
-
   ]
 })
 export class SharedModule { }

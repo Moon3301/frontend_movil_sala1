@@ -2,10 +2,10 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
-import { finalize, forkJoin, tap } from 'rxjs';
+import { combineLatest, debounceTime, finalize, forkJoin, map, shareReplay, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedService } from '../../../shared/services/shared.service';
 import { Capacitor } from '@capacitor/core';
+import { FilterService } from '../../../shared/services/filter.service';
 
 @Component({
   selector: 'movie-list-movie-page',
@@ -20,11 +20,15 @@ export class ListMoviePageComponent implements OnInit{
 
   isLoading = false;
   movies: Movie[] = []
+  moviesFilter: Movie[] = []
   moviesSkeleton = Array.from({ length : 6})
 
   moviesPremiere: Movie[] = []
   moviesPresale: Movie[] = []
   moviesComingSoon: Movie[] = []
+
+  /** teardown */
+  private destroy$ = new Subject<void>();
 
   // Índice del tab seleccionado
   selectedTabIndex = 0;
@@ -33,63 +37,45 @@ export class ListMoviePageComponent implements OnInit{
     private movieService: MovieService,
     private route: ActivatedRoute,
     private router: Router,
+    private filter: FilterService
   ){}
 
   ngOnInit(): void {
 
+    /** 1️⃣ Cargar carrusel UNA sola vez */
+    const carrusel$ = this.movieService.getCarrusel().pipe(
+      shareReplay(1)
+    );
+
+    /** 2️⃣ Reaccionar a los filtros + carrusel */
     this.isLoading = true;
 
-    forkJoin([
-      this.movieService.getMovies(),
-      this.movieService.getCarrusel()
+    combineLatest([
+      this.filter.selectedRegion$.pipe(startWith(null)),
+      this.filter.selectedChain$.pipe(startWith(null)),
+      this.filter.selectedCinema$.pipe(startWith(null)),
+      carrusel$
     ]).pipe(
-      finalize(() => this.isLoading = false),
-      
-      ).subscribe({
-      next: ([allMovies, moviesCarrusel]) => {
+      tap(() => this.isLoading = true),
+      debounceTime(0),
+      switchMap(([regionId, chain, cinemaId, carrusel]) =>
+        this.movieService.getMoviesByFilters(regionId, chain, cinemaId).pipe(
+          map(movies => this.combineAndSort(movies, carrusel))
+        )
+      ),
+      tap(sortedMovies => {
+        this.populateCategories(sortedMovies);
+        this.isLoading = false;
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
 
-        const finalList = this.combineAndSort(allMovies, moviesCarrusel);
-        this.movies = finalList;
+    /** 3️⃣ Sincronizar pestaña con query */
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(p => this.selectedTabIndex = +p['tab'] || 0);
 
-        this.movieService.saveAllMoviesT(this.movies).subscribe({
-          next: (resp)=> {
-
-            // console.log('Peliculas guardadas en localStorage');
-
-          },
-          error: (error)=> {
-            console.log('Error al guardar las peliculas', error);
-          }
-        })
-
-        this.movies.forEach( movie => {
-
-          if(movie.screen_type === 'ESTRENO'){
-            this.moviesPremiere.push(movie)
-          }
-
-          if(movie.screen_type === 'PREVENTA'){
-            this.moviesPresale.push(movie)
-          }
-
-          if(movie.screen_type === 'PROXIMAMENTE'){
-            this.moviesComingSoon.push(movie)
-          }
-
-        })
-
-
-
-      },
-      error: (err) => console.error('Error combinando:', err)
-    })
-
-    // Leer el índice de la URL (query params, por ejemplo)
-    this.route.queryParams.subscribe(params => {
-      const tabIndex = +params['tab'] || 0; // si no hay 'tab', usar 0
-      this.selectedTabIndex = tabIndex;
-    });
-
+    /** 4️⃣ CSS extra para iOS */
     if (Capacitor.getPlatform() === 'ios') {
       this.listMoviesContainerRef.nativeElement.classList.add('ios-device');
     }
@@ -106,26 +92,27 @@ export class ListMoviePageComponent implements OnInit{
   }
 
   private combineAndSort(allMovies: Movie[], moviesCarrusel: MovieCarrusel[]): Movie[] {
-    // 1. Crear un Map<externalMovieId, position> a partir del carrusel
-
     const positionMap = new Map<string, number>(
       moviesCarrusel.map(c => [String(c.externalMovieId), c.position])
     );
 
-    // 2. Copiar el array de películas para no mutarlo (opcional)
-    const finalList = [...allMovies];
-
-    // 3. Ordenar: las que tengan position, primero (asc), y las que no, al final
-    finalList.sort((a, b) => {
+    return [...allMovies].sort((a, b) => {
       const posA = positionMap.get(a.external_id) ?? Infinity;
       const posB = positionMap.get(b.external_id) ?? Infinity;
       return posA - posB;
     });
-
-    // Devuelvo el array final ya ordenado
-    return finalList;
   }
 
+  private populateCategories(list: Movie[]) {
+    this.movies           = list;
+    this.moviesPremiere   = list.filter(m => m.screen_type === 'ESTRENO');
+    this.moviesPresale    = list.filter(m => m.screen_type === 'PREVENTA');
+    this.moviesComingSoon = list.filter(m => m.screen_type === 'PROXIMAMENTE');
+  }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }
