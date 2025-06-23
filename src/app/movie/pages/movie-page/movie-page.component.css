@@ -91,7 +91,8 @@ mat-toolbar {
 
 .movie-synopsis {
   font-size: clamp(14px, 3vw, 18px); /* Ajusta min, punto medio y max a tus necesidades */
-  max-height: 250px;
+  font-family: 'Oswald', sans-serif;
+  max-height: auto;
   text-align: justify; /* Justifica el texto */
   overflow-y: auto;
   /* Opcionales para partir palabras largas */
@@ -153,6 +154,14 @@ mat-toolbar {
   cursor: pointer;
   /* Transición opcional para suavizar */
   transition: top 0.3s ease, left 0.3s ease;
+}
+
+.btn-showtimes {
+  color: whitesmoke;
+  height: 6.5vh;
+  font-size: clamp(6px, 3vw, 12px);
+  width: 100%;
+  margin-top: 10px;
 }
 
 

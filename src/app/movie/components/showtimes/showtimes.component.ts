@@ -17,6 +17,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { Browser } from '@capacitor/browser';
+import { isButtonDisabled } from '../../../common/helpers';
+import { timeToMinutes } from '../../../common/helpers';
 
 @Component({
   selector: 'movie-showtimes',
@@ -66,7 +68,7 @@ export class ShowtimesComponent implements OnInit {
 
     this.dataShowtimes.showtimes.forEach(cinema => {
       cinema.showtimes.sort((a, b) => {
-        return this.timeToMinutes(a.showtime) - this.timeToMinutes(b.showtime);
+        return timeToMinutes(a.showtime) - timeToMinutes(b.showtime);
       });
     });
 
@@ -160,44 +162,18 @@ export class ShowtimesComponent implements OnInit {
     }, this.timeRedirect)
   }
 
-  onClose(): void{
-    this.dialogRef.close(true);
+  redirectToCinema(cinematype: string, urlRedirect: string){
+
+    const cinema = cinematype;
+    this.showMessage(cinema);
+    setTimeout(() => {
+      Browser.open({ url: urlRedirect})
+    }, this.timeRedirect)
+
   }
 
-  isButtonDisabled(showtime: string, showdate: string, cinemaType: string): boolean {
-    /* ───── Normalizar fechas ───── */
-    // 1) Fecha del show sin hora (forzamos hora 00:00 local)
-    console.log('showtime: ',showtime);
-
-    console.log('showdate: ',showdate)
-
-    const dShow = new Date(`${showdate}`);
-    // 2) Hoy sin hora
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    /* ───── Filtro por día ───── */
-    if (dShow.getTime() > today.getTime()) {
-      // Mañana o después ⇒ botón habilitado
-      return false;
-    }
-    if (dShow.getTime() < today.getTime()) {
-      // Ayer o antes ⇒ botón deshabilitado
-      return true;
-    }
-
-    /* ───── Aquí sabemos que es HOY ───── */
-    // Hora del show
-    const [hours, minutes] = showtime.split(':').map(Number);
-    const showtimeDate = new Date(today);          // mismo día
-    showtimeDate.setHours(hours, minutes, 0, 0);   // hora del show
-
-    // Umbral: 20 min o 0 min para Cinemark
-    const threshold =
-      cinemaType.toLowerCase() === 'cinemark' ? 0 : 20 * 60 * 1000;
-
-    // Si ya pasaron ≥ threshold ms desde la hora del show ⇒ deshabilitar
-    return now.getTime() - showtimeDate.getTime() >= threshold;
+  onClose(): void{
+    this.dialogRef.close(true);
   }
 
   showMessage(cinema:string){
@@ -217,10 +193,9 @@ export class ShowtimesComponent implements OnInit {
     );
   }
 
-  // Método de ayuda que convierte "HH:MM" en minutos
-  private timeToMinutes(time: string): number {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
+
+  isButtonDisabled(showtime: string, showdate: string, cinemaType: string): boolean {
+    return isButtonDisabled(showtime, showdate, cinemaType);
   }
 
 }

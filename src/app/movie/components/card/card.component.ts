@@ -18,7 +18,7 @@ export class CardComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    if (!this.movie) throw Error('Hero property is required');
+    
   }
 
   navigateToMovie(movieId: any){

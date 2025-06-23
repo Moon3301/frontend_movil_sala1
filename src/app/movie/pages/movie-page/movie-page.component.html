@@ -31,7 +31,7 @@
       <mat-card-content>
 
         <div class="row">
-          <div class="col-3 col-md-3 movie-detail">
+          <!-- <div class="col-3 col-md-3 movie-detail">
             <img [src]="movie.img_url" width="100%">
             <hr>
             <h5>
@@ -46,65 +46,131 @@
               <h6 class="movie-rating">{{ movie.rating }}</h6>
             </h5>
 
-          </div>
+          </div> -->
 
-          <div class="col-9 col-md-9">
-            <h4 class="synopsis-title text-center">{{ movie.synopsis_alt }}</h4>
-
-            <h5>Sinopsis</h5>
-            <p class="movie-synopsis" style="color: white;">{{ movie.synopsis }}</p>
+          <div class="col-12 col-md-12">
+            <div class="row text-center">
+              <div class="col-3">
+                <img [src]="movie.img_url" width="100%" style="border-radius: 10px;">
+              </div>
+              <div class="col-9" style="display: flex; align-items: center;">
+                <h4 class="synopsis-title text-center">{{ movie.title }}</h4>
+              </div>
+            </div>
+            <mat-divider class="mt-2"></mat-divider>
+            <div class="row mt-4">
+              <div class="col-12">
+                <h3 class="text-center" style="font-size: 25px;">Sinopsis</h3>
+                <p class="movie-synopsis" style="color: white;">{{ movie.synopsis }}</p>
+              </div>
+            </div>
           </div>
         </div>
 
       </mat-card-content>
     </mat-card>
 
+    <hr>
+
   </div>
 }@else{
   <mat-spinner style="margin: 0 auto;"></mat-spinner>
 }
 
-<p class="text-center mt-2 mb-2;" style="font-size: 30px; color: black;">Funciones</p>
 
-  <div class="container">
+<p class="text-center mt-2 mb-2;" style="font-size: 30px; color: black; font-family: 'Oswald', sans-serif; font-weight: bold;">Funciones</p>
 
-    @if(funciones){
-      @if(funciones!.length > 0){
+<ng-container *ngIf="funciones?.length; else sinFunciones">
 
-        <mat-form-field appearance="fill" class="fechas-funciones" class="w-100">
-          <mat-label>Funciones disponibles</mat-label>
-          <mat-select [value]="selectedDate">
-            @for (date of dates; track date) {
-              <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+  <!-- selector de fechas ... -->
 
-        <mat-list>
-          @for(cinema of funciones; track cinema){
-
-            <mat-list-item
-              (click)="openShowtimes(cinema.cinemas, cinema.cinemaType)"
-              matRipple
-              style="background-color: rgb(31, 31, 31);">
-
-              <span style="color: white;">{{cinema.cinemaType | uppercase}}</span>
-
-            </mat-list-item>
-            <mat-divider></mat-divider>
-
-          }
-        </mat-list>
-
-      }@else {
-        <div class="alert alert-dark" style="display: flex; justify-content: center; align-items: center; background-color: rgb(31, 31, 31); color: whitesmoke;">No existen funciones disponibles aun.</div>
+  <mat-form-field  appearance="fill" class="fechas-funciones" class="w-100" style="padding: 10px;">
+    <mat-label>Funciones disponibles</mat-label>
+    <mat-select [value]="selectedDate">
+      @for (date of dates; track date) {
+        <mat-option [value]="date" (onSelectionChange)="onSelectDate(date, $event)">{{date}}</mat-option>
       }
-    }@else {
+    </mat-select>
+  </mat-form-field>
 
-      <mat-spinner style="margin: 0 auto;"></mat-spinner>
-    }
 
+  <!-- 🔻 ÚNICO ngSwitch -->
+  <ng-container [ngSwitch]="filterType">
+
+    <!-- REGION ────────────────────────────────────── -->
+    <ng-container *ngSwitchCase="'region'">
+      <mat-list  style="padding: 10px;" >
+        @for(g of funciones; track g){
+          <mat-list-item
+            matRipple
+            style="background-color: rgb(31, 31, 31); border-radius: 20px; height: 7vh; margin-bottom: 10px;"
+            (click)="openShowtimes(g.cinemas, g.cinemaType)">
+
+          <span style="color: whitesmoke; ">{{ g.cinemaType | uppercase }}</span>
+          </mat-list-item>
+
+        }
+      </mat-list>
+    </ng-container>
+
+    <!-- CADENA ────────────────────────────────────── -->
+    <ng-container *ngSwitchCase="'chain'">
+      <mat-list style="padding: 10px;">
+        @for(c of funciones![0].cinemas; track c){
+          <mat-list-item
+            matRipple
+            style="background-color: rgb(31, 31, 31); border-radius: 20px; margin-bottom: 10px;"
+            (click)="openModalByCinema([c], funciones![0].cinemaType)"
+            >
+            <span style="color: whitesmoke;">{{ c.cinemaName }}</span>
+          </mat-list-item>
+
+        }
+      </mat-list>
+    </ng-container>
+
+    <!-- CINE ──────────────────────────────────────── -->
+    <ng-container *ngSwitchCase="'cinema'">
+      <div class="container">
+
+        <div class="row">
+
+            @for(st of funciones![0].cinemas![0].showtimes; track st){
+
+              @let disabled = isButtonDisabled(st.showtime, st.showdate, funciones![0].cinemaType);
+
+              <div class="col-6">
+                <button
+                  style="background-color: rgb(31, 31, 31);"
+                  class="btn-showtimes"
+                  translate="no"
+                  mat-flat-button
+                  [disabled]="disabled"
+                  [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
+                  (click)="redirectToCinema(funciones![0].cinemaType, st.urlRedirect)"
+                  >
+
+                  {{ st.showtime }} {{ st.language }}
+                </button>
+              </div>
+            }
+        </div>
+
+      </div>
+    </ng-container>
+
+  </ng-container>
+</ng-container>
+
+<div class="p-d-flex p-jc-center p-ai-center">
+  <p-toast styleClass="center-toast" position="top-center"></p-toast>
+</div>
+
+<ng-template #sinFunciones>
+  <div class="alert alert-dark d-flex justify-content-center align-items-center">
+    No existen funciones disponibles aún.
   </div>
+</ng-template>
 
 
 

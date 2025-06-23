@@ -10,127 +10,39 @@
 
   @for(showtime of dataShowtimes.showtimes; track showtime){
 
-    <mat-card style="border: 1px solid rgb(31, 31, 31); background-color: rgb(31, 31, 31); color: whitesmoke;">
-      <mat-card-header>
-        <mat-card-title>{{showtime.cinemaName}}</mat-card-title>
-      </mat-card-header>
-      <hr>
-      <mat-card-content>
-        <!-- <mat-card-subtitle>Funciones: </mat-card-subtitle> -->
-        <div class="row">
-          @for (schedule of showtime.showtimes; track schedule) {
-            @let disabled = isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType);
+  <mat-card style="border: 1px solid rgb(31, 31, 31); background-color: rgb(31, 31, 31); color: whitesmoke;">
+    <mat-card-header>
+      <mat-card-title>{{showtime.cinemaName}}</mat-card-title>
+    </mat-card-header>
+    <hr>
+    <mat-card-content class="w-100">
+      <!-- <mat-card-subtitle>Funciones: </mat-card-subtitle> -->
+      <div class="row">
+        @for (schedule of showtime.showtimes; track schedule) {
+          @let disabled = isButtonDisabled(schedule.showtime, schedule.showdate, cinemaType);
 
-            <div class="col-6 col-md-2" style="text-align: center;">
+          <div class="col-6 col-md-2" style="text-align: center;">
 
-              @if(cinemaType === 'Cinepolis'){
-                <button mat-button
+            <button
+              mat-button
+              (click)="redirectToCinema(cinemaType, schedule.urlRedirect)"
+              [disabled]="disabled"
+              [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
+              >
+              {{ schedule.showtime }} {{schedule.language}}
+            </button>
 
-                  [disabled]="disabled"
-                  [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                  (click)="buildUrlPaymentCinepolis(
-                  showtime.vistaId,
-                  schedule.showtimeExternalId)"
-                  class="notranslate button-showtime" translate="no"
+          </div>
 
-                  >
+        }
 
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
+      </div>
+    </mat-card-content>
 
-              }@else if
-              (cinemaType === 'Cinemark'){
-                <button mat-button
-                [disabled]="disabled"
-                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                (click)="buildUrlPaymentCinemark(
-                  showtime.cinemaExternalId,
-                  schedule.showtimeExternalId,
-                  schedule.showdate,
-                  schedule.showtime,
-                  showtime.cinemaSlug,
-                  schedule.sessionId)"
-                  class="notranslate button-showtime" translate="no"
+  </mat-card>
+  <br>
 
-                  >
-
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
-              }@else if
-              (cinemaType === 'Cineplanet'){
-                <button mat-button
-                [disabled]="disabled"
-                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                (click)="buildUrlPaymentCineplanet(
-                    showtime.version.title,
-                    showtime.cinemaExternalId,
-                    schedule.sessionId
-                  )"
-                  class="notranslate button-showtime" translate="no"
-                  >
-
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
-              }@else if
-              (cinemaType === 'Muvix'){
-                <button mat-button
-                [disabled]="disabled"
-                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                  (click)="buildUrlPaymentMuvix(
-                    showtime.cinemaExternalId,
-                    schedule.sessionId
-                  )"
-                  class="notranslate button-showtime" translate="no"
-                  >
-
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
-              }@else if
-              (cinemaType === 'Cinestar'){
-                <button mat-button
-                [disabled]="disabled"
-                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                  (click)="buildUrlPaymentCinestar(
-                    showtime.cinemaExternalId,
-                    schedule.sessionId
-                  )"
-                  class="notranslate button-showtime" translate="no"
-                  >
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
-              }@else if(cinemaType === 'Lido'){
-                <button mat-button
-                [disabled]="disabled"
-                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                  (click)="buildUrlPaymentLido(
-                    schedule.sessionId
-                  )"
-                  class="notranslate button-showtime" translate="no"
-                  >
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
-              }@else if(cinemaType === "Paseo del valle"){
-                <button mat-button
-                [disabled]="disabled"
-                [ngStyle]="disabled ? { color: 'grey' } : { color: 'whitesmoke' }"
-                  (click)="buildPaymentPDV()"
-                  class="notranslate button-showtime" translate="no"
-                  >
-                {{ schedule.showtime }} {{schedule.language}}</button>
-                <mat-divider class="p-1"></mat-divider>
-              }
-
-            </div>
-
-          }
-
-        </div>
-      </mat-card-content>
-
-    </mat-card>
-    <br>
-
-  }
+}
 
   <div class="p-d-flex p-jc-center p-ai-center">
     <p-toast styleClass="center-toast" position="top-center"></p-toast>

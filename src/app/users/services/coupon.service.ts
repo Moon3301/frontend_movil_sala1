@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, switchMap, Observable } from "rxjs";
+import { map, switchMap, Observable, firstValueFrom } from "rxjs";
 import { environments as env } from "../../../environments/environments";
 import { CouponView } from "../interfaces/coupon.interface";
 import { DeviceIdService } from "../../shared/services/deviceId.service";
@@ -35,6 +35,7 @@ export class CouponService {
   getDeviceId(): Observable<string> {
     return this.deviceIdService.getId();
   }
+
 
   assignCoupon(promotionId: number): Observable<any> {
     return this.getDeviceId().pipe(

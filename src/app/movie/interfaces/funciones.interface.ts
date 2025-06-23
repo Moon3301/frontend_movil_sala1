@@ -17,7 +17,8 @@ export interface ICinema {
   cinemaExternalId: string;
   vistaId:          string;
   showtimes:        Showtime[];
-  version:          Version
+  version:          Version;
+
 }
 
 export interface Version {
@@ -35,6 +36,7 @@ export interface Showtime {
   language:           string;
   showtimeExternalId: string;
   sessionId:          string;
+  urlRedirect:      string;
 }
 
 export interface IMovie {

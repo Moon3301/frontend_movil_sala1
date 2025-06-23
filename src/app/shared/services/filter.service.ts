@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, distinctUntilChanged } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class FilterService {
@@ -9,20 +9,30 @@ export class FilterService {
   private cinemaId$  = new BehaviorSubject<number | null>(null);
 
   // getters as observables
-  selectedRegion$ = this.regionId$.asObservable();
-  selectedChain$  = this.chain$.asObservable();
-  selectedCinema$ = this.cinemaId$.asObservable();
+  selectedRegion$ = this.regionId$.asObservable().pipe(distinctUntilChanged());
+  selectedChain$  = this.chain$.asObservable().pipe(distinctUntilChanged());
+  selectedCinema$ = this.cinemaId$.asObservable().pipe(distinctUntilChanged());
 
-  get currentRegionId()  { return this.regionId$.value; }
-  get currentChain()     { return this.chain$.value; }
-  get currentCinemaId()  { return this.cinemaId$.value; }
+  get currentRegionId() { return this.regionId$.value; }
+  get currentChain()    { return this.chain$.value; }
+  get currentCinemaId() { return this.cinemaId$.value; }
 
-  // setters
-  setRegion(id: number|null)  { this.regionId$.next(id);  this.resetChain(); }
-  setChain(chain: string|null){ this.chain$.next(chain);  this.resetCinema(); }
-  setCinema(id: number|null)  { this.cinemaId$.next(id); }
+  setRegion(id: number|null)  {
+    if (this.regionId$.value !== id){
+      this.regionId$.next(id);
+      this.resetChain();
+    }
+  }
+  setChain(chain: string|null){
+    if (this.chain$.value !== chain) {
+      this.chain$.next(chain);
+      this.resetCinema();
+    }
+  }
+  setCinema(id: number|null){
+    if (this.cinemaId$.value !== id) this.cinemaId$.next(id);
+  }
 
-  // helpers: al cambiar región reseteo niveles inferiores
-  public resetChain()  { this.chain$.next(null); this.resetCinema(); }
-  public resetCinema() { this.cinemaId$.next(null); }
+  resetChain(){ this.chain$.next(null); this.resetCinema(); }
+  resetCinema(){ this.cinemaId$.next(null); }
 }

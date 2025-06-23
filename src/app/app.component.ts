@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { environments } from '../environments/environments';
 import { IRegion } from './common/interfaces';
-import { catchError, from, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, from, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
@@ -29,6 +29,8 @@ export class AppComponent implements OnInit{
   @ViewChild('drawer') drawer!: MatDrawer;
 
   window: any;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private readonly http: HttpClient,
@@ -63,50 +65,38 @@ export class AppComponent implements OnInit{
     })
 
     this.getAllRegions().pipe(
-
-      tap(resp => this.regions = resp),
-      switchMap(regions => this.storageService.saveData('regions', JSON.stringify(regions))),
-      tap(() => console.log('Regiones guardadas en el almacenamiento local')),
-
-      // Llama a la función que retorna un Observable de la ubicación
-      switchMap(() => this.getUserLocationANDROID()),
-      tap(() => {
-        console.log('Ubicación obtenida y guardada')
-
-        // Neesito almacenar un valor por defecto si el usuario no permite el acceso a la ubicacion
-      }
-
-    ),
-
-      switchMap(() => this.authService.checkAuthentication()),
-      tap(() => console.log('CheckAuthentication finished')),
-
-      catchError(err => {
-        console.error('Error en la inicialización:', err);
-        return of(null); // Evita que el Observable se rompa
-      })
+      tap(regs => this.storageService.saveData('regions', JSON.stringify(regs)).subscribe()),
+      /** 2. obtengo userLocation SÓLO si no existe region persistida */
+      switchMap(() => this.storageService.getData('user_region_id')),
+      switchMap(regionId => {
+        if (regionId) return of(regionId);           // ya hay región -> saltar geoloc
+        return this.getUserLocationANDROID();        // hace setRegion dentro
+      }),
+      switchMap(() => this.authService.checkAuthentication())
     ).subscribe();
 
-    // if(Capacitor.getPlatform() !== 'web'){
+    if(Capacitor.getPlatform() !== 'web'){
 
-    //   if(Capacitor.getPlatform() === 'ios'){
+      if(Capacitor.getPlatform() === 'ios'){
 
-    //     document.addEventListener('deviceready', async () => {
+        document.addEventListener('deviceready', async () => {
 
-    //       // 1. Pide permiso al usuario
-    //       const { value: status } = await AdvertisingId.requestTracking();
-    //       console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
+          const { value: status } = await AdvertisingId.requestTracking();
+          console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
 
-    //       // 2. Lee el identificador (IDFA) — devuelve '00000000-…' si no está autorizado
-    //       const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
-    //       console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
-    //     });
-    //   }
+          const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
+          console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
+        });
+      }
 
-    //   console.log('Iniciando SDK AppsFlyer')
-    //   this.initSdkAppsFlyer();
-    // }
+      console.log('Iniciando SDK AppsFlyer')
+      this.initSdkAppsFlyer();
+    }
 
+  }
+
+  getAllRegions(): Observable<IRegion[]>{
+    return this.http.get<IRegion[]>(`${environments.baseUrl}/region`)
   }
 
   getUserLocationANDROID() {
@@ -154,11 +144,15 @@ export class AppComponent implements OnInit{
         }
       })
 
+      this.storageService.saveData("user_region_id", response.id.toString()).subscribe()
+
       // Guardar la ubicación real en storage
       return this.storageService.saveData('user_ubication', response.name).pipe(
         // Encadena y retorna la ubicación guardada
         switchMap(() => this.storageService.getData('user_ubication'))
       );
+
+
       }),
       tap(saved => {
         console.log('Ubicación guardada en el almacenamiento local:', saved);
@@ -182,25 +176,10 @@ export class AppComponent implements OnInit{
     );
   }
 
-  async getUserLocationWEB(){
-
-    navigator.geolocation.getCurrentPosition(
-      (position)=> {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        this.sharedService.getUbicationByServer(lat.toString(), lng.toString()).subscribe(response => {
-          sessionStorage.setItem("user_ubication",response.name)
-        })
-      }
-    )
-  }
-
-  getAllRegions(): Observable<IRegion[]>{
-    return this.http.get<IRegion[]>(`${environments.baseUrl}/region`)
-  }
-
   ngOnDestroy(): void {
+
+    this.destroy$.next();
+    this.destroy$.complete();
 
     if (this.ptrInstance) {
       this.ptrInstance.destroy();
@@ -228,4 +207,38 @@ export class AppComponent implements OnInit{
 
   }
 
+  async getUserLocationWEB(){
+
+    navigator.geolocation.getCurrentPosition(
+      (position)=> {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        this.sharedService.getUbicationByServer(lat.toString(), lng.toString()).subscribe(response => {
+          sessionStorage.setItem("user_ubication",response.name)
+        })
+      }
+    )
+  }
+
 }
+
+// if(Capacitor.getPlatform() !== 'web'){
+
+    //   if(Capacitor.getPlatform() === 'ios'){
+
+    //     document.addEventListener('deviceready', async () => {
+
+    //       // 1. Pide permiso al usuario
+    //       const { value: status } = await AdvertisingId.requestTracking();
+    //       console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
+
+    //       // 2. Lee el identificador (IDFA) — devuelve '00000000-…' si no está autorizado
+    //       const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
+    //       console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
+    //     });
+    //   }
+
+    //   console.log('Iniciando SDK AppsFlyer')
+    //   this.initSdkAppsFlyer();
+    // }

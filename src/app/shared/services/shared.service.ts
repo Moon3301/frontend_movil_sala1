@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import { BehaviorSubject, catchError, from, map, Observable, of, pipe, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, distinctUntilChanged, from, map, Observable, of, pipe, switchMap, tap } from 'rxjs';
 import { environments } from '../../../environments/environments';
 import { IRegion, IUbication } from "../../common/interfaces";
 import stringSimilarity from "string-similarity";
@@ -20,7 +20,8 @@ export interface Region {
 export class SharedService{
 
   private _currentRegion = new BehaviorSubject<string | null>(null);
-  public currentRegion$: Observable<string | null> = this._currentRegion.asObservable();
+  currentRegion$ = this._currentRegion.asObservable().pipe(distinctUntilChanged());
+
 
   regions: IRegion[] = []
   currentRegion!: string;
@@ -30,10 +31,10 @@ export class SharedService{
   private toggleDrawerSubject = new Subject<void>();
   toggleDrawer$ = this.toggleDrawerSubject.asObservable();
 
-  private nameOptionFilter$ = new BehaviorSubject<string | null>(null);
+  private nameOptionFilter$ = new BehaviorSubject<string | null>('Cargando…');
   selectedNameFilter$ = this.nameOptionFilter$.asObservable();
 
-  private iconOptionFilter$ = new BehaviorSubject<string | null>(null);
+  private iconOptionFilter$ = new BehaviorSubject<string | null>('location_on');
   selectedIconFilter$ = this.iconOptionFilter$.asObservable();
 
   private baseUrl: string = environments.baseUrl;
@@ -180,8 +181,8 @@ export class SharedService{
     this.toggleDrawerSubject.next();
   }
 
-  setRegion(region: string) {
-    this._currentRegion.next(region);
+  setRegion(name: string){
+    if (this._currentRegion.value !== name) this._currentRegion.next(name);
   }
 
   getRegionValue(): string | null {

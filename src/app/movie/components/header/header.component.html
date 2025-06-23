@@ -48,7 +48,7 @@
       class="location-btn"
       [matMenuTriggerFor]="menuRegion">
       <mat-icon class="icon-location" aria-hidden="true">location_on</mat-icon>
-      <span class="current-region">{{ userCurrentRegion }}</span>
+      <span class="current-region">{{ userCurrentRegion || 'Seleccione una región' }}</span>
 
     </button>
 
@@ -76,7 +76,7 @@
 
     </button>
 
-    <button mat-flat-button class="w-100" (click)="onFilterMovies()">Aceptar</button>
+    <button mat-flat-button class="w-100" (click)="onToggleFilter()">Aceptar</button>
 
   </mat-card-content>
 </mat-card>

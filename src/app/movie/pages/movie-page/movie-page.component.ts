@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, EMPTY, filter, from, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, forkJoin, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../interfaces/movie.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -15,8 +15,9 @@ import { ShowtimesComponent } from '../../components/showtimes/showtimes.compone
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { App } from '@capacitor/app';
 import { Location } from '@angular/common';  // Para retroceder en Angular
-import { ViewportScroller } from '@angular/common';
 import { Capacitor } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'movie-movie-page',
@@ -34,6 +35,8 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   @ViewChild('videoContainer') videoContainerRef!: ElementRef;
   @ViewChild('detailContainer') detailContainerRef!: ElementRef;
 
+  timeRedirect: number = 2000;
+
   movie?: Movie
   funciones?: ICines[]
   isLoadingFunciones: boolean = false
@@ -42,7 +45,15 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   isLoading: boolean = false;
   selectedDate: any
 
+  regionId: number | null = null;
+  chain: string | null = null;
+  cinemaId: number | null = null;
+
   trailerSafeUrl!: SafeResourceUrl;
+
+  filter!: string;
+
+  filterType!: 'region' | 'chain' | 'cinema';
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -53,7 +64,7 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     private storageService: StorageService,
     private cdr: ChangeDetectorRef,
     private location: Location,
-
+    private messageService: MessageService,
   ){}
   ngAfterViewInit() {
 
@@ -68,6 +79,8 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
   ngOnInit(): void {
 
     this.isLoadingFunciones = true;
+
+    const currentDate = getFormattedDate();
 
     let coordinates: any = null;
     this.storageService.getData('coordenates').subscribe({
@@ -92,8 +105,6 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
       }
     });
 
-    const currentDate = getFormattedDate();
-
     this.activateRoute.params.pipe(
       switchMap(({ id }) => {
         const movieId = +id;
@@ -115,9 +126,33 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
       // Obtener la región (ya sea del localStorage o mediante geolocalización).
       switchMap(() => this.getCoordenates()),
       // Una vez se tiene la región, se solicitan los cines.
-      switchMap(resp =>
-        this.movieService.getCinemasByUbicationAndMovie(this.movie!.id, resp.latitude, resp.longitude, currentDate)
-      )
+      switchMap(coords =>
+        forkJoin({
+          regionId : this.storageService.getData('user_region_id'),
+          chain    : this.storageService.getData('user_chain'),
+          cinemaId : this.storageService.getData('user_cinema_id')
+        }).pipe(
+          map(({ regionId, chain, cinemaId }) => {
+
+            this.regionId = regionId ? +regionId : null;
+            this.chain    = chain    || null;
+            this.cinemaId = cinemaId ? +cinemaId : null;
+
+            const filterType: 'region' | 'chain' | 'cinema' =
+                  this.cinemaId ? 'cinema'
+                : this.chain    ? 'chain'
+                :                 'region';
+
+            this.filterType = filterType;
+
+            return { coords, filterType };
+          })
+        )
+      ),
+      switchMap(({ coords, filterType }) =>
+        this.movieService.getFilterBillboards(this.movie!.id, coords.latitude, coords.longitude, currentDate, this.regionId!, this.chain!, this.cinemaId!, this.filterType)
+      ),
+
     ).subscribe(
       (dataBillboard) => {
 
@@ -235,20 +270,18 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
 
   }
 
-  openShowtimes(showtimes: ICinema[], cinemaType: string){
-
+  openShowtimes(cinemas: ICinema[], cinemaType: string) {
     this.dialog.open(ShowtimesComponent, {
-      data: {
-        cinema: cinemaType,
-        showtimes: showtimes,
-        movie: this.movie,
-        dates: this.dates
-      },
-      width: '100%',
-      height: '80%',
-      maxWidth: '100%',
-    })
+      data: { cinema: cinemaType, showtimes: cinemas, movie: this.movie, dates: this.dates },
+      width: '100%', height: '80%', maxWidth: '100%'
+    });
+  }
 
+  openModalByCinema(cinemas: ICinema[], cinemaType: string) {
+    this.dialog.open(ShowtimesComponent, {
+      data: { cinema: cinemaType, showtimes: cinemas, movie: this.movie, dates: this.dates },
+      width: '100%', height: '80%', maxWidth: '100%'
+    });
   }
 
   openBillboards(){
@@ -336,11 +369,72 @@ export class MoviePageComponent  implements OnInit, AfterViewInit  {
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
 
+  showMessage(cinema:string){
+
+    let message = 'Redireccionando a la pagina de compra ...';
+    if(cinema === 'Paseo del valle'){
+      message = 'Deberá iniciar sesion en la web para continuar con la compra..'
+    }
+
+    this.messageService.add(
+      {
+        severity: 'contrast',
+        summary: `Redireccionando a ${cinema}`,
+        detail: message,
+        life: this.timeRedirect + 100
+      }
+    );
+  }
+
+  redirectToCinema(cinemaType: string, urlRedirect: string) {
+    const cinema = cinemaType;
+    this.showMessage(cinema);
+    setTimeout(() => {
+      Browser.open({ url: urlRedirect})
+    }, this.timeRedirect)
+  }
+
   private getTodayString(): string {
     const d = new Date();
     const mm = (d.getMonth() + 1).toString().padStart(2, '0');
     const dd = d.getDate().toString().padStart(2, '0');
     return `${d.getFullYear()}-${mm}-${dd}`;
+  }
+
+  isButtonDisabled(showtime: string, showdate: string, cinemaType: string): boolean {
+    /* ───── Normalizar fechas ───── */
+    // 1) Fecha del show sin hora (forzamos hora 00:00 local)
+    console.log('showtime: ',showtime);
+
+    console.log('showdate: ',showdate)
+
+    const dShow = new Date(`${showdate}`);
+    // 2) Hoy sin hora
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    /* ───── Filtro por día ───── */
+    if (dShow.getTime() > today.getTime()) {
+      // Mañana o después ⇒ botón habilitado
+      return false;
+    }
+    if (dShow.getTime() < today.getTime()) {
+      // Ayer o antes ⇒ botón deshabilitado
+      return true;
+    }
+
+    /* ───── Aquí sabemos que es HOY ───── */
+    // Hora del show
+    const [hours, minutes] = showtime.split(':').map(Number);
+    const showtimeDate = new Date(today);          // mismo día
+    showtimeDate.setHours(hours, minutes, 0, 0);   // hora del show
+
+    // Umbral: 20 min o 0 min para Cinemark
+    const threshold =
+      cinemaType.toLowerCase() === 'cinemark' ? 0 : 20 * 60 * 1000;
+
+    // Si ya pasaron ≥ threshold ms desde la hora del show ⇒ deshabilitar
+    return now.getTime() - showtimeDate.getTime() >= threshold;
   }
 
 }

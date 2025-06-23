@@ -50,7 +50,7 @@ export class TestingComponent implements OnInit{
         // sound: 'beep.wav',           // opcional (colócalo en ios/App/App/assets y android/app/src/main/res/raw)
         // smallIcon: 'ic_stat_sala1',  // opcional (solo Android)
         actionTypeId: '',            // o define tipos para botones de acción
-        extra: { promotionId: '9' }      // datos que te servirán al abrirla
+        extra: { promotionId: '10' }      // datos que te servirán al abrirla
       }]
     })
   }

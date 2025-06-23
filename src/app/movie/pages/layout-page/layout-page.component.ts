@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CineFeature, mapBoxNearbyService } from '../../../shared/services/mapboxNearby.service';
-import { Observable, from, switchMap, tap } from 'rxjs';
-import { Geolocation } from '@capacitor/geolocation';
+import { mapBoxNearbyService } from '../../../shared/services/mapboxNearby.service';
 
 @Component({
   selector: 'movie-layout-page',
@@ -15,7 +13,7 @@ export class LayoutPageComponent implements OnInit {
   constructor(private mapboxService: mapBoxNearbyService) { }
 
   ngOnInit(): void {
-    
+
   }
 
 

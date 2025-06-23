@@ -2,10 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Movie } from '../../interfaces/movie.interface';
 import { MovieService } from '../../services/movie.service';
 import { MovieCarrusel } from '../../../administration/interfaces/movies.interface';
-import { combineLatest, debounceTime, finalize, forkJoin, map, shareReplay, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { FilterService } from '../../../shared/services/filter.service';
+import { StorageService } from '../../../storage/storage.service';
 
 @Component({
   selector: 'movie-list-movie-page',
@@ -35,6 +36,7 @@ export class ListMoviePageComponent implements OnInit{
 
   constructor(
     private movieService: MovieService,
+    private storageService: StorageService,
     private route: ActivatedRoute,
     private router: Router,
     private filter: FilterService
@@ -47,24 +49,30 @@ export class ListMoviePageComponent implements OnInit{
       shareReplay(1)
     );
 
+    this.movieService.getMovies().pipe(
+      tap(movies => this.storageService.saveData('movies', JSON.stringify(movies)).subscribe()),
+    ).subscribe();
+
     /** 2️⃣ Reaccionar a los filtros + carrusel */
     this.isLoading = true;
 
     combineLatest([
-      this.filter.selectedRegion$.pipe(startWith(null)),
-      this.filter.selectedChain$.pipe(startWith(null)),
-      this.filter.selectedCinema$.pipe(startWith(null)),
-      carrusel$
+      this.filter.selectedRegion$,
+      this.filter.selectedChain$,
+      this.filter.selectedCinema$,
+      carrusel$                           // sólo emite 1 vez
     ]).pipe(
+      distinctUntilChanged((a,b)=> a[0]===b[0] && a[1]===b[1] && a[2]===b[2]),
       tap(() => this.isLoading = true),
-      debounceTime(0),
-      switchMap(([regionId, chain, cinemaId, carrusel]) =>
-        this.movieService.getMoviesByFilters(regionId, chain, cinemaId).pipe(
+
+      switchMap(([region, chain, cinema, carrusel]) =>
+        this.movieService.getMoviesByFilters(region, chain, cinema).pipe(
           map(movies => this.combineAndSort(movies, carrusel))
         )
       ),
-      tap(sortedMovies => {
-        this.populateCategories(sortedMovies);
+
+      tap(list => {
+        this.populateCategories(list);
         this.isLoading = false;
       }),
       takeUntil(this.destroy$)

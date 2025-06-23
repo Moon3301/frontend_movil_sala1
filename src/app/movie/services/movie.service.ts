@@ -30,6 +30,13 @@ export class MovieService {
     )
   }
 
+  public getFilterBillboards(movieId: number, lat: string, lng: string, currentDate?: string, regionId?: number, chain?: string, cinemaId?: number, filter?: string): Observable<any>{
+    console.log(regionId, chain, cinemaId, filter);
+    return this.http.get<any>(
+      `${this.baseUrl}/billboard/${currentDate}/v3?movieId=${movieId}&lat=${lat}&lng=${lng}&regionId=${regionId}&chain=${chain}&cinemaId=${cinemaId}&filter=${filter}`
+    )
+  }
+
   public getMovieByIdLocal( movieId: number): Observable<Movie>{
 
     return this.storageService.getData('movies').pipe(
@@ -84,9 +91,9 @@ export class MovieService {
     return this.http.get<MovieCarrusel[]>(`${this.baseUrl}/carrusel`)
   }
 
-  public saveAllMovies(movies: Movie[]){
-    localStorage.setItem("movies", JSON.stringify(movies))
-  }
+  // public saveAllMovies(movies: Movie[]){
+  //   localStorage.setItem("movies", JSON.stringify(movies))
+  // }
 
   public saveAllMoviesT(movies: Movie[]){
     return this.storageService.saveData("movies", JSON.stringify(movies))
