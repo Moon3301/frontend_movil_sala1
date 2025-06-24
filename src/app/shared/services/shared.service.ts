@@ -31,7 +31,7 @@ export class SharedService{
   private toggleDrawerSubject = new Subject<void>();
   toggleDrawer$ = this.toggleDrawerSubject.asObservable();
 
-  private nameOptionFilter$ = new BehaviorSubject<string | null>('Cargando…');
+  private nameOptionFilter$ = new BehaviorSubject<string | null>('Seleccione una región');
   selectedNameFilter$ = this.nameOptionFilter$.asObservable();
 
   private iconOptionFilter$ = new BehaviorSubject<string | null>('location_on');
@@ -121,7 +121,7 @@ export class SharedService{
   }
 
   getUserLocationANDROID() {
-      const DEFAULT_LOCATION = 'Metropolitana de Santiago'; // El valor por defecto que desees
+      const DEFAULT_LOCATION = 'Seleccione una region'; // El valor por defecto que desees
 
       return from(Geolocation.checkPermissions()).pipe(
         switchMap(permissions => {
@@ -140,10 +140,14 @@ export class SharedService{
         }),
         switchMap(response => {
           // Guardar la ubicación real en storage
+
+          this.storageService.saveData('user_region_id', response.id.toString()).subscribe()
+
           return this.storageService.saveData('user_ubication', response.name).pipe(
             // Encadena y retorna la ubicación guardada
-            switchMap(() => this.storageService.getData('user_ubication'))
+            switchMap(() => this.storageService.getData('user_ubication')),
           );
+
         }),
         tap(saved => {
           console.log('Ubicación guardada en el almacenamiento local:', saved);

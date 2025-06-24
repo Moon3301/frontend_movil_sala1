@@ -109,6 +109,19 @@ export class HeaderComponent implements OnInit {
         this.sharedService.getChainsByRegion(+regionId).pipe(take(1))
           .subscribe(list => this.cadenas = list);
 
+      }else{
+        this.sharedService.getUserLocationANDROID().pipe(take(1)).subscribe({
+          next: (resp) => {
+            this.userCurrentRegion = resp!;
+            this.cdr.detectChanges();
+
+            this.sharedService.setNameOptionFilter(resp!);
+            this.sharedService.setIconOptionFilter('location_on');
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
       }
 
       if (chain) {

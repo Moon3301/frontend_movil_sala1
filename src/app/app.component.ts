@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { environments } from '../environments/environments';
 import { IRegion } from './common/interfaces';
-import { catchError, from, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { catchError, first, firstValueFrom, forkJoin, from, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { AuthService } from './auth/services/auth.service';
 import { Region, SharedService } from './shared/services/shared.service';
 import { Geolocation } from '@capacitor/geolocation';
@@ -12,6 +12,7 @@ import { Capacitor } from '@capacitor/core';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { AdvertisingId } from '@capacitor-community/advertising-id';
 import { MatDrawer } from '@angular/material/sidenav';
+import { PushNotifications } from '@capacitor/push-notifications';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,7 @@ import { MatDrawer } from '@angular/material/sidenav';
   styleUrl: './app.component.css',
 })
 
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterViewInit {
 
   regions: Region[] = []
 
@@ -40,6 +41,20 @@ export class AppComponent implements OnInit{
 
   ){}
 
+  async ngAfterViewInit() {
+    // esperamos al primer repintado para no bloquear el splash
+    requestAnimationFrame(() => this.bootstrapAsync());
+  }
+
+  private async bootstrapAsync() {
+    try {
+      await this.ensurePermissions();   // pide push + localización con timeout
+      await firstValueFrom(this.initData$())
+    } catch (err) {
+      console.error('[BOOT]', err);
+    }
+  }
+
   async ngOnInit(){
 
     if(Capacitor.getPlatform() === 'ios'){
@@ -50,30 +65,30 @@ export class AppComponent implements OnInit{
       EdgeToEdge.setBackgroundColor({ color: '#000000' });
     }
 
-    Geolocation.getCurrentPosition().then((position) => {
+    // Geolocation.getCurrentPosition().then((position) => {
 
-      const coordenates = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      }
+    //   const coordenates = {
+    //     latitude: position.coords.latitude,
+    //     longitude: position.coords.longitude
+    //   }
 
-      this.storageService.saveData('coordenates', JSON.stringify(coordenates)).subscribe({
-        next: () => console.log('Coordenadas guardadas en el almacenamiento local'),
-        error: (error) => console.error('Error al guardar coordenadas:', error)
-      })
+    //   this.storageService.saveData('coordenates', JSON.stringify(coordenates)).subscribe({
+    //     next: () => console.log('Coordenadas guardadas en el almacenamiento local'),
+    //     error: (error) => console.error('Error al guardar coordenadas:', error)
+    //   })
 
-    })
+    // })
 
-    this.getAllRegions().pipe(
-      tap(regs => this.storageService.saveData('regions', JSON.stringify(regs)).subscribe()),
-      /** 2. obtengo userLocation SÓLO si no existe region persistida */
-      switchMap(() => this.storageService.getData('user_region_id')),
-      switchMap(regionId => {
-        if (regionId) return of(regionId);           // ya hay región -> saltar geoloc
-        return this.getUserLocationANDROID();        // hace setRegion dentro
-      }),
-      switchMap(() => this.authService.checkAuthentication())
-    ).subscribe();
+    // this.getAllRegions().pipe(
+    //   tap(regs => this.storageService.saveData('regions', JSON.stringify(regs)).subscribe()),
+    //   /** 2. obtengo userLocation SÓLO si no existe region persistida */
+    //   switchMap(() => this.storageService.getData('user_region_id')),
+    //   switchMap(regionId => {
+    //     if (regionId) return of(regionId);           // ya hay región -> saltar geoloc
+    //     return this.getUserLocationANDROID();        // hace setRegion dentro
+    //   }),
+    //   switchMap(() => this.authService.checkAuthentication())
+    // ).subscribe();
 
     if(Capacitor.getPlatform() !== 'web'){
 
@@ -93,6 +108,76 @@ export class AppComponent implements OnInit{
       this.initSdkAppsFlyer();
     }
 
+  }
+
+  private initData$(): Observable<void> {
+    return this.getAllRegions().pipe(
+      tap(regs =>
+        this.storageService.saveData('regions', JSON.stringify(regs)).subscribe()
+      ),
+      switchMap(() => this.storageService.getData('user_region_id')),
+      switchMap(regionId =>
+        regionId
+          ? of(regionId)                     // ya persistido, nada que hacer
+          : this.setRegionFromCoords$()      // usa coords que guardó ensurePermissions()
+      ),
+      switchMap(() => this.authService.checkAuthentication()),
+      map(() => void 0)                      // <- para que devuelva Observable<void>
+    );
+  }
+
+  private setRegionFromCoords$(): Observable<void> {
+    return this.storageService.getData('coordenates').pipe(
+      switchMap(value => {
+        if (!value) return of(null);     // sin coords → ubicación por defecto
+        const { latitude, longitude } = JSON.parse(value);
+        return this.sharedService.getUbicationByServer(
+          latitude.toString(),
+          longitude.toString()
+        );
+      }),
+      switchMap(region => {
+        const fallback = { id: 0, name: 'Seleccione una región' };
+        const r = region ?? fallback;
+
+        return forkJoin([
+          this.storageService.saveData('user_region_id', String(r.id)),
+          this.storageService.saveData('user_ubication', r.name)
+        ]).pipe(
+          tap(() => {
+            this.sharedService.setRegion(r.name);
+            this.sharedService.setNameIconOptionFilter(r.name, 'location_on');
+          })
+        );
+      }),
+      map(() => void 0)
+    );
+  }
+
+  private async ensurePermissions() {
+    /* --- push notifications --- */
+    const pushPerm = await PushNotifications.checkPermissions();
+    if (pushPerm.receive === 'prompt') {
+      await PushNotifications.requestPermissions();
+    }
+
+    /* --- localización --- */
+    let locPerm = await Geolocation.checkPermissions();
+    if (locPerm.location === 'denied') {
+      locPerm = await Geolocation.requestPermissions();
+    }
+    if (locPerm.location !== 'granted') {
+      await firstValueFrom(
+        this.storageService.saveData('user_ubication', 'Seleccione una ubicacion'),
+      )
+      return;   // seguimos sin petar la app
+    }
+
+    const pos = await Geolocation.getCurrentPosition({ timeout: 8000 });
+    const coords = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+    await firstValueFrom(
+      this.storageService.saveData('coordenates', JSON.stringify(coords))
+    )
   }
 
   getAllRegions(): Observable<IRegion[]>{
@@ -127,6 +212,7 @@ export class AppComponent implements OnInit{
           if(resp!= null){
             this.sharedService.setNameOptionFilter(resp)
           }else{
+            console.log(response.name)
             this.storageService.saveData("filterDataName", response.name).subscribe()
             this.sharedService.setNameOptionFilter(response.name)
           }
