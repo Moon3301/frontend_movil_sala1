@@ -41,6 +41,7 @@
     "@popperjs/core": "^2.11.8",
     "@primeng/themes": "^19.0.6",
     "bootstrap": "^5.3.3",
+    "capacitor-plugin-app-tracking-transparency": "^2.0.5",
     "compare-versions": "^6.1.1",
     "cordova-plugin-appsflyer-sdk": "^6.16.2",
     "ngx-mat-select-search": "^8.0.2",

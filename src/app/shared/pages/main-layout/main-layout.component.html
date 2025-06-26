@@ -10,11 +10,11 @@
         </button>
       </mat-toolbar>
       <mat-card>
-        @if(currentUser){
+        @if(authService.currentUser){
 
           <button mat-card-avatar class="avatar mx-auto mt-2"></button>
-          <span class="mx-auto">{{currentUser.name}}</span>
-          <span class="mx-auto" style="color: gray;">{{currentUser.email}}</span>
+          <span class="mx-auto">{{authService.currentUser.name}}</span>
+          <span class="mx-auto" style="color: gray;">{{authService.currentUser.email}}</span>
           <mat-divider class="mt-2 w-100"></mat-divider>
 
           <mat-list>
@@ -23,14 +23,14 @@
               Cuenta
             </mat-list-item>
 
-            @if(currentUser.role === 'Proveedor' || currentUser.role === 'Administrador'){
+            @if(authService.currentUser.role === 'Proveedor' || authService.currentUser.role === 'Administrador'){
               <mat-list-item matRipple [routerLink]="['/suppliers']" (click)="drawer.toggle()">
                 <mat-icon matListItemIcon>badge</mat-icon>
                 Proveedores
               </mat-list-item>
             }
 
-            @if(currentUser.role === 'Administrador'){
+            @if(authService.currentUser.role === 'Administrador'){
               <mat-list-item matRipple [routerLink]="['/administration']" (click)="drawer.toggle()">
                 <mat-icon matListItemIcon>shield_person</mat-icon>
                 Administracion

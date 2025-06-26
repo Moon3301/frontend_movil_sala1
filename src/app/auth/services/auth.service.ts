@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environments } from '../../../environments/environments';
-import { catchError, concatMap, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, concatMap, filter, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { User } from '../../users/interfaces/user.interface';
 import { UserRegister } from '../interfaces/registerUser';
 import { StorageService } from '../../storage/storage.service';
@@ -134,6 +134,41 @@ export class AuthService implements OnInit{
         console.log(allMovies, moviesCarrusel);
       }
     })
+
+  }
+
+  deleteAccount(): Observable<any>{
+
+    return this.storageService.getData("userLogged").pipe(
+      switchMap(storedUser => {
+        if (!storedUser) {
+          return of(false);
+        }
+        try {
+          const JSONcurrentUser = JSON.parse(storedUser);
+          if (!JSONcurrentUser?.userId) {
+            return of(false);
+          }
+          return this.http.delete<User>(`${environments.baseUrl}/user/${JSONcurrentUser.userId}`).pipe(
+            tap(user => {
+              this.user = undefined;
+              this.storageService.deleteData("userLogged").subscribe();
+              this.storageService.deleteData("access_token").subscribe();
+
+              this.logout();
+            }),
+            map(user => !!user),
+            catchError(err => {
+              console.error("Error verificando autenticación:", err);
+              return of(false);
+            })
+          );
+        } catch (error) {
+          console.error("Error al parsear el usuario del storage:", error);
+          return of(false);
+        }
+      })
+    );
 
   }
 }

@@ -5,7 +5,6 @@
   <span class="ml-2">Cuenta de Usuario</span>
 </mat-toolbar>
 
-
 <div class="container mt-2">
 
   <mat-list>
@@ -20,6 +19,12 @@
       <mat-icon matListItemIcon>redeem</mat-icon>
       <span matListItemTitle >Cupones</span>
       <span matListItemLine>Ver tus cupones disponibles</span>
+    </mat-list-item>
+
+    <mat-list-item matRipple [routerLink]="['/users/delete-account']">
+      <mat-icon matListItemIcon>delete</mat-icon>
+      <span matListItemTitle >Eliminar cuenta</span>
+      <span matListItemLine>Elimina los datos de tu cuenta</span>
     </mat-list-item>
 
     <mat-divider></mat-divider>

@@ -14,6 +14,11 @@ import { AdvertisingId } from '@capacitor-community/advertising-id';
 import { MatDrawer } from '@angular/material/sidenav';
 import { PushNotifications } from '@capacitor/push-notifications';
 
+import {
+  AppTrackingTransparency,
+  type AppTrackingStatusResponse
+} from 'capacitor-plugin-app-tracking-transparency';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -48,8 +53,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private async bootstrapAsync() {
     try {
+      await this.askATT();
       await this.ensurePermissions();   // pide push + localización con timeout
       await firstValueFrom(this.initData$())
+      await this.initSdkAppsFlyer();
     } catch (err) {
       console.error('[BOOT]', err);
     }
@@ -63,49 +70,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     if (Capacitor.getPlatform() === 'android') {
       EdgeToEdge.setBackgroundColor({ color: '#000000' });
-    }
-
-    // Geolocation.getCurrentPosition().then((position) => {
-
-    //   const coordenates = {
-    //     latitude: position.coords.latitude,
-    //     longitude: position.coords.longitude
-    //   }
-
-    //   this.storageService.saveData('coordenates', JSON.stringify(coordenates)).subscribe({
-    //     next: () => console.log('Coordenadas guardadas en el almacenamiento local'),
-    //     error: (error) => console.error('Error al guardar coordenadas:', error)
-    //   })
-
-    // })
-
-    // this.getAllRegions().pipe(
-    //   tap(regs => this.storageService.saveData('regions', JSON.stringify(regs)).subscribe()),
-    //   /** 2. obtengo userLocation SÓLO si no existe region persistida */
-    //   switchMap(() => this.storageService.getData('user_region_id')),
-    //   switchMap(regionId => {
-    //     if (regionId) return of(regionId);           // ya hay región -> saltar geoloc
-    //     return this.getUserLocationANDROID();        // hace setRegion dentro
-    //   }),
-    //   switchMap(() => this.authService.checkAuthentication())
-    // ).subscribe();
-
-    if(Capacitor.getPlatform() !== 'web'){
-
-      if(Capacitor.getPlatform() === 'ios'){
-
-        document.addEventListener('deviceready', async () => {
-
-          const { value: status } = await AdvertisingId.requestTracking();
-          console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
-
-          const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
-          console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
-        });
-      }
-
-      console.log('Iniciando SDK AppsFlyer')
-      this.initSdkAppsFlyer();
     }
 
   }
@@ -152,6 +116,22 @@ export class AppComponent implements OnInit, AfterViewInit {
       }),
       map(() => void 0)
     );
+  }
+
+  /* -------- ATT ---------- */
+  private async askATT(): Promise<void> {
+    if (Capacitor.getPlatform() !== 'ios') return;           // sólo iOS/iPadOS
+
+    const { status } = await AppTrackingTransparency.getStatus();
+    if (status === 'notDetermined') {
+      // espera al primer frame para evitar que se oculte tras el splash
+      await new Promise(r => requestAnimationFrame(r));
+
+      const res: AppTrackingStatusResponse =
+        await AppTrackingTransparency.requestPermission();
+
+      console.log('[ATT] result:', res.status); // authorized | denied | ...
+    }
   }
 
   private async ensurePermissions() {
@@ -272,25 +252,29 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async initSdkAppsFlyer(){
+  async initSdkAppsFlyer() {
 
-    await AdvertisingId.requestTracking();
+    // — (iOS) recoge la IDFA sólo si el usuario la autorizó —
+    if (Capacitor.getPlatform() === 'ios') {
+      const { id, status } = await AdvertisingId.getAdvertisingId();
+      console.log('[AdvertisingId] ID:', id, 'Status:', status);
+    }
 
     const opts: any = {
       devKey:   environments.appsFlyerDevKey,
       appId:    environments.appleAppId,
-      isDebug: environments.isDebug,
-      onInstallConversionDataListener: environments.onInstallConversionDataListener
+      isDebug:  environments.isDebug,
+      onInstallConversionDataListener:
+                environments.onInstallConversionDataListener
     };
 
-    const { Appsflyer } = await import('@awesome-cordova-plugins/appsflyer/ngx');
+    const { Appsflyer } =
+      await import('@awesome-cordova-plugins/appsflyer/ngx');
 
-    const af = new Appsflyer()
-
-    af.initSdk(opts)
-      .then((res: any) => console.log('[AF] OK', res))
-      .catch((err: any) => console.error('[AF] ERROR', err));
-
+    new Appsflyer()
+      .initSdk(opts)
+      .then(res  => console.log('[AF] OK', res))
+      .catch(err => console.error('[AF] ERROR', err));
   }
 
   async getUserLocationWEB(){
@@ -309,22 +293,3 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 }
 
-// if(Capacitor.getPlatform() !== 'web'){
-
-    //   if(Capacitor.getPlatform() === 'ios'){
-
-    //     document.addEventListener('deviceready', async () => {
-
-    //       // 1. Pide permiso al usuario
-    //       const { value: status } = await AdvertisingId.requestTracking();
-    //       console.log('[ATT] Estado:', status);  // 'Authorized' | 'Denied' | 'Restricted' | 'Not Determined'
-
-    //       // 2. Lee el identificador (IDFA) — devuelve '00000000-…' si no está autorizado
-    //       const { id, status: postStatus } = await AdvertisingId.getAdvertisingId();
-    //       console.log('[AdvertisingId] ID:', id, 'Status:', postStatus);
-    //     });
-    //   }
-
-    //   console.log('Iniciando SDK AppsFlyer')
-    //   this.initSdkAppsFlyer();
-    // }

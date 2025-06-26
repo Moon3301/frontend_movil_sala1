@@ -8,6 +8,7 @@ import { PreferencesComponent } from './pages/preferences/preferences.component'
 import { CouponsComponent } from './pages/coupons/coupons.component';
 import { RedeemPromotionComponent } from './pages/redeem-promotion/redeem-promotion.component';
 import { CouponService } from './services/coupon.service';
+import { DeleteAccountComponent } from './pages/delete-account/delete-account.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CouponService } from './services/coupon.service';
     AccountPageComponent,
     PreferencesComponent,
     CouponsComponent,
-    RedeemPromotionComponent
+    RedeemPromotionComponent,
+    DeleteAccountComponent
   ],
   imports: [
     CommonModule,

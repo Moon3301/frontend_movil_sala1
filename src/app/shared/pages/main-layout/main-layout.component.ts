@@ -38,7 +38,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
   showFiller = false;
 
   constructor(
-    private readonly authService: AuthService,
+    public authService: AuthService,
     // private router: Router,
     private sharedService: SharedService,
     private cdr: ChangeDetectorRef,
@@ -66,7 +66,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
     // Se verifica la auntenticidad del usuario validando que existen un usuario en localStorage
     this.authService.checkAuthentication().subscribe((isAuthenticated) => {
       if (isAuthenticated) {
-        this.currentUser = this.authService.currentUser;
+        this.currentUser = this.authService.currentUser
       } else {
         this.currentUser = undefined;
       }

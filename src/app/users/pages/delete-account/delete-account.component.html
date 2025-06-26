@@ -1,0 +1,21 @@
+<mat-toolbar style="border: 1px solid gray; background-color: black; position: sticky; top: 0; z-index: 100;">
+  <mat-icon style="font-size: 20px; font-weight: bold; color: white;" [routerLink]="['/users']">
+    arrow_back_ios_new
+  </mat-icon>
+</mat-toolbar>
+
+<div class="container mt-5">
+  <mat-card>
+    <mat-card-header class="mb-4 d-flex justify-content-center">
+      <mat-card-title style="font-weight: bold; ">Eliminar cuenta</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>¿Estás seguro de que deseas eliminar tu cuenta?</p>
+      <p>Esta acción no se puede deshacer.</p>
+    </mat-card-content>
+    <mat-card-actions class="mt-4 mb-4 d-flex justify-content-center">
+      <button mat-button mat-raised-button style="background-color: rgb(255, 0, 0); color: white;" (click)="deleteAccount()">Eliminar cuenta</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+

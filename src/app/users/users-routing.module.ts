@@ -5,6 +5,7 @@ import { AccountPageComponent } from './pages/account-page/account-page.componen
 import { PreferencesComponent } from './pages/preferences/preferences.component';
 import { CouponsComponent } from './pages/coupons/coupons.component';
 import { RedeemPromotionComponent } from './pages/redeem-promotion/redeem-promotion.component';
+import { DeleteAccountComponent } from './pages/delete-account/delete-account.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'coupons/:promotionId',
     component: RedeemPromotionComponent,
+  },
+  {
+    path: 'delete-account',
+    component: DeleteAccountComponent,
   },
   {
     path: '**',
