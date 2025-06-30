@@ -39,12 +39,28 @@ export class PushService {
       if (perm.receive !== 'granted') return;
     }
 
+    await FCM.setAutoInit({ enabled: true });
+
     /* 2️⃣ Registrar (iOS muestra el diálogo) */
     await PushNotifications.register();
 
-    /* 3️⃣ Token FCM en ambas plataformas */
-    const { token } = await FCM.getToken();
-    await this.sendToken(token);
+    PushNotifications.addListener('registration', async () => {
+      try {
+        const { token } = await FCM.getToken();     // ahora sí existe en iOS
+        await this.sendToken(token);
+      } catch (e) {
+        console.error('[Push] error obteniendo FCM token', e);
+      }
+    });
+
+    /* 4️⃣.b Errores de registro */
+    PushNotifications.addListener('registrationError',
+      err => console.error('[Push] registration error', err)
+    );
+
+    // /* 3️⃣ Token FCM en ambas plataformas */
+    // const { token } = await FCM.getToken();
+    // await this.sendToken(token);
 
     /* 3️⃣.b Auto-refresh */
     FCM.refreshToken()
@@ -77,7 +93,7 @@ export class PushService {
     }
 
     /* 7️⃣ Auto-init asegurado */
-    await FCM.setAutoInit({ enabled: true });
+
   }
 
   /* Método reutilizable */
