@@ -8,6 +8,7 @@ import { MaterialModule } from '../material/material.module';
 import { AuthService } from './services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { ToastMessagesModule } from '../toast-messages/toast-messages.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     AuthRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ToastMessagesModule
   ],
   providers: [AuthService]
 })

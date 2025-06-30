@@ -59,6 +59,11 @@ export class AuthService implements OnInit{
           map(() => resp)
         )
       )
+    ).pipe(
+      catchError(err => {
+        // console.error("Error al iniciar sesión:", err);
+        return of(err);
+      })
     );
   }
 

@@ -16,7 +16,7 @@ import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
 import { CoreModule } from './core/core.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { ToastMessagesModule } from './toast-messages/toast-messages.module';
 // import { Appsflyer } from '@awesome-cordova-plugins/appsflyer/ngx';
 
 @NgModule({
@@ -29,10 +29,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     NgbModule,
     SharedModule,
     CoreModule,
-
+    ToastMessagesModule,
   ],
   providers: [
     MessageService,
+
     //Appsflyer,
     provideNativeDateAdapter(),
     provideAnimationsAsync(),
